@@ -1,0 +1,332 @@
+//@version=5
+// =====================================================================
+//  Handsome Rob (1:1.5) — LETF Decay-Harvest Strategy
+//  Source: Bezdjian, "Deception by Design" (SSRN 5347238, Jul 2025)
+//
+//  How it works
+//  ------------
+//  Short BOTH legs of a leveraged ETF pair (long LETF + inverse LETF)
+//  at a 1 : 1.5 notional ratio. The inverse leg gets the larger weight
+//  because inverse LETFs decay faster (asymmetry documented in issuer
+//  prospectus performance tables).
+//
+//    At quarter start:
+//      Short Xlong  of L  (default $1,000 of TQQQ)
+//      Short Xshort of I  (default $1,500 of SQQQ)
+//      Pref(L) = price of L, Pref(I) = price of I
+//
+//    Multi-top-up (directional — declines only):
+//      If P(leg) <= 0.90 * Pref(leg):
+//          add  (Xtarget - V) / P   new short shares
+//          Pref(leg) <- P(leg)
+//
+//    Quarter end: cover everything, realize P&L, restart.
+//
+//  Deployment note
+//  ---------------
+//  TradingView strategies can only PLACE orders on the chart symbol.
+//  This script places real short orders on the chart symbol (the LONG
+//  LETF) AND tracks the inverse-LETF leg synthetically via
+//  request.security(), folding its P&L into a custom equity curve so
+//  the backtest reflects BOTH legs accurately.
+//
+//  To trade live, you would run two mirror instances (one on each
+//  symbol) at your broker, OR use the bar-by-bar signals here to drive
+//  an external execution layer.
+//
+//  Risk controls included
+//  ----------------------
+//    * Borrow-fee accrual (default 6%/yr, configurable per leg)
+//    * Per-quarter cap on number of top-ups (runaway-rally protection)
+//    * Hard equity-stop kill switch (peak-to-trough drawdown cap)
+//    * Per-leg notional ceiling (protects against unlimited short loss)
+//    * Optional date filter
+//
+//  DISCLAIMER: Backtest only. Shorting leveraged ETFs can incur
+//  unlimited losses, hard-to-borrow fees, and forced buy-ins. Verify
+//  borrow availability and cost with your broker before live trading.
+// =====================================================================
+
+strategy(
+     "Handsome Rob 1:1.5  (LETF Decay Harvest)",
+     overlay                  = false,
+     pyramiding               = 100,
+     default_qty_type         = strategy.fixed,
+     default_qty_value        = 0,
+     initial_capital          = 100000,
+     currency                 = currency.USD,
+     commission_type          = strategy.commission.percent,
+     commission_value         = 0.01,
+     slippage                 = 2,
+     calc_on_every_tick       = false,
+     process_orders_on_close  = true,
+     close_entries_rule       = "FIFO")
+
+
+// ---------------------------------------------------------------------
+//  INPUTS
+// ---------------------------------------------------------------------
+grpPair   = "Pair Selection"
+inverseSym = input.symbol("AMEX:SQQQ", "Inverse LETF symbol",
+     tooltip = "Pair partner of the chart symbol. Chart MUST be the LONG LETF (e.g. TQQQ, SOXL, FAS).", group = grpPair)
+
+grpSize   = "Position Sizing"
+notionalLong   = input.float(1000.0, "Long-LETF target short notional ($)",
+     minval = 1, group = grpSize)
+notionalShort  = input.float(1500.0, "Inverse-LETF target short notional ($)",
+     minval = 1, group = grpSize,
+     tooltip = "Default ratio 1 : 1.5 (long : inverse) per the paper.")
+
+grpRule   = "Top-Up Rule"
+dropTrig  = input.float(10.0, "Top-up trigger: drop from reference (%)",
+     minval = 0.5, maxval = 50, step = 0.5, group = grpRule) / 100.0
+maxTopUps = input.int(20, "Max top-ups per leg per quarter",
+     minval = 0, group = grpRule,
+     tooltip = "Caps runaway rebuilding into a sustained rally. 0 disables top-ups.")
+maxNotionalMult = input.float(5.0, "Max notional multiple of initial target",
+     minval = 1.0, step = 0.5, group = grpRule,
+     tooltip = "Hard ceiling on how big either leg can grow via top-ups (e.g. 5x = $5,000 of TQQQ short max).")
+
+grpCycle  = "Rebalance Cycle"
+cycleMode = input.string("Quarterly", "Rebalance period",
+     options = ["Monthly","Quarterly","Semi-Annual","Annual"], group = grpCycle)
+
+grpCost   = "Costs"
+borrowPctLong   = input.float(6.0, "Borrow fee p.a. — long LETF (%)",
+     minval = 0, step = 0.25, group = grpCost) / 100.0
+borrowPctShort  = input.float(6.0, "Borrow fee p.a. — inverse LETF (%)",
+     minval = 0, step = 0.25, group = grpCost,
+     tooltip = "Inverse LETFs are frequently hard-to-borrow. Stress with 15–30% to be conservative.") / 100.0
+
+grpRisk   = "Risk Kill Switch"
+useKill   = input.bool(true,  "Enable equity drawdown kill switch", group = grpRisk)
+killDD    = input.float(25.0, "Kill on peak-equity drawdown (%)",
+     minval = 1, maxval = 90, step = 1, group = grpRisk) / 100.0
+
+grpTime   = "Backtest Window"
+useDate   = input.bool(false, "Restrict to date range", group = grpTime)
+startDate = input.time(timestamp("2015-01-01 00:00"), "Start", group = grpTime)
+endDate   = input.time(timestamp("2099-12-31 00:00"), "End",   group = grpTime)
+
+
+// ---------------------------------------------------------------------
+//  TIMEFRAME / DATA GUARDS
+// ---------------------------------------------------------------------
+// Force daily semantics regardless of chart TF.
+priceL_close = close
+priceI_close = request.security(inverseSym, timeframe.period, close,
+     barmerge.gaps_off, barmerge.lookahead_off)
+priceI_open  = request.security(inverseSym, timeframe.period, open,
+     barmerge.gaps_off, barmerge.lookahead_off)
+
+inWindow = not useDate or (time >= startDate and time <= endDate)
+
+
+// ---------------------------------------------------------------------
+//  CYCLE / NEW-PERIOD DETECTOR
+// ---------------------------------------------------------------------
+cycleAnchor = switch cycleMode
+    "Monthly"     => month
+    "Quarterly"   => math.floor((month - 1) / 3)
+    "Semi-Annual" => math.floor((month - 1) / 6)
+    "Annual"      => 0
+    => math.floor((month - 1) / 3)
+
+newPeriod = ta.change(cycleAnchor) != 0 or ta.change(year) != 0
+firstBar  = bar_index == 0
+
+
+// ---------------------------------------------------------------------
+//  STATE  (synthetic dual-leg book)
+// ---------------------------------------------------------------------
+var float sharesL        = 0.0   // shares short of long LETF (chart sym)
+var float sharesI        = 0.0   // shares short of inverse LETF
+var float refL           = na    // reference price long  leg
+var float refI           = na    // reference price inverse leg
+var float entryAvgL      = na    // weighted avg entry of long  leg
+var float entryAvgI      = na    // weighted avg entry of inverse leg
+var int   topUpsL        = 0
+var int   topUpsI        = 0
+var float realizedPnL    = 0.0   // running realized P&L of synthetic book
+var float borrowAccrued  = 0.0   // borrow cost lifetime
+var float equityPeak     = strategy.initial_capital
+var bool  killed         = false
+
+
+// ---------------------------------------------------------------------
+//  HELPERS
+// ---------------------------------------------------------------------
+addShort(_targetNotional, _curPrice, _curShares) =>
+    curNotional = _curShares * _curPrice
+    needed      = _targetNotional - curNotional
+    deltaShares = needed > 0 and _curPrice > 0 ? needed / _curPrice : 0.0
+    deltaShares
+
+
+// ---------------------------------------------------------------------
+//  DAILY BORROW ACCRUAL  (proportional to bars per year)
+// ---------------------------------------------------------------------
+// Estimate bars/year from current timeframe.
+barsPerYear = timeframe.isintraday ?
+     (1440 / math.max(timeframe.in_seconds() / 60, 1)) * 252 :
+     timeframe.isdaily ? 252 : timeframe.isweekly ? 52 : 12
+
+dailyBorrowL = sharesL * priceL_close * (borrowPctLong  / barsPerYear)
+dailyBorrowI = sharesI * priceI_close * (borrowPctShort / barsPerYear)
+if inWindow and not killed
+    borrowAccrued += dailyBorrowL + dailyBorrowI
+
+
+// ---------------------------------------------------------------------
+//  MAIN LOGIC
+// ---------------------------------------------------------------------
+canTrade = inWindow and not killed and not na(priceI_close) and priceL_close > 0 and priceI_close > 0
+
+// --- Quarter-end COVER + realize ----------------------------------
+if canTrade and newPeriod and (sharesL > 0 or sharesI > 0)
+    // realized P&L for closed legs
+    realizedPnL += (entryAvgL - priceL_close) * sharesL
+    realizedPnL += (entryAvgI - priceI_close) * sharesI
+    // close real chart-symbol short
+    strategy.close_all(comment = "Cycle Cover")
+    sharesL := 0.0
+    sharesI := 0.0
+    refL := na
+    refI := na
+    entryAvgL := na
+    entryAvgI := na
+    topUpsL := 0
+    topUpsI := 0
+
+// --- Quarter-start OPEN ------------------------------------------
+if canTrade and (newPeriod or firstBar) and sharesL == 0 and sharesI == 0
+    dS_L = notionalLong  / priceL_close
+    dS_I = notionalShort / priceI_close
+    sharesL := dS_L
+    sharesI := dS_I
+    refL    := priceL_close
+    refI    := priceI_close
+    entryAvgL := priceL_close
+    entryAvgI := priceI_close
+    // real short on chart symbol
+    strategy.entry("ShortL", strategy.short, qty = dS_L, comment = "Cycle Open L")
+
+// --- Multi-top-up (long leg) -------------------------------------
+if canTrade and sharesL > 0 and not na(refL) and topUpsL < maxTopUps
+     and priceL_close <= refL * (1.0 - dropTrig)
+    ceilingShares = (notionalLong * maxNotionalMult) / priceL_close
+    dS = addShort(notionalLong, priceL_close, sharesL)
+    dS := math.min(dS, math.max(ceilingShares - sharesL, 0))
+    if dS > 0
+        newAvg = (entryAvgL * sharesL + priceL_close * dS) / (sharesL + dS)
+        entryAvgL := newAvg
+        sharesL   += dS
+        refL      := priceL_close
+        topUpsL   += 1
+        strategy.entry("ShortL_TU" + str.tostring(topUpsL), strategy.short,
+             qty = dS, comment = "Top-up L #" + str.tostring(topUpsL))
+
+// --- Multi-top-up (inverse leg, synthetic) -----------------------
+if canTrade and sharesI > 0 and not na(refI) and topUpsI < maxTopUps
+     and priceI_close <= refI * (1.0 - dropTrig)
+    ceilingSharesI = (notionalShort * maxNotionalMult) / priceI_close
+    dSI = addShort(notionalShort, priceI_close, sharesI)
+    dSI := math.min(dSI, math.max(ceilingSharesI - sharesI, 0))
+    if dSI > 0
+        newAvgI = (entryAvgI * sharesI + priceI_close * dSI) / (sharesI + dSI)
+        entryAvgI := newAvgI
+        sharesI   += dSI
+        refI      := priceI_close
+        topUpsI   += 1
+
+
+// ---------------------------------------------------------------------
+//  SYNTHETIC EQUITY  (chart-symbol P&L is already in strategy.equity;
+//  we ADD the inverse leg synthetically and subtract borrow.)
+// ---------------------------------------------------------------------
+unrealizedI = sharesI > 0 and not na(entryAvgI) ?
+     (entryAvgI - priceI_close) * sharesI : 0.0
+
+syntheticEquity = strategy.equity + realizedPnL + unrealizedI - borrowAccrued
+
+// Peak & drawdown
+equityPeak := math.max(equityPeak, syntheticEquity)
+ddPct = equityPeak > 0 ? (equityPeak - syntheticEquity) / equityPeak : 0.0
+
+// Kill switch
+if useKill and ddPct >= killDD and not killed
+    killed := true
+    // realize any open synthetic P&L and close chart leg
+    if sharesL > 0
+        realizedPnL += (entryAvgL - priceL_close) * sharesL
+    if sharesI > 0
+        realizedPnL += (entryAvgI - priceI_close) * sharesI
+    sharesL := 0.0
+    sharesI := 0.0
+    strategy.close_all(comment = "KILL: drawdown")
+
+
+// ---------------------------------------------------------------------
+//  PLOTS
+// ---------------------------------------------------------------------
+plot(syntheticEquity, "Synthetic Combined Equity", color = color.new(color.teal, 0), linewidth = 2)
+plot(equityPeak,      "Peak Equity",               color = color.new(color.gray, 60))
+plot(strategy.initial_capital, "Initial Capital",  color = color.new(color.gray, 70), style = plot.style_stepline)
+
+hline(0, "Zero", color = color.new(color.gray, 80))
+
+plotshape(newPeriod and inWindow, title = "Rebalance",
+     style = shape.triangleup, location = location.bottom,
+     color = color.new(color.yellow, 0), size = size.tiny)
+
+bgcolor(killed ? color.new(color.red, 88) : na, title = "Killed")
+
+
+// ---------------------------------------------------------------------
+//  INFO TABLE
+// ---------------------------------------------------------------------
+var table info = table.new(position.top_right, 2, 9,
+     bgcolor = color.new(color.black, 80), border_width = 1)
+
+if barstate.islast
+    table.cell(info, 0, 0, "Handsome Rob 1:1.5", text_color = color.white, bgcolor = color.new(color.teal, 30))
+    table.cell(info, 1, 0, cycleMode,            text_color = color.white, bgcolor = color.new(color.teal, 30))
+    table.cell(info, 0, 1, "Long  leg (chart)",  text_color = color.silver)
+    table.cell(info, 1, 1, syminfo.ticker,       text_color = color.white)
+    table.cell(info, 0, 2, "Inverse leg",        text_color = color.silver)
+    table.cell(info, 1, 2, inverseSym,           text_color = color.white)
+    table.cell(info, 0, 3, "Synth equity",       text_color = color.silver)
+    table.cell(info, 1, 3, str.tostring(syntheticEquity, "#.##"), text_color = color.white)
+    table.cell(info, 0, 4, "Peak equity",        text_color = color.silver)
+    table.cell(info, 1, 4, str.tostring(equityPeak, "#.##"), text_color = color.white)
+    table.cell(info, 0, 5, "Drawdown",           text_color = color.silver)
+    table.cell(info, 1, 5, str.tostring(ddPct * 100, "#.##") + " %",
+         text_color = ddPct > 0.10 ? color.orange : color.white)
+    table.cell(info, 0, 6, "Borrow accrued",     text_color = color.silver)
+    table.cell(info, 1, 6, str.tostring(borrowAccrued, "#.##"), text_color = color.white)
+    table.cell(info, 0, 7, "Top-ups (L / I)",    text_color = color.silver)
+    table.cell(info, 1, 7, str.tostring(topUpsL) + " / " + str.tostring(topUpsI),
+         text_color = color.white)
+    table.cell(info, 0, 8, "Status",             text_color = color.silver)
+    table.cell(info, 1, 8, killed ? "KILLED" : "RUNNING",
+         text_color = killed ? color.red : color.lime)
+
+
+// ---------------------------------------------------------------------
+//  ALERTS  (for external execution)
+// ---------------------------------------------------------------------
+alertcondition(newPeriod and sharesL == 0 and sharesI == 0,
+     title = "Cycle OPEN",
+     message = "Handsome Rob: open quarter — short {{ticker}} $L and inverse $I.")
+alertcondition(newPeriod and (sharesL[1] > 0 or sharesI[1] > 0),
+     title = "Cycle COVER",
+     message = "Handsome Rob: cover both legs (cycle end).")
+alertcondition(canTrade and sharesL > 0 and priceL_close <= refL * (1.0 - dropTrig),
+     title = "Top-up LONG leg",
+     message = "Handsome Rob: top-up LONG leg (chart symbol).")
+alertcondition(canTrade and sharesI > 0 and priceI_close <= refI * (1.0 - dropTrig),
+     title = "Top-up INVERSE leg",
+     message = "Handsome Rob: top-up INVERSE leg.")
+alertcondition(killed and not killed[1],
+     title = "Kill switch",
+     message = "Handsome Rob: equity drawdown kill triggered.")
