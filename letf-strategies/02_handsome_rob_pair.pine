@@ -1,0 +1,85 @@
+//@version=6
+// ============================================================================
+// STRATEGY 1B — "Handsome Rob" PAIR (Synthetic Decay-Harvest Equity)
+// Source: Bezdjian, "Deception by Design" (SSRN 5347238)
+// ----------------------------------------------------------------------------
+// This is the REAL trade the paper describes: short BOTH the long LETF and the
+// inverse LETF of the same underlying at a 1 : 1.5 notional ratio, top-up each
+// leg on a 10% drop, reset every quarter. Because TradingView's strategy tester
+// only trades the chart symbol, the pair is modelled here as an INDICATOR that
+// reconstructs the combined dollar P&L of the two short legs and plots it as an
+// equity curve.
+//
+// The edge: in choppy / range-bound regimes the SUM (long-LETF + inverse-LETF)
+// bleeds lower from daily-reset volatility drag, so shorting both harvests it.
+// The risk: in a strong sustained TREND one leg (the long in a rally, or the
+// inverse in a crash) can run against you faster than decay accrues within the
+// quarter. The equity curve below lets you see both.
+//
+// Apply to ANY chart (symbol is ignored — both legs are pulled by request).
+// Default pair: TQQQ / SQQQ. Try SOXL/SOXS, FAS/FAZ, NUGT/DUST, JNUG/JDST...
+// ============================================================================
+
+indicator("02 Handsome Rob — Pair Decay Harvest (Synthetic Equity $)", overlay=false)
+
+symA    = input.symbol("AMEX:TQQQ", "Long LETF  (Leg A)")
+symB    = input.symbol("AMEX:SQQQ", "Inverse LETF (Leg B)")
+notA    = input.float(1000, "Target short notional Leg A ($)", minval=1)
+notB    = input.float(1500, "Target short notional Leg B ($)", minval=1)
+dropPct = input.float(10,   "Top-up trigger (% drop)", minval=1) / 100.0
+showRaw = input.bool(true,  "Include borrow cost?")
+borrowAPR = input.float(8.0, "Borrow drag (annual %)", minval=0) / 100.0
+
+closeA = request.security(symA, timeframe.period, close)
+closeB = request.security(symB, timeframe.period, close)
+
+q    = math.floor((month - 1) / 3)
+newQ = na(q[1]) or q != q[1]
+
+// Per-leg running state: short proceeds, shares short, reference price
+var float realized = 0.0
+var float procA = 0.0
+var float shA = 0.0
+var float prefA = na
+var float procB = 0.0
+var float shB = 0.0
+var float prefB = na
+var float borrowAcc = 0.0
+
+// Open mark-to-market P&L of a short = proceeds received - current liability
+openPnL() => (procA - shA * closeA) + (procB - shB * closeB)
+
+if newQ
+    // crystallise open P&L, then re-open both legs at target notional
+    realized := realized + openPnL()
+    shA   := notA / closeA
+    procA := shA * closeA
+    prefA := closeA
+    shB   := notB / closeB
+    procB := shB * closeB
+    prefB := closeB
+else
+    // Leg A top-up (only when price dropped => short gained, notional shrank)
+    if (not na(prefA)) and closeA <= (1 - dropPct) * prefA
+        dS = (notA - shA * closeA) / closeA
+        if dS > 0
+            shA   := shA + dS
+            procA := procA + dS * closeA
+        prefA := closeA
+    // Leg B top-up
+    if (not na(prefB)) and closeB <= (1 - dropPct) * prefB
+        dS = (notB - shB * closeB) / closeB
+        if dS > 0
+            shB   := shB + dS
+            procB := procB + dS * closeB
+        prefB := closeB
+
+// Modelled daily borrow drag on combined short notional
+if showRaw and (not na(prefA))
+    borrowAcc += (shA * closeA + shB * closeB) * borrowAPR / 252.0
+
+equity = realized + openPnL() - (showRaw ? borrowAcc : 0.0)
+
+plot(equity, "Combined short equity ($)", color=color.teal, linewidth=2)
+plot(realized, "Realized (quarter-locked) $", color=color.new(color.gray, 50))
+hline(0, "Break-even", color=color.new(color.red, 50))

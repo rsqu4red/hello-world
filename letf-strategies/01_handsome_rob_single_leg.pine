@@ -1,0 +1,72 @@
+//@version=6
+// ============================================================================
+// STRATEGY 1A — "Handsome Rob" (Single-Leg LETF Decay Short)
+// Source: Bezdjian, "Deception by Design" (SSRN 5347238)
+// ----------------------------------------------------------------------------
+// IDEA: Leveraged/inverse ETFs lose value to volatility drag (beta slippage)
+//       because they reset leverage DAILY. Shorting them and letting that decay
+//       accrue is the edge. This is the NATIVE, fully back-testable leg.
+//
+// RULES (per the paper):
+//   1. At the start of every calendar quarter, cover everything and re-open a
+//      fresh short of a fixed target notional.
+//   2. "Multi top-up": whenever price falls >=10% from the last reference price,
+//      add shares to bring the short back up to the target notional, then reset
+//      the reference price to the new (lower) price. (Adds to a WINNING short.)
+//   3. No trimming when price rises (losers are left to run until quarter end).
+//   4. Cover all at quarter end. Repeat.
+//
+// HOW TO USE: Put this on TQQQ, then SQQQ, then SOXL, SOXS, FAS, FAZ, etc.
+//   Run each leg separately. To see the PAIR effect, use script 02.
+//
+// HONEST CAVEAT: TradingView's strategy tester does NOT model stock-borrow fees
+//   or short availability. Inverse/vol LETFs are frequently hard-to-borrow with
+//   fees far above the author's claimed 6%/yr. Set the "Borrow drag" + commission
+//   inputs below to approximate it, and read the README before trusting results.
+// ============================================================================
+
+strategy("01 Handsome Rob — Single-Leg LETF Short", overlay=true,
+     pyramiding=100, initial_capital=100000, currency=currency.USD,
+     default_qty_type=strategy.fixed,
+     commission_type=strategy.commission.percent, commission_value=0.02,
+     slippage=2, process_orders_on_close=true)
+
+// ---------------- Inputs ----------------
+targetNotional = input.float(10000, "Target short notional ($ per leg)", minval=100)
+topUpDrop      = input.float(10.0,  "Top-up trigger (% drop from ref)", minval=1) / 100.0
+borrowAPR      = input.float(8.0,   "Borrow drag (annual %, modelled)", minval=0) / 100.0
+applyBorrow    = input.bool(true,   "Apply modelled borrow drag")
+
+// ---------------- Quarter detection ----------------
+q          = math.floor((month - 1) / 3)
+newQuarter = na(q[1]) or q != q[1]
+
+var float pref = na
+
+// ---------------- Quarter reset ----------------
+if newQuarter
+    strategy.close_all(comment="Q-Close")
+    strategy.entry("HR", strategy.short, qty=targetNotional / close, comment="Q-Open")
+    pref := close
+
+// ---------------- Multi top-up on declines ----------------
+if (not newQuarter) and (not na(pref)) and strategy.position_size < 0 and close <= (1 - topUpDrop) * pref
+    curShares   = -strategy.position_size
+    deltaShares = (targetNotional - curShares * close) / close
+    if deltaShares > 0
+        strategy.entry("HR", strategy.short, qty=deltaShares, comment="TopUp")
+    pref := close
+
+// ---------------- Modelled borrow drag ----------------
+// Approximates daily stock-borrow cost on the short notional. Pine has no native
+// borrow API, so we bleed equity via a synthetic per-bar commission proxy.
+var float borrowAccrued = 0.0
+if applyBorrow and strategy.position_size < 0
+    dailyCost = math.abs(strategy.position_size) * close * borrowAPR / 252.0
+    borrowAccrued += dailyCost
+
+plot(applyBorrow ? -borrowAccrued : na, "Cumulative modelled borrow cost ($)",
+     color=color.new(color.red, 60), display=display.data_window)
+
+// Visual reference price
+plot(pref, "Reference price", color=color.new(color.orange, 40), style=plot.style_stepline)

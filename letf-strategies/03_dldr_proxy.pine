@@ -1,0 +1,78 @@
+//@version=6
+// ============================================================================
+// STRATEGY 2 — "Day Late, Dollar Richer" (DLDR)  +  Creation-Spike Fade (CSF)
+// Source: Bezdjian, "Am I the Patsy?" (SSRN 5360727) and
+//         "Who's the Dog and Who's the Tail?" (SSRN 5400451)
+// ----------------------------------------------------------------------------
+// !!! READ THIS FIRST — IMPORTANT DATA LIMITATION !!!
+//
+// The TRUE DLDR signal is the daily change in an ETF's SHARES OUTSTANDING
+// (issuer creations / redemptions):
+//      dShares > 0  (creation)   -> SHORT the ETF next day at NAV
+//      dShares < 0  (redemption) -> BUY/COVER the ETF next day at NAV
+//
+// TradingView / Pine Script does NOT provide shares-outstanding or NAV time
+// series for ETFs. Therefore DLDR CANNOT be faithfully back-tested in Pine.
+// A real backtest must be done in Python using issuer CSVs (shares outstanding
+// + daily NAV) — see /python/dldr_backtest.py in this repo for that.
+//
+// What this script gives you instead is a PRICE-BASED PROXY. The papers show
+// creations cluster into drawdowns and redemptions into rallies, so "trade
+// against the flow, one day late" collapses into a short-horizon MEAN-REVERSION
+// fade of the LETF. This proxy is INSPIRED BY DLDR but is NOT DLDR. Treat any
+// result as a sanity check, not validation of the paper's numbers.
+// ============================================================================
+
+strategy("03 DLDR Proxy (price-based, NOT true share-flow)", overlay=true,
+     initial_capital=100000, default_qty_type=strategy.percent_of_equity,
+     default_qty_value=100, commission_type=strategy.commission.percent,
+     commission_value=0.02, slippage=2, process_orders_on_close=true)
+
+// ---------------- Inputs ----------------
+lookback   = input.int(63,  "Flow-proxy lookback (bars)", minval=5)
+z_in       = input.float(1.0, "Z-score entry threshold", minval=0.1)
+z_exit     = input.float(0.0, "Z-score exit threshold")
+holdMax    = input.int(10,  "Max hold (bars), DLDR T+1 spirit", minval=1)
+useCSF     = input.bool(true, "Use Creation-Spike-Fade band (90th pct)")
+
+// ---------------- Proxy for 'flow pressure' ----------------
+// In the papers, issuer CREATIONS cluster while the LETF is trading DOWN /
+// extended below trend; REDEMPTIONS cluster while it is extended UP. We proxy
+// "net creation pressure" by how far price sits below/above its rolling mean,
+// normalised to a z-score. The paper SHORTS after creation, so:
+//   z very negative (extended down)  => proxy creation   => SHORT next bar
+//   z very positive (extended up)    => proxy redemption => COVER / go long
+// A one-bar lag is applied (signal[1]) to honour DLDR's T+1 execution.
+basis = ta.sma(close, lookback)
+dev   = ta.stdev(close, lookback)
+z     = dev > 0 ? (close - basis) / dev : 0.0
+
+// 90th / 10th percentile band as the CSF "spike" gate
+hiBand = ta.percentile_nearest_rank(z, lookback, 90)
+loBand = ta.percentile_nearest_rank(z, lookback, 10)
+
+// One-day lag (DLDR trades T+1 on yesterday's signal)
+zL     = z[1]
+hiL    = hiBand[1]
+loL    = loBand[1]
+
+// ---------------- Signals ----------------
+// Proxy-creation (price extended DOWN) -> SHORT ;  proxy-redemption (extended UP) -> cover/long
+shortSig = useCSF ? (zL <= loL and zL <= -z_in) : (zL <= -z_in)
+coverSig = useCSF ? (zL >= hiL and zL >=  z_in) : (zL >=  z_in)
+
+var int barsHeld = 0
+barsHeld := strategy.position_size != 0 ? barsHeld + 1 : 0
+
+if shortSig and strategy.position_size >= 0
+    strategy.entry("DLDRs", strategy.short)
+    barsHeld := 0
+if coverSig and strategy.position_size <= 0
+    strategy.entry("DLDRl", strategy.long)
+    barsHeld := 0
+
+// time-based exit (T+1 / short-hold spirit) and z-score mean-revert exit
+if strategy.position_size != 0 and (barsHeld >= holdMax or math.abs(zL) <= z_exit)
+    strategy.close_all(comment="exit")
+
+plot(basis, "Rolling basis", color=color.new(color.blue, 50))
