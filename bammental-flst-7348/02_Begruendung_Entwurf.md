@@ -15,7 +15,7 @@ Waldabstand (§ 4 Abs. 3 LBO BW)**
 
 Sehr geehrte Damen und Herren,
 
-als Eigentümer des Flurstücks 7348 (Bammertsbergweg/Grenzweg) beabsichtige ich die Errichtung
+als Eigentümer des Flurstücks 7348 (Grenzweg 12, 69245 Bammental) beabsichtige ich die Errichtung
 eines zeitgemäßen, maßvollen Wochenendhauses. Das frühere Wochenendhaus, dessen Standort der
 Bebauungsplan mit dem Baufenster Nr. 9 planungsrechtlich gesichert hat, wurde zwischenzeitlich
 entfernt; das Grundstück ist derzeit unbebaut. Ich bitte um Erteilung eines Bauvorbescheids zu
@@ -28,10 +28,10 @@ den unten formulierten Fragen und begründe mein Vorhaben wie folgt.
 - **Ein Vollgeschoss**, Satteldach **22°**, Firsthöhe **max. 5,50 m** über EG-Fußbodenoberkante —
   vollständig innerhalb der Festsetzungen des Bebauungsplans und der örtlichen Bauvorschriften.
 - Situierung **im und am festgesetzten Baufenster Nr. 9**: Der Neubau nutzt das fortgeltende
-  Baufenster und erweitert es ausschließlich **nach Westen — vom Wald weg**. Die waldseitige
-  (östliche) Baugrenze des Fensters Nr. 9 wird **nicht überschritten**; der Waldabstand
-  verschlechtert sich gegenüber der planungsrechtlich bereits zulässigen Situation an keiner
-  Stelle.
+  Baufenster und erweitert es **seitlich, parallel zum Waldrand** (je ca. 0,8 m) sowie **in die
+  waldabgewandte Richtung** (ca. 2,3 m). Die waldseitige Baugrenze des Fensters Nr. 9 wird
+  **nicht überschritten**; der Abstand zum Baumbestand verschlechtert sich gegenüber der
+  planungsrechtlich bereits zulässigen Situation an keiner Stelle.
 - Einhaltung der Gestaltungsvorschriften: keine Terrassierung, Geländeveränderungen nur im
   3-m-Umgriff, Einfriedungen nach § 6 der örtlichen Bauvorschriften, Zisterne gemäß Empfehlung
   des Bebauungsplans, wasserdurchlässige Stellplatzbefestigung.
@@ -42,7 +42,7 @@ Beantragt wird allein die **Überschreitung der eng gefassten Baugrenze (Baufens
 ## 2. Die Sondersituation des Flurstücks 7348
 
 Der Bebauungsplan sichert auf Flst. 7348 lediglich den damaligen Bestand: Das Baufenster Nr. 9
-ist eng um das seinerzeit vorhandene Gebäude gezogen (nutzbar ca. 40 m²), während alle übrigen
+ist eng um das seinerzeit vorhandene Gebäude gezogen (nutzbar ca. 37 m²), während alle übrigen
 Baugrundstücke großzügige Baufenster für 65 m² Grundfläche erhalten haben.
 
 Die Planbegründung (Kap. 5.3) nennt dafür ausdrücklich **keinen städtebaulichen Grund**, sondern

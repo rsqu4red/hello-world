@@ -1,6 +1,6 @@
 # Wochenendhaus Bammental, Flurstück 7348 — Analyse der Rechtslage
 
-**Projekt:** Neubau/Erweiterung Wochenendhaus, Gemarkung Bammental, Flst. 7348 (Bammertsbergweg / Grenzweg)
+**Projekt:** Neubau Wochenendhaus, Grenzweg 12, 69245 Bammental, Flst. 7348 (am Bammertsbergweg)
 **Stand:** Juli 2026 · Arbeitsstand, keine Rechtsberatung
 
 ---
@@ -29,7 +29,7 @@ Bammental (Satzungsfassung vom 11.09.2008) mit Satzung über örtliche Bauvorsch
 ### Sonderfall Flurstück 7348
 
 - Das Baufenster (überbaubare Grundstücksfläche **Nr. 9**) ist **eng um das bestehende
-  Wochenendhaus** (Gebäude Nr. 12 lt. Liegenschaftskarte) gezogen — nutzbar sind nur ca. 40 m²,
+  Wochenendhaus** (Gebäude Nr. 12 lt. Liegenschaftskarte) gezogen — nutzbar sind nur ca. 37 m²,
   während alle übrigen Baugrundstücke großzügige Baufenster mit GR 65 m² erhalten.
 - Grund laut Planbegründung (Kap. 5.3): Das Grundstück liegt praktisch vollständig im
   **30-m-Waldabstandsstreifen** nach § 4 Abs. 3 LBO BW (Wald östlich des Bammertsbergwegs,
@@ -47,7 +47,7 @@ Bammental (Satzungsfassung vom 11.09.2008) mit Satzung über örtliche Bauvorsch
   > diese im Rahmen von Einzelgenehmigungsverfahren von dem nach Landesbauordnung, § 4 Abs. 3
   > geforderten Mindestabstand von 30 m **Ausnahmen** zulassen wird."
 
-**Kernbefund:** Die Beschränkung auf ~40 m² ist keine städtebauliche Entscheidung gegen das
+**Kernbefund:** Die Beschränkung auf ca. 37 m² ist keine städtebauliche Entscheidung gegen das
 Grundstück, sondern allein die Folge der damaligen (2008) Haltung der Forstverwaltung zum
 Waldabstand. Die Gemeinde selbst wollte das Grundstück bebaubar halten — sonst hätte sie das
 Baufenster Nr. 9 gar nicht festgesetzt.
@@ -61,9 +61,9 @@ liegt vor). Rechtlich wichtig:
 - Das **Baufenster Nr. 9 gilt als planungsrechtliche Festsetzung unverändert fort.** Ein Neubau
   innerhalb dieses Fensters ist planungsrechtlich zulässig, und § 4 Abs. 3 LBO n.F. nimmt
   Gebäude, die ein Bebauungsplan mit geringerem Waldabstand zulässt, ausdrücklich vom
-  30-m-Gebot aus. Das Baufenster ist also unser rechtlicher **Anker**: ~40 m² sind dort schon
-  heute baubar; verhandelt wird nur die maßvolle, **ausschließlich waldabgewandte** Erweiterung
-  auf das gebietsübliche Maß von 65 m².
+  30-m-Gebot aus. Das Baufenster ist also unser rechtlicher **Anker**: ca. 37 m² sind dort schon
+  heute baubar; verhandelt wird nur die maßvolle, **waldabstandsneutrale** Erweiterung auf das
+  gebietsübliche Maß von 65 m² (seitlich waldparallel je ca. 0,8 m + waldabgewandt ca. 2,3 m).
 
 ---
 
@@ -112,7 +112,7 @@ Aussicht auf Ausnahmen") ist **überholt**. Damit ist der Weg frei für:
 ### 3.1 Gleichbehandlung (Art. 3 GG / Abwägungsgerechtigkeit)
 
 - Alle übrigen Baugrundstücke im Plangebiet dürfen **65 m² Grundfläche** zzgl. 0,15 GRZ für
-  Nebenanlagen ausnutzen; Flst. 7348 nur ~40 m² — bei **gleicher Belastung** mit Erschließungs-
+  Nebenanlagen ausnutzen; Flst. 7348 nur ca. 37 m² — bei **gleicher Belastung** mit Erschließungs-
   und Umlegungskosten.
 - Die Gemeinde hat 2008 selbst anerkannt (Begründung Kap. 5.2), dass die alten 50 m² „keine
   zeitgemäße Nutzung entsprechend der Zweckbestimmung erlauben" und dass die

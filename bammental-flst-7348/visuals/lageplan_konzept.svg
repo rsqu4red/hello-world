@@ -47,7 +47,7 @@
 
   <!-- Baufenster Nr. 9 (festgesetzt, leer) -->
   <rect x="272" y="352" width="76" height="52" fill="#d3f0f4" fill-opacity="0.6" stroke="#1ec3d6" stroke-width="3" stroke-dasharray="12 5 3 5"/>
-  <text x="310" y="310" font-size="12.5" fill="#159aa9" text-anchor="middle" font-weight="bold">Baufenster Nr. 9 (festgesetzt, ~40 m²)</text>
+  <text x="310" y="310" font-size="12.5" fill="#159aa9" text-anchor="middle" font-weight="bold">Baufenster Nr. 9 (festgesetzt, ca. 37 m²)</text>
   <text x="310" y="324" font-size="10.5" fill="#159aa9" text-anchor="middle">hier ist Bauen heute schon zulässig</text>
   <line x1="310" y1="328" x2="330" y2="352" stroke="#159aa9" stroke-width="1"/>
 

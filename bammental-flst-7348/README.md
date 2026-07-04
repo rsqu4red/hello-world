@@ -16,7 +16,7 @@ Flst. 7348 im Bebauungsplan „Wochenendhausgebiet – 1. Änderung (Neufassung)
 
 ## Kernbotschaft
 
-Die Beschränkung des Flst. 7348 auf ~40 m² Baufenster beruhte 2008 allein auf dem
+Die Beschränkung des Flst. 7348 (Grenzweg 12) auf ca. 37 m² Baufenster beruhte 2008 allein auf dem
 30-m-Waldabstand und der damaligen Absage der Forstverwaltung. Seit der LBO-Reform 2025
 (§ 4 Abs. 3 LBO BW n.F.) gehen Bebauungsplan-Festsetzungen dem 30-m-Gebot vor und
 Einzelfall-Ausnahmen sind möglich. Das Grundstück ist derzeit unbebaut; das festgesetzte
