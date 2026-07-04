@@ -15,10 +15,11 @@ Waldabstand (§ 4 Abs. 3 LBO BW)**
 
 Sehr geehrte Damen und Herren,
 
-als Eigentümer des Flurstücks 7348 (Bammertsbergweg/Grenzweg) beabsichtige ich, das vorhandene,
-in die Jahre gekommene Wochenendhaus durch einen zeitgemäßen, maßvollen Neubau zu ersetzen. Ich
-bitte um Erteilung eines Bauvorbescheids zu den unten formulierten Fragen und begründe mein
-Vorhaben wie folgt.
+als Eigentümer des Flurstücks 7348 (Bammertsbergweg/Grenzweg) beabsichtige ich die Errichtung
+eines zeitgemäßen, maßvollen Wochenendhauses. Das frühere Wochenendhaus, dessen Standort der
+Bebauungsplan mit dem Baufenster Nr. 9 planungsrechtlich gesichert hat, wurde zwischenzeitlich
+entfernt; das Grundstück ist derzeit unbebaut. Ich bitte um Erteilung eines Bauvorbescheids zu
+den unten formulierten Fragen und begründe mein Vorhaben wie folgt.
 
 ## 1. Das Vorhaben
 
@@ -26,9 +27,11 @@ Vorhaben wie folgt.
   Baugrundstücke im Gebiet festsetzt (GR max. 65 m², GRZ 0,15 inkl. Nebenanlagen).
 - **Ein Vollgeschoss**, Satteldach **22°**, Firsthöhe **max. 5,50 m** über EG-Fußbodenoberkante —
   vollständig innerhalb der Festsetzungen des Bebauungsplans und der örtlichen Bauvorschriften.
-- Situierung **im westlichen, waldabgewandten Bereich** des Grundstücks: Der Neubau rückt
-  **nicht näher an den Wald** heran als das bestehende, zulässig errichtete Gebäude; angestrebt
-  wird ein größerer Waldabstand als im Bestand.
+- Situierung **im und am festgesetzten Baufenster Nr. 9**: Der Neubau nutzt das fortgeltende
+  Baufenster und erweitert es ausschließlich **nach Westen — vom Wald weg**. Die waldseitige
+  (östliche) Baugrenze des Fensters Nr. 9 wird **nicht überschritten**; der Waldabstand
+  verschlechtert sich gegenüber der planungsrechtlich bereits zulässigen Situation an keiner
+  Stelle.
 - Einhaltung der Gestaltungsvorschriften: keine Terrassierung, Geländeveränderungen nur im
   3-m-Umgriff, Einfriedungen nach § 6 der örtlichen Bauvorschriften, Zisterne gemäß Empfehlung
   des Bebauungsplans, wasserdurchlässige Stellplatzbefestigung.
@@ -38,9 +41,9 @@ Beantragt wird allein die **Überschreitung der eng gefassten Baugrenze (Baufens
 
 ## 2. Die Sondersituation des Flurstücks 7348
 
-Der Bebauungsplan sichert auf Flst. 7348 lediglich den Bestand: Das Baufenster Nr. 9 ist eng um
-das vorhandene Gebäude gezogen (nutzbar ca. 40 m²), während alle übrigen Baugrundstücke
-großzügige Baufenster für 65 m² Grundfläche erhalten haben.
+Der Bebauungsplan sichert auf Flst. 7348 lediglich den damaligen Bestand: Das Baufenster Nr. 9
+ist eng um das seinerzeit vorhandene Gebäude gezogen (nutzbar ca. 40 m²), während alle übrigen
+Baugrundstücke großzügige Baufenster für 65 m² Grundfläche erhalten haben.
 
 Die Planbegründung (Kap. 5.3) nennt dafür ausdrücklich **keinen städtebaulichen Grund**, sondern
 allein den Waldabstand nach § 4 Abs. 3 LBO in Verbindung mit der damaligen Auskunft der
@@ -86,15 +89,18 @@ Grundstück erst recht Geltung.
 **d) Belange des Waldes werden nicht beeinträchtigt.**
 - Zwischen Baugrundstück und Waldtraufe liegt der **Bammertsbergweg** als dauerhaft freier
   Puffer.
-- Der Neubau hält **mindestens den Waldabstand des zulässig errichteten Bestands** ein bzw.
-  vergrößert ihn; eine Verschärfung der Gefahrenlage (Brand, Baumwurf) tritt nicht ein — durch
-  nichtbrennbare Dacheindeckung und moderne Bauweise sinkt das Brandrisiko gegenüber dem
-  Altbestand.
+- Der Neubau hält **mindestens den Waldabstand des festgesetzten Baufensters Nr. 9** ein — die
+  Erweiterung liegt vollständig auf der waldabgewandten Seite. Gegenüber der schon heute
+  zulässigen Bebauung des Fensters tritt keinerlei Verschärfung der Gefahrenlage (Brand,
+  Baumwurf) ein; nichtbrennbare Dacheindeckung, Funkenflugschutz und Löschwasser-Zisterne
+  verbessern die Situation gegenüber dem früheren Altbestand sogar.
+- Der angrenzende Wald ist nach den vorliegenden Aufnahmen überwiegend **Laubwald (Buche)** mit
+  entsprechend geringem Waldbrandrisiko.
 - Zur Baumwurfgefahr biete ich an, eine forstfachliche Stellungnahme (Baumfallzone) beizubringen
   und Freisitz/Stellplatz außerhalb der Fallzone anzuordnen.
-- Der Baumbestand außerhalb der überbaubaren Fläche bleibt erhalten (Festsetzung Nr. 9 des
-  Bebauungsplans); zusätzlich sage ich Neuanpflanzungen von Obstbäumen sowie eine
-  artenschutzfachliche Prüfung vor Rückbau des Altgebäudes zu.
+- Der Baumbestand außerhalb der überbaubaren Fläche bleibt erhalten (Festsetzung 9 des
+  Bebauungsplans); zusätzlich sage ich Neuanpflanzungen von Obstbäumen und eine
+  Baufeldfreimachung außerhalb der Vogelbrutzeit zu.
 
 **e) Vereinbarkeit mit öffentlichen Belangen und nachbarlichen Interessen.** Nachbarliche Belange
 werden durch die Einhaltung der seitlichen Abstände von mindestens 5 m gewahrt; das Vorhaben ist
@@ -102,12 +108,14 @@ von den angrenzenden Grundstücken aus als gebietstypisches Wochenendhaus wahrne
 
 ## 5. Fragen der Bauvoranfrage
 
-1. Ist auf Flst. 7348 ein Wochenendhaus mit bis zu 65 m² Grundfläche, einem Vollgeschoss und
-   max. 5,50 m Firsthöhe im dargestellten Baufeld (Anlage Lageplan) unter Befreiung von der
-   Baugrenze des Baufensters Nr. 9 planungsrechtlich zulässig?
-2. Wird hierfür die Ausnahme vom Waldabstandsgebot des § 4 Abs. 3 LBO zugelassen —
-   hilfsweise: Ist das Vorhaben als bauliche Änderung/Ersatzbau des rechtmäßig bestehenden
-   Gebäudes vom Waldabstandsgebot freigestellt?
+1. Ist ein Wochenendhaus **innerhalb des festgesetzten Baufensters Nr. 9** nach § 30 BauGB
+   i.V.m. § 4 Abs. 3 LBO (Vorrang der Bebauungsplan-Festsetzung vor dem 30-m-Gebot) ohne
+   weitere Ausnahme zulässig?
+2. Ist auf Flst. 7348 ein Wochenendhaus mit bis zu 65 m² Grundfläche, einem Vollgeschoss und
+   max. 5,50 m Firsthöhe im dargestellten Baufeld (Anlage Lageplan; Erweiterung des Fensters
+   Nr. 9 ausschließlich nach Westen) unter Befreiung von der Baugrenze nach § 31 Abs. 2 BauGB
+   zulässig — und wird, soweit erforderlich, die Ausnahme vom Waldabstandsgebot des § 4 Abs. 3
+   LBO zugelassen?
 3. Hilfsweise: Ist die Gemeinde bereit, das Baufenster Nr. 9 im Wege einer vereinfachten
    Planänderung (§ 13 BauGB) an das im Plangebiet übliche Maß anzupassen? Hierzu rege ich eine
    Behandlung im Gemeinderat an.
@@ -117,7 +125,8 @@ von den angrenzenden Grundstücken aus als gebietstypisches Wochenendhaus wahrne
 - Lageplan-Konzept M ~1:500 mit Baufeld, Abständen und Waldabstandssituation
 - Konzeptdarstellungen (Ansichten/Schnitt) des geplanten Wochenendhauses
 - Auszug Liegenschaftskarte 1:500 (Vermessungsbehörde, 07.06.2018)
-- Fotodokumentation Bestand und Waldrand *(wird nachgereicht)*
+- Fotodokumentation Grundstück und Waldrand (inkl. Drohnenaufnahme)
+- Referenzbilder zur geplanten Architektursprache
 
 Mit freundlichen Grüßen
 

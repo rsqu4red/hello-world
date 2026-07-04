@@ -52,6 +52,18 @@ Grundstück, sondern allein die Folge der damaligen (2008) Haltung der Forstverw
 Waldabstand. Die Gemeinde selbst wollte das Grundstück bebaubar halten — sonst hätte sie das
 Baufenster Nr. 9 gar nicht festgesetzt.
 
+**Aktueller Stand (2026):** Das frühere Wochenendhaus ist zwischenzeitlich entfernt; das
+Grundstück ist unbebaut (Drohnenaufnahme liegt vor). Rechtlich wichtig:
+
+- Der **Bestandsschutz** des Gebäudes ist damit erloschen — der Weg über „bauliche Änderung
+  rechtmäßig bestehender Anlagen" (§ 4 Abs. 3 LBO) steht **nicht mehr** zur Verfügung.
+- Das **Baufenster Nr. 9 gilt als planungsrechtliche Festsetzung unverändert fort.** Ein Neubau
+  innerhalb dieses Fensters ist planungsrechtlich zulässig, und § 4 Abs. 3 LBO n.F. nimmt
+  Gebäude, die ein Bebauungsplan mit geringerem Waldabstand zulässt, ausdrücklich vom
+  30-m-Gebot aus. Das Baufenster ist also unser rechtlicher **Anker**: ~40 m² sind dort schon
+  heute baubar; verhandelt wird nur die maßvolle, **ausschließlich waldabgewandte** Erweiterung
+  auf das gebietsübliche Maß von 65 m².
+
 ---
 
 ## 2. Die Rechtslage hat sich seit 2008 geändert
@@ -71,9 +83,11 @@ Daraus folgen drei eigenständige Wege:
 - **Weg A — Bebauungsplan:** Die Gemeinde kann ein größeres Baufenster im Waldabstandsstreifen
   schlicht festsetzen; die 30-m-Regel tritt dann zurück. Dass das rechtlich möglich ist, beweist der
   Plan selbst: Baufenster Nr. 9 liegt bereits vollständig im Streifen.
-- **Weg B — bauliche Änderung des Bestands:** Erweiterung/Umbau des rechtmäßig bestehenden
-  Gebäudes ist vom Waldabstandsgebot ausdrücklich ausgenommen (Umfang im Einzelfall mit der
-  Baurechtsbehörde zu klären; je näher am Bestand, desto sicherer).
+- **Weg B — Neubau im fortgeltenden Baufenster Nr. 9 plus Erweiterung:** Innerhalb des
+  festgesetzten Fensters ist ein Neubau bereits heute zulässig (B-Plan-Festsetzung geht dem
+  30-m-Gebot vor). Die Befreiung nach § 31 Abs. 2 BauGB wird nur für den **westlich, also
+  waldabgewandt** über das Fenster hinausgehenden Gebäudeteil benötigt — die waldseitige
+  Baugrenze wird nicht überschritten.
 - **Weg C — Ausnahme im Einzelfall:** Anders als nach altem Recht ist die Ausnahme heute ohne
   die früheren engen Tatbestandsvoraussetzungen ins Ermessen der Baurechtsbehörde gestellt
   (Anhörung der Forstbehörde). Die pauschale Absage der Forstverwaltung von 2008 entspricht
@@ -111,10 +125,11 @@ Aussicht auf Ausnahmen") ist **überholt**. Damit ist der Weg frei für:
 
 - Zwischen Grundstück und Wald verläuft der **Bammertsbergweg** (öffentlicher Weg, Flst. 4609)
   als dauerhaft unbebaubarer Puffer.
-- Auf dem Grundstück steht seit Jahrzehnten ein **zulässig errichtetes** Wochenendhaus im
-  Abstandsstreifen — die vom Waldabstand adressierten Gefahren (Brand, Baumwurf) bestehen
-  bereits heute und werden durch einen maßvollen Neubau **nicht erhöht**, wenn dieser **nicht
-  näher an den Wald** rückt als der Bestand.
+- Auf dem Grundstück stand jahrzehntelang ein **zulässig errichtetes** Wochenendhaus im
+  Abstandsstreifen; der Bebauungsplan schreibt diese Bebaubarkeit mit Baufenster Nr. 9 fort.
+  Die vom Waldabstand adressierten Gefahren (Brand, Baumwurf) sind vom Plangeber für diesen
+  Standort also bereits bewertet und hingenommen — die Erweiterung rückt **nicht näher an den
+  Wald**, sondern ausschließlich von ihm weg.
 - Schutzrichtung Brandschutz: Wochenendhaus ohne ständige Nutzung, moderne Bauweise
   (nichtbrennbare Dacheindeckung, Abschottung) kann das Risiko gegenüber dem Altbestand sogar
   senken.
@@ -147,7 +162,8 @@ Aussicht auf Ausnahmen") ist **überholt**. Damit ist der Weg frei für:
   eingehalten; Neuanpflanzung von Obstbäumen als Angebot.
 - Dachbegrünung ist im Plan ausdrücklich empfohlen — kann beim Nebengebäude angeboten werden;
   Zisterne (Empfehlung des Plans, min. 0,02 m³/m² Dachfläche) wird vorgesehen.
-- Artenschutzprüfung (Bruthöhlen etc.) vor Rückbau des Altgebäudes wird zugesagt.
+- Grundstück ist bereits unbebaut und als Wiese gepflegt — der Neubau greift nicht in
+  Gehölzbestand ein; Baufeldfreimachung außerhalb der Vogelbrutzeit wird zugesagt.
 
 ---
 
@@ -170,8 +186,12 @@ Aussicht auf Ausnahmen") ist **überholt**. Damit ist der Weg frei für:
 
 ## 5. Offene Punkte / benötigte Unterlagen
 
-- Exakte Grundstücksgröße und Abstand Westgrenze ↔ Waldtraufe (Vermessung/amtl. Auszug).
-- Fotos Bestand + Waldrand (liegen beim Bauherrn vor — nachreichen).
-- Baujahr/Genehmigungslage des Bestandsgebäudes (Nachweis „rechtmäßig bestehend").
-- Klärung, ob Waldtraufe östlich des Bammertsbergwegs verläuft (Annahme nach Liegenschaftskarte:
-  ja, Flst. 5646 „LNH").
+- Exakte Grundstücksgröße und Abstand Baufeld ↔ Waldtraufe (Vermessung/amtl. Auszug).
+- Unterlagen zum früheren Gebäude (Genehmigung, Zeitpunkt/Anlass des Abbruchs) — für die
+  Historie und das Argument der planerisch anerkannten Bebaubarkeit.
+- Verlauf des Bammertsbergwegs vor Ort verifizieren: Die Liegenschaftskarte zeigt den Weg
+  (Flst. 4609) zwischen Grundstück und Wald (Flst. 5646); die Drohnenaufnahme zeigt den
+  Waldrand unmittelbar hinter dem Zaun. Für die Pufferwirkung-Argumentation exakte Abstände
+  aufnehmen.
+- Waldtyp bestätigen: Laut Drohnenaufnahme überwiegend **Laubwald (Buche)** — günstig für die
+  Waldbrand-Argumentation gegenüber der Forstbehörde.

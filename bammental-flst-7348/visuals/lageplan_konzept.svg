@@ -1,17 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 720" font-family="Helvetica, Arial, sans-serif">
   <defs>
-    <pattern id="bestandHatch" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
-      <rect width="8" height="8" fill="#e8e2d6"/>
-      <line x1="0" y1="0" x2="0" y2="8" stroke="#8a7f6a" stroke-width="1.5"/>
-    </pattern>
     <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/>
     </marker>
   </defs>
 
   <rect width="940" height="720" fill="#fbfaf7"/>
 
-  <!-- Wiese / Grundstücksumfeld -->
   <!-- Grenzweg (Nord) -->
   <polygon points="60,150 400,55 400,25 60,120" fill="#f0ead8" stroke="#b5ab90" stroke-width="1"/>
   <text x="180" y="105" font-size="15" fill="#7a6f55" transform="rotate(-15 180 105)">Grenzweg</text>
@@ -29,54 +27,60 @@
     <circle cx="545" cy="455" r="22"/><circle cx="615" cy="510" r="24"/>
   </g>
   <text x="590" y="565" font-size="15" fill="#3f6234" text-anchor="middle" font-weight="bold">Wald (Flst. 5646)</text>
+  <text x="590" y="583" font-size="12" fill="#3f6234" text-anchor="middle">überwiegend Laubwald (Buche)</text>
   <text x="502" y="38" font-size="12" fill="#3f6234" transform="rotate(90 506 40)">Waldtraufe</text>
 
   <!-- Flurstück 7348 -->
   <polygon points="100,620 80,170 360,90 370,420 350,540 100,620" fill="#f6f3ea" stroke="#4a4a4a" stroke-width="2.5"/>
   <text x="150" y="205" font-size="18" font-weight="bold" fill="#4a4a4a">Flst. 7348</text>
-  <text x="150" y="225" font-size="12" fill="#8a8578">ca. 1.300 m² (Angabe prüfen)</text>
+  <text x="150" y="225" font-size="12" fill="#8a8578">derzeit unbebaut · ca. 1.300 m² (prüfen)</text>
 
   <!-- Nachbargrundstücke -->
   <text x="45" y="400" font-size="13" fill="#a09a8a" transform="rotate(-83 45 400)">Flst. 7349</text>
   <text x="215" y="640" font-size="13" fill="#a09a8a">Flst. 7354</text>
 
-  <!-- 30m Waldabstandslinie: Waldtraufe x=500 minus 30m (10px/m) -> x=200 -->
+  <!-- 30m Waldabstandslinie -->
   <line x1="196" y1="70" x2="212" y2="640" stroke="#c0392b" stroke-width="2" stroke-dasharray="10 6"/>
   <text x="222" y="120" font-size="12.5" fill="#c0392b" font-weight="bold">30-m-Waldabstand</text>
-  <text x="222" y="136" font-size="12.5" fill="#c0392b">§ 4 Abs. 3 LBO</text>
-  <text x="222" y="152" font-size="12.5" fill="#c0392b">(Ausnahme beantragt)</text>
+  <text x="222" y="136" font-size="12.5" fill="#c0392b">§ 4 Abs. 3 LBO n.F. 2025:</text>
+  <text x="222" y="152" font-size="12.5" fill="#c0392b">B-Plan-Festsetzung geht vor</text>
 
-  <!-- Bestand + Baufenster Nr. 9 -->
-  <rect x="265" y="345" width="90" height="66" fill="none" stroke="#1ec3d6" stroke-width="3" stroke-dasharray="12 5 3 5"/>
-  <rect x="272" y="352" width="76" height="52" fill="url(#bestandHatch)" stroke="#8a7f6a" stroke-width="1.5"/>
-  <text x="310" y="336" font-size="12.5" fill="#159aa9" text-anchor="middle" font-weight="bold">Baufenster Nr. 9 (Bestand, ~40 m²)</text>
-  <text x="310" y="382" font-size="11" fill="#6d6350" text-anchor="middle">Bestand,</text>
-  <text x="310" y="395" font-size="11" fill="#6d6350" text-anchor="middle">später Rückbau</text>
+  <!-- Baufenster Nr. 9 (festgesetzt, leer) -->
+  <rect x="272" y="352" width="76" height="52" fill="#d3f0f4" fill-opacity="0.6" stroke="#1ec3d6" stroke-width="3" stroke-dasharray="12 5 3 5"/>
+  <text x="310" y="310" font-size="12.5" fill="#159aa9" text-anchor="middle" font-weight="bold">Baufenster Nr. 9 (festgesetzt, ~40 m²)</text>
+  <text x="310" y="324" font-size="10.5" fill="#159aa9" text-anchor="middle">hier ist Bauen heute schon zulässig</text>
+  <line x1="310" y1="328" x2="330" y2="352" stroke="#159aa9" stroke-width="1"/>
 
-  <!-- Neubau -->
-  <rect x="140" y="342" width="96" height="68" fill="#d8862b" fill-opacity="0.85" stroke="#8f5410" stroke-width="2.5"/>
-  <!-- Firstlinie -->
-  <line x1="140" y1="376" x2="236" y2="376" stroke="#8f5410" stroke-width="1.5" stroke-dasharray="6 4"/>
-  <text x="188" y="368" font-size="12.5" fill="#fff" text-anchor="middle" font-weight="bold">NEUBAU</text>
-  <text x="188" y="384" font-size="11" fill="#fff" text-anchor="middle">9,60 × 6,75 m</text>
-  <text x="188" y="398" font-size="11" fill="#fff" text-anchor="middle">GR 64,8 m² ≤ 65 m²</text>
-  <!-- Terrasse -->
-  <rect x="140" y="412" width="60" height="42" fill="none" stroke="#8f5410" stroke-width="1.5" stroke-dasharray="4 4"/>
-  <text x="170" y="437" font-size="10.5" fill="#8f5410" text-anchor="middle">Terrasse SW</text>
+  <!-- Neubau: Ostkante = Ostkante Baufenster (x=348), Erweiterung nach Westen -->
+  <rect x="252" y="344" width="96" height="68" fill="#d8862b" fill-opacity="0.82" stroke="#8f5410" stroke-width="2.5"/>
+  <line x1="252" y1="378" x2="348" y2="378" stroke="#8f5410" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="298" y="366" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">NEUBAU</text>
+  <text x="298" y="381" font-size="10.5" fill="#fff" text-anchor="middle">9,60 × 6,75 m</text>
+  <text x="298" y="395" font-size="10.5" fill="#fff" text-anchor="middle">GR 64,8 ≤ 65 m²</text>
+  <text x="298" y="408" font-size="9.5" fill="#fff" text-anchor="middle">Stehfalzdach 22°</text>
+
+  <!-- Waldseitige Baugrenze wird nicht überschritten -->
+  <line x1="348" y1="335" x2="348" y2="425" stroke="#2e7d32" stroke-width="4"/>
+  <text x="360" y="440" font-size="11.5" fill="#2e7d32" font-weight="bold">waldseitige Baugrenze:</text>
+  <text x="360" y="454" font-size="11.5" fill="#2e7d32">wird NICHT überschritten</text>
+
+  <!-- Erweiterungsrichtung -->
+  <line x1="300" y1="470" x2="210" y2="470" stroke="#2e7d32" stroke-width="2.5" marker-end="url(#arrg)"/>
+  <text x="255" y="488" font-size="12" fill="#2e7d32" text-anchor="middle" font-weight="bold">Erweiterung nur nach Westen — vom Wald weg</text>
+
+  <!-- Holzdeck -->
+  <rect x="185" y="370" width="67" height="42" fill="none" stroke="#8f5410" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="218" y="395" font-size="10.5" fill="#8f5410" text-anchor="middle">Holzdeck W/S</text>
+
   <!-- Stellplatz am Grenzweg -->
   <rect x="130" y="155" width="36" height="52" fill="none" stroke="#8f5410" stroke-width="1.5" stroke-dasharray="4 4" transform="rotate(-15 148 181)"/>
   <text x="108" y="145" font-size="10.5" fill="#8f5410">Stellplatz (wasserdurchlässig)</text>
 
   <!-- Bemaßungen -->
-  <!-- Grenzabstand West >=5m -->
-  <line x1="88" y1="376" x2="140" y2="376" stroke="#333" stroke-width="1.2" marker-start="url(#arr)" marker-end="url(#arr)"/>
-  <text x="114" y="366" font-size="11.5" fill="#333" text-anchor="middle">≥ 5,0 m</text>
-  <!-- Abstand Neubau -> Waldtraufe -->
-  <line x1="236" y1="470" x2="500" y2="470" stroke="#2e7d32" stroke-width="1.4" marker-start="url(#arr)" marker-end="url(#arr)"/>
-  <text x="368" y="461" font-size="12" fill="#2e7d32" text-anchor="middle" font-weight="bold">Neubau → Wald: Abstand deutlich größer als Bestand</text>
-  <!-- Abstand Bestand -> Waldtraufe -->
-  <line x1="348" y1="430" x2="500" y2="430" stroke="#8a7f6a" stroke-width="1.2" marker-start="url(#arr)" marker-end="url(#arr)"/>
-  <text x="424" y="422" font-size="11" fill="#6d6350" text-anchor="middle">Bestand → Wald (heute zulässig)</text>
+  <line x1="88" y1="378" x2="185" y2="378" stroke="#333" stroke-width="1.2" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="136" y="368" font-size="11.5" fill="#333" text-anchor="middle">≥ 5,0 m zur Grenze</text>
+  <line x1="348" y1="515" x2="500" y2="515" stroke="#8a7f6a" stroke-width="1.2" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="428" y="532" font-size="11" fill="#6d6350" text-anchor="middle">Abstand zur Waldtraufe unverändert</text>
 
   <!-- Nordpfeil -->
   <g transform="translate(880,70)">
@@ -87,11 +91,11 @@
   <!-- Legende / Titel -->
   <g transform="translate(60,655)">
     <rect x="0" y="-14" width="14" height="14" fill="#d8862b"/>
-    <text x="20" y="-3" font-size="12" fill="#333">Neubau (Befreiung von Baugrenze beantragt)</text>
-    <rect x="310" y="-14" width="14" height="14" fill="url(#bestandHatch)" stroke="#8a7f6a"/>
-    <text x="330" y="-3" font-size="12" fill="#333">Bestand / Baufenster Nr. 9</text>
-    <line x1="530" y1="-7" x2="560" y2="-7" stroke="#c0392b" stroke-width="2" stroke-dasharray="8 5"/>
-    <text x="566" y="-3" font-size="12" fill="#333">30-m-Waldabstandslinie</text>
+    <text x="20" y="-3" font-size="12" fill="#333">Neubau (Befreiung nur für westliche Erweiterung)</text>
+    <rect x="330" y="-14" width="14" height="14" fill="#d3f0f4" stroke="#1ec3d6" stroke-dasharray="6 3"/>
+    <text x="350" y="-3" font-size="12" fill="#333">Baufenster Nr. 9 (festgesetzt)</text>
+    <line x1="560" y1="-7" x2="590" y2="-7" stroke="#c0392b" stroke-width="2" stroke-dasharray="8 5"/>
+    <text x="596" y="-3" font-size="12" fill="#333">30-m-Waldabstandslinie</text>
     <text x="0" y="24" font-size="15" font-weight="bold" fill="#333">Lageplan-Konzept · Wochenendhaus Flst. 7348, Bammental</text>
     <text x="0" y="42" font-size="11.5" fill="#8a8578">Unmaßstäbliche Konzeptskizze auf Basis Liegenschaftskarte 1:500 (07.06.2018) und</text>
     <text x="0" y="57" font-size="11.5" fill="#8a8578">B-Plan „Wochenendhausgebiet – 1. Änderung (Neufassung)“ · Maße nach Vermessung zu präzisieren</text>
