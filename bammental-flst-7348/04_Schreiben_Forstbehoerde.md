@@ -50,8 +50,9 @@ Vorhaben nur in einer Form verfolgen, die aus forstfachlicher Sicht mitgetragen 
   oder Ton), keine offenen Feuerstellen auf der Waldseite, **Löschwasser-Zisterne**,
   Aufenthaltsbereiche im Freien (Terrasse, Stellplatz) auf der waldabgewandten Seite und damit
   außerhalb der unmittelbaren Baumfallzone.
-- Der angrenzende Bestand ist nach meiner Wahrnehmung überwiegend **Laubwald (Buche)**;
-  zwischen Grundstück und Waldtraufe verläuft zudem der Bammertsbergweg. Gern stelle ich Ihnen
+- Der angrenzende Bestand ist überwiegend **Laubwald (Buche)**. Zwischen dem Baufenster und
+  der Waldtraufe liegt ein **ca. 20 m breiter, dauerhaft freier Puffer**: ein Grünstreifen mit
+  Büschen und Brombeeren (keine Großbäume) sowie der Bammertsbergweg. Gern stelle ich Ihnen
   Fotos und eine aktuelle Drohnenaufnahme zur Verfügung.
 - Sollte aus Ihrer Sicht eine **forstfachliche Stellungnahme oder ein Baumfallzonen-Gutachten**
   sinnvoll sein, beauftrage ich dies gern auf meine Kosten.

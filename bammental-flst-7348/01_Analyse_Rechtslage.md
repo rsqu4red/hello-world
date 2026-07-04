@@ -52,8 +52,9 @@ Grundstück, sondern allein die Folge der damaligen (2008) Haltung der Forstverw
 Waldabstand. Die Gemeinde selbst wollte das Grundstück bebaubar halten — sonst hätte sie das
 Baufenster Nr. 9 gar nicht festgesetzt.
 
-**Aktueller Stand (2026):** Das frühere Wochenendhaus ist zwischenzeitlich entfernt; das
-Grundstück ist unbebaut (Drohnenaufnahme liegt vor). Rechtlich wichtig:
+**Aktueller Stand (2026):** Das frühere Wochenendhaus — eine baufällige, nicht solide gebaute
+Holzhütte — wurde vom Voreigentümer entfernt; das Grundstück ist unbebaut (Drohnenaufnahme
+liegt vor). Rechtlich wichtig:
 
 - Der **Bestandsschutz** des Gebäudes ist damit erloschen — der Weg über „bauliche Änderung
   rechtmäßig bestehender Anlagen" (§ 4 Abs. 3 LBO) steht **nicht mehr** zur Verfügung.
@@ -123,8 +124,9 @@ Aussicht auf Ausnahmen") ist **überholt**. Damit ist der Weg frei für:
 
 ### 3.2 Atypik der örtlichen Situation
 
-- Zwischen Grundstück und Wald verläuft der **Bammertsbergweg** (öffentlicher Weg, Flst. 4609)
-  als dauerhaft unbebaubarer Puffer.
+- Zwischen Baufenster und Waldtraufe liegt ein **ca. 20 m breiter, dauerhaft unbebaubarer
+  Puffer**: Grünstreifen hinter dem Zaun (Büsche/Brombeeren, keine Großbäume) und der
+  **Bammertsbergweg** (öffentlicher Weg, Flst. 4609). Erst dahinter beginnt der Wald.
 - Auf dem Grundstück stand jahrzehntelang ein **zulässig errichtetes** Wochenendhaus im
   Abstandsstreifen; der Bebauungsplan schreibt diese Bebaubarkeit mit Baufenster Nr. 9 fort.
   Die vom Waldabstand adressierten Gefahren (Brand, Baumwurf) sind vom Plangeber für diesen
@@ -187,11 +189,10 @@ Aussicht auf Ausnahmen") ist **überholt**. Damit ist der Weg frei für:
 ## 5. Offene Punkte / benötigte Unterlagen
 
 - Exakte Grundstücksgröße und Abstand Baufeld ↔ Waldtraufe (Vermessung/amtl. Auszug).
-- Unterlagen zum früheren Gebäude (Genehmigung, Zeitpunkt/Anlass des Abbruchs) — für die
-  Historie und das Argument der planerisch anerkannten Bebaubarkeit.
-- Verlauf des Bammertsbergwegs vor Ort verifizieren: Die Liegenschaftskarte zeigt den Weg
-  (Flst. 4609) zwischen Grundstück und Wald (Flst. 5646); die Drohnenaufnahme zeigt den
-  Waldrand unmittelbar hinter dem Zaun. Für die Pufferwirkung-Argumentation exakte Abstände
-  aufnehmen.
+- Unterlagen zum früheren Gebäude, soweit vom Voreigentümer erhältlich (Genehmigung,
+  Abbruch) — für die Historie und das Argument der planerisch anerkannten Bebaubarkeit.
+- Pufferbreite dokumentieren (Bauherr: ca. 20 m vom Baufenster bis zur Waldtraufe —
+  Grünstreifen mit Büschen/Brombeeren, dann Bammertsbergweg, dann Wald); für die
+  Bauvoranfrage vermessen/bemaßen.
 - Waldtyp bestätigen: Laut Drohnenaufnahme überwiegend **Laubwald (Buche)** — günstig für die
   Waldbrand-Argumentation gegenüber der Forstbehörde.

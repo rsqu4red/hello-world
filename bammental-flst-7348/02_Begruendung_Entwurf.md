@@ -87,8 +87,8 @@ Grundstücksausnutzung erlauben muss" (Begründung Kap. 5.2). Diese Wertung bean
 Grundstück erst recht Geltung.
 
 **d) Belange des Waldes werden nicht beeinträchtigt.**
-- Zwischen Baugrundstück und Waldtraufe liegt der **Bammertsbergweg** als dauerhaft freier
-  Puffer.
+- Zwischen Baufenster und Waldtraufe liegt ein **ca. 20 m breiter, dauerhaft freier Puffer**
+  aus Grünstreifen (Büsche/Brombeeren, keine Großbäume) und dem öffentlichen Bammertsbergweg.
 - Der Neubau hält **mindestens den Waldabstand des festgesetzten Baufensters Nr. 9** ein — die
   Erweiterung liegt vollständig auf der waldabgewandten Seite. Gegenüber der schon heute
   zulässigen Bebauung des Fensters tritt keinerlei Verschärfung der Gefahrenlage (Brand,
