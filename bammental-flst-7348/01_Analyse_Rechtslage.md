@@ -127,6 +127,11 @@ Aussicht auf Ausnahmen") ist **überholt**. Damit ist der Weg frei für:
 - Zwischen Baufenster und Waldtraufe liegt ein **ca. 20 m breiter, dauerhaft unbebaubarer
   Puffer**: Grünstreifen hinter dem Zaun (Büsche/Brombeeren, keine Großbäume) und der
   **Bammertsbergweg** (öffentlicher Weg, Flst. 4609). Erst dahinter beginnt der Wald.
+- **Öffentlicher-Weg-Argument:** Der Waldrand grenzt hier an einen dem öffentlichen Verkehr
+  gewidmeten Weg und wird in diesem Rahmen ohnehin kontrolliert/gepflegt. Ein Gebäude hinter
+  dem Weg erzeugt keinen zusätzlichen Sicherungs- oder Pflegeaufwand — die Baumfallzone endet
+  faktisch am bereits gesicherten Wegekorridor. (Diplomatisch formulieren: nicht die Pflichten
+  der Behörde „erklären", sondern auf den fehlenden Mehraufwand abstellen.)
 - Auf dem Grundstück stand jahrzehntelang ein **zulässig errichtetes** Wochenendhaus im
   Abstandsstreifen; der Bebauungsplan schreibt diese Bebaubarkeit mit Baufenster Nr. 9 fort.
   Die vom Waldabstand adressierten Gefahren (Brand, Baumwurf) sind vom Plangeber für diesen

@@ -1,85 +1,93 @@
-# Entwurf: Schreiben an die untere Forstbehörde (Kreisforstamt)
+# Schreiben an die untere Forstbehörde — Finalfassung
 
-> **Arbeitsentwurf** — Absender, Datum ergänzen. Adressat: Landratsamt Rhein-Neckar-Kreis,
-> Kreisforstamt / untere Forstbehörde (zuständiges Forstrevier Bammental ggf. in Kopie).
-> Ton: bewusst früh, offen und kooperativ — Ziel ist eine positive oder zumindest neutrale
-> forstfachliche Einschätzung, bevor die Gemeinde angesprochen wird.
+> Vor Versand ergänzen: Absenderblock, Datum, ggf. Name des zuständigen Revierförsters.
+> Empfänger: Landratsamt Rhein-Neckar-Kreis, Kreisforstamt — untere Forstbehörde
+> (Forstrevier Bammental gern in Kopie).
 
 ---
 
-**An das Landratsamt Rhein-Neckar-Kreis
-— Kreisforstamt / untere Forstbehörde —**
+*(Absender: Name, Anschrift, Telefon, E-Mail)*
 
-**Betreff: Frühzeitige forstfachliche Abstimmung — geplanter Neubau eines Wochenendhauses auf
-Flst. 7348, Gemarkung Bammental (Bebauungsplan „Wochenendhausgebiet – 1. Änderung (Neufassung)");
-Waldabstand nach § 4 Abs. 3 LBO; Bitte um Gesprächstermin, gern vor Ort**
+*(Datum)*
+
+**Landratsamt Rhein-Neckar-Kreis
+Kreisforstamt — untere Forstbehörde**
+
+**Geplanter Neubau eines Wochenendhauses auf Flst. 7348, Gemarkung Bammental —
+Waldabstand nach § 4 Abs. 3 LBO; Bitte um frühzeitige forstfachliche Abstimmung,
+gern bei einem Ortstermin**
 
 Sehr geehrte Damen und Herren,
 
-ich bin Eigentümer des Flurstücks 7348 am Bammertsbergweg in Bammental und plane dort die
-Errichtung eines Wochenendhauses. Bevor ich bei der Gemeinde und der Baurechtsbehörde formelle
-Schritte einleite, ist mir eine **frühzeitige Abstimmung mit Ihnen** wichtig, da mein Grundstück
-im 30-m-Waldabstandsstreifen zum östlich angrenzenden Wald (Flst. 5646) liegt. Ich möchte ein
-Vorhaben nur in einer Form verfolgen, die aus forstfachlicher Sicht mitgetragen werden kann.
+ich bin Eigentümer des Flurstücks 7348 am Bammertsbergweg in Bammental, im Geltungsbereich des
+Bebauungsplans „Wochenendhausgebiet – 1. Änderung (Neufassung)" (2008). Ich plane dort ein
+Wochenendhaus und möchte **vor** allen weiteren Schritten Ihre forstfachliche Einschätzung
+einholen, da das Grundstück im 30-m-Waldabstandsstreifen zum östlich gelegenen Wald
+(Flst. 5646) liegt.
 
-## Zur Situation
+## Worum es geht
 
-1. Der Bebauungsplan „Wochenendhausgebiet – 1. Änderung (Neufassung)" (2008) setzt auf meinem
-   Grundstück bereits eine **überbaubare Grundstücksfläche (Baufenster Nr. 9) innerhalb des
-   Waldabstandsstreifens** fest. Sie sichert den Standort des früheren, zulässig errichteten
-   Wochenendhauses; das Gebäude selbst wurde zwischenzeitlich entfernt, das Grundstück ist
-   derzeit unbebaut.
-2. Alle übrigen Baugrundstücke im Gebiet dürfen eine Grundfläche von 65 m² bebauen; mein
-   Baufenster umfasst nur rund 40 m². Die Planbegründung von 2008 führt dies allein auf die
-   damalige Einschätzung der Forstverwaltung zurück, Ausnahmen vom Waldabstand seien nicht in
-   Aussicht zu stellen.
-3. Mit der **LBO-Reform 2025** wurde § 4 Abs. 3 LBO neu gefasst: Bebauungsplan-Festsetzungen
-   mit geringerem Waldabstand gehen dem 30-m-Gebot vor, und Ausnahmen können im Einzelfall
-   zugelassen werden.
+Der Bebauungsplan setzt auf meinem Grundstück bereits eine **überbaubare Grundstücksfläche
+(Baufenster Nr. 9) innerhalb des Abstandsstreifens** fest — dort ist ein Gebäude nach § 4
+Abs. 3 Satz 2 LBO (Vorrang der Bebauungsplan-Festsetzung) schon heute zulässig. Das Baufenster
+umfasst jedoch nur rund 40 m², während alle übrigen Grundstücke im Gebiet 65 m² Grundfläche
+bebauen dürfen. Ich möchte das Baufenster **ausschließlich nach Westen — also vom Wald weg —**
+auf das gebietsübliche Maß erweitern. **Die waldseitige Baugrenze bleibt unangetastet; zum Wald
+hin ändert sich gegenüber der heute bereits zulässigen Situation nichts.**
 
-## Mein Vorhaben — bewusst waldverträglich angelegt
+Die Planbegründung von 2008 führt die Beschränkung allein auf die damalige Auskunft der
+Forstverwaltung zurück, Ausnahmen vom Waldabstand seien nicht in Aussicht zu stellen. Diese
+Auskunft erging zur alten Rechtslage; seit der **LBO-Novelle 2025** stellt § 4 Abs. 3 LBO
+Ausnahmen in das Ermessen der Behörde und lässt Bebauungsplan-Festsetzungen ausdrücklich
+vorgehen. Ich bitte daher um eine neue Bewertung des Einzelfalls.
 
-- Wochenendhaus mit max. **65 m² Grundfläche** (das gebietsübliche Maß), ein Vollgeschoss,
-  Satteldach 22°, Firsthöhe max. 5,50 m — vollständig im Rahmen der übrigen Festsetzungen des
-  Bebauungsplans.
-- Das Gebäude nutzt das **festgesetzte Baufenster Nr. 9** und erweitert es **ausschließlich nach
-  Westen, also vom Wald weg**. Die waldseitige (östliche) Baugrenze wird an keiner Stelle
-  überschritten — gegenüber der planungsrechtlich bereits zulässigen Bebauung rückt nichts
-  näher an den Wald heran.
-- Vorgesehene Vorkehrungen: **nichtbrennbare Dacheindeckung** (beschichtetes Stehfalz-Metall
-  oder Ton), keine offenen Feuerstellen auf der Waldseite, **Löschwasser-Zisterne**,
-  Aufenthaltsbereiche im Freien (Terrasse, Stellplatz) auf der waldabgewandten Seite und damit
-  außerhalb der unmittelbaren Baumfallzone.
-- Der angrenzende Bestand ist überwiegend **Laubwald (Buche)**. Zwischen dem Baufenster und
-  der Waldtraufe liegt ein **ca. 20 m breiter, dauerhaft freier Puffer**: ein Grünstreifen mit
-  Büschen und Brombeeren (keine Großbäume) sowie der Bammertsbergweg. Gern stelle ich Ihnen
-  Fotos und eine aktuelle Drohnenaufnahme zur Verfügung.
-- Sollte aus Ihrer Sicht eine **forstfachliche Stellungnahme oder ein Baumfallzonen-Gutachten**
-  sinnvoll sein, beauftrage ich dies gern auf meine Kosten.
+## Warum die Belange des Waldes gewahrt bleiben
 
-## Meine Bitten an Sie
+1. **Keine Annäherung an den Wald.** Die Erweiterung liegt vollständig auf der waldabgewandten
+   Westseite des festgesetzten Baufensters. Der Abstand des Baukörpers zur Waldtraufe
+   verringert sich an keiner Stelle.
 
-1. Können Sie mir in einem **Gespräch — gern bei einem Ortstermin —** Ihre forstfachliche
-   Einschätzung zu dem Vorhaben geben?
-2. Bestehen aus Ihrer Sicht Bedenken gegen einen Neubau **innerhalb des festgesetzten
-   Baufensters Nr. 9**?
-3. Würden Sie einer **maßvollen, ausschließlich waldabgewandten Erweiterung** des Baufeldes auf
-   das gebietsübliche Maß (65 m² Grundfläche) — sei es über eine Ausnahme nach § 4 Abs. 3 LBO
-   im Baugenehmigungsverfahren oder über eine punktuelle Anpassung des Bebauungsplans —
-   entgegentreten, und wenn ja, aus welchen Gründen?
-4. Welche **Auflagen, Nachweise oder Schutzvorkehrungen** (z. B. Brandschutz, Baumfallzone,
-   Waldrandpflege) wären aus Ihrer Sicht Voraussetzung für eine positive Stellungnahme?
+2. **Ca. 20 m dauerhaft freier Puffer, davon ein öffentlicher Weg.** Zwischen Baufenster und
+   Waldtraufe liegen ein Grünstreifen mit Busch- und Brombeerbewuchs (keine Großbäume) sowie
+   der **öffentliche Bammertsbergweg** (Flst. 4609). Der Waldrand steht dort also schon heute
+   nicht „ungestört", sondern grenzt an einen dem öffentlichen Verkehr gewidmeten Weg, dessen
+   Umfeld ohnehin im Rahmen der regelmäßigen Waldrand- und Wegekontrolle im Blick gehalten
+   wird. **Durch mein Vorhaben entsteht daher kein zusätzlicher Sicherungs-, Kontroll- oder
+   Pflegeaufwand** — die maßgebliche Baumfallzone endet faktisch am bereits gesicherten
+   Wegekorridor, und Bewirtschaftung wie Befahrbarkeit des Waldrandes bleiben uneingeschränkt.
 
-Mir ist bewusst, dass der Waldabstand wichtigen Schutzzwecken dient. Genau deshalb suche ich
-das Gespräch mit Ihnen **zuerst** — mein Ziel ist eine Lösung, die die Belange des Waldes
-nachweislich wahrt und zugleich die vom Gemeinderat 2008 gewollte Bebaubarkeit meines
-Grundstücks in gebietsüblichem Umfang ermöglicht.
+3. **Geringes Brandrisiko, Verbesserung gegenüber dem früheren Zustand.** Der angrenzende
+   Bestand ist überwiegend Laubwald (Buche). Auf dem Grundstück stand bis vor kurzem eine vom
+   Voreigentümer entfernte, baufällige **Holzhütte**; der geplante Neubau erhält eine
+   **nichtbrennbare Dacheindeckung**, eine **Löschwasser-Zisterne** und verzichtet auf offene
+   Feuerstellen zur Waldseite. Brandschutzfachlich ist das Vorhaben der früheren, vom
+   Plangeber ausdrücklich hingenommenen Situation deutlich überlegen.
 
-Für einen Terminvorschlag bin ich dankbar; kurzfristige Ortstermine sind mir gut möglich.
+4. **Freibereiche waldabgewandt.** Terrasse und Stellplatz liegen auf der West-/Südseite des
+   Gebäudes und damit außerhalb des waldnahen Bereichs.
+
+Sollten Sie eine **forstfachliche Stellungnahme oder ein Baumfallzonen-Gutachten** für
+erforderlich halten, beauftrage ich dies gern auf meine Kosten.
+
+## Meine Bitte
+
+1. Können wir das Vorhaben in einem **Gespräch, gern bei einem Ortstermin,** erörtern?
+2. Würden Sie einer **ausschließlich waldabgewandten Erweiterung** des Baufeldes auf das
+   gebietsübliche Maß (65 m² Grundfläche) — im Wege der Ausnahme nach § 4 Abs. 3 LBO oder
+   einer punktuellen Anpassung des Bebauungsplans — aus forstfachlicher Sicht entgegentreten?
+3. Falls Sie Bedenken haben: **Unter welchen Auflagen** (Brandschutz, Baumfallzone,
+   Waldrandpflege) wäre eine positive Stellungnahme möglich?
+
+Mir ist bewusst, dass der Waldabstand wichtigen Schutzzwecken dient — genau deshalb suche ich
+zuerst das Gespräch mit Ihnen. Für einen Terminvorschlag bin ich dankbar; kurzfristige
+Ortstermine sind mir gut möglich.
 
 Mit freundlichen Grüßen
 
 *(Unterschrift)*
 
-**Anlagen:** Auszug Bebauungsplan mit Baufenster Nr. 9 · Auszug Liegenschaftskarte 1:500 ·
-Lageplan-Konzept mit Erweiterungsrichtung · Fotodokumentation/Drohnenaufnahme
+**Anlagen:**
+1. Auszug Bebauungsplan mit Baufenster Nr. 9
+2. Auszug Liegenschaftskarte 1:500
+3. Lageplan-Konzept mit Erweiterungsrichtung und Pufferzone
+4. Fotodokumentation (inkl. Drohnenaufnahme) und Visualisierung des geplanten Gebäudes

@@ -89,6 +89,9 @@ Grundstück erst recht Geltung.
 **d) Belange des Waldes werden nicht beeinträchtigt.**
 - Zwischen Baufenster und Waldtraufe liegt ein **ca. 20 m breiter, dauerhaft freier Puffer**
   aus Grünstreifen (Büsche/Brombeeren, keine Großbäume) und dem öffentlichen Bammertsbergweg.
+  Da der Waldrand dort bereits an einen dem öffentlichen Verkehr gewidmeten Weg grenzt und in
+  dessen Rahmen kontrolliert wird, entsteht durch das Vorhaben **kein zusätzlicher Sicherungs-
+  oder Pflegeaufwand** für den Waldbesitzer.
 - Der Neubau hält **mindestens den Waldabstand des festgesetzten Baufensters Nr. 9** ein — die
   Erweiterung liegt vollständig auf der waldabgewandten Seite. Gegenüber der schon heute
   zulässigen Bebauung des Fensters tritt keinerlei Verschärfung der Gefahrenlage (Brand,
