@@ -1,0 +1,661 @@
+<title>Haus am Waldrand · Flst. 7348 Bammental</title>
+<style>
+  :root{
+    --ground:#EFE9DA;
+    --surface:#E6DDC8;
+    --line:#C9BEA4;
+    --ink:#2A2620;
+    --ink-soft:#5C5546;
+    --corten:#A0481F;
+    --corten-deep:#7E3716;
+    --moss:#4C5C3F;
+    --moss-soft:#75855F;
+    --sandstone:#C89A78;
+    --wood:#8A6B4B;
+    --meadow:#D6D5AE;
+    --road:#CFC8B6;
+    --water:#7C93A0;
+    --display:"Futura","Century Gothic","Avenir Next","URW Gothic","Trebuchet MS",sans-serif;
+    --body:"Charter","Bitstream Charter","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#201D16;
+      --surface:#2A261C;
+      --line:#4A4232;
+      --ink:#EAE2CC;
+      --ink-soft:#B0A588;
+      --corten:#C96A38;
+      --corten-deep:#A0481F;
+      --moss:#8A9C6E;
+      --moss-soft:#66754F;
+      --sandstone:#B98F6E;
+      --wood:#9A7B58;
+      --meadow:#3A3D28;
+      --road:#3B382E;
+      --water:#8FA5B2;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#201D16; --surface:#2A261C; --line:#4A4232; --ink:#EAE2CC; --ink-soft:#B0A588;
+    --corten:#C96A38; --corten-deep:#A0481F; --moss:#8A9C6E; --moss-soft:#66754F;
+    --sandstone:#B98F6E; --wood:#9A7B58; --meadow:#3A3D28; --road:#3B382E; --water:#8FA5B2;
+  }
+  :root[data-theme="light"]{
+    --ground:#EFE9DA; --surface:#E6DDC8; --line:#C9BEA4; --ink:#2A2620; --ink-soft:#5C5546;
+    --corten:#A0481F; --corten-deep:#7E3716; --moss:#4C5C3F; --moss-soft:#75855F;
+    --sandstone:#C89A78; --wood:#8A6B4B; --meadow:#D6D5AE; --road:#CFC8B6; --water:#7C93A0;
+  }
+
+  html{background:var(--ground);}
+  body{
+    margin:0; color:var(--ink); background:var(--ground);
+    font-family:var(--body); font-size:17px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px 96px;}
+
+  /* ---------- Kopf ---------- */
+  header.kopf{padding:64px 0 40px; border-bottom:3px double var(--line);}
+  .eyebrow{
+    font-family:var(--display); font-size:12px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--corten); margin:0 0 18px;
+  }
+  h1{
+    font-family:var(--display); font-weight:500; text-transform:uppercase;
+    font-size:clamp(34px,6vw,58px); letter-spacing:.06em; line-height:1.08;
+    margin:0 0 14px; text-wrap:balance;
+  }
+  .untertitel{font-size:19px; color:var(--ink-soft); margin:0; max-width:62ch;}
+  .kennzahlen{
+    display:flex; flex-wrap:wrap; gap:0; margin-top:36px;
+    border:1px solid var(--line); background:var(--surface);
+  }
+  .kz{flex:1 1 150px; padding:14px 18px; border-right:1px solid var(--line);}
+  .kz:last-child{border-right:0;}
+  .kz b{
+    display:block; font-family:var(--display); font-size:22px; font-weight:500;
+    font-variant-numeric:tabular-nums; letter-spacing:.02em;
+  }
+  .kz span{
+    font-family:var(--display); font-size:10.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+
+  /* ---------- Blätter ---------- */
+  section.blatt{padding:56px 0 8px; border-bottom:1px solid var(--line);}
+  section.blatt:last-of-type{border-bottom:0;}
+  .blattkopf{display:flex; align-items:baseline; gap:18px; margin-bottom:8px;}
+  .blattnr{
+    font-family:var(--display); font-size:12px; letter-spacing:.2em; color:var(--corten);
+    text-transform:uppercase; white-space:nowrap;
+  }
+  h2{
+    font-family:var(--display); font-weight:500; text-transform:uppercase;
+    letter-spacing:.08em; font-size:clamp(22px,3.4vw,30px); margin:0; text-wrap:balance;
+  }
+  .lead{max-width:66ch; color:var(--ink-soft); margin-top:6px;}
+  h3{
+    font-family:var(--display); font-weight:500; text-transform:uppercase;
+    letter-spacing:.12em; font-size:15px; margin:34px 0 10px; color:var(--ink);
+  }
+  p{max-width:66ch;}
+  .zweispaltig{display:grid; grid-template-columns:1fr 1fr; gap:0 48px;}
+  @media (max-width:760px){ .zweispaltig{grid-template-columns:1fr;} }
+
+  figure{margin:28px 0;}
+  .planrahmen{
+    border:1px solid var(--line); background:var(--surface);
+    padding:10px; overflow-x:auto;
+  }
+  figcaption{
+    font-family:var(--display); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-soft); margin-top:10px;
+  }
+  svg{display:block; width:100%; height:auto;}
+  svg text{font-family:var(--display);}
+
+  /* ---------- Legende ---------- */
+  ol.legende{
+    list-style:none; margin:20px 0 0; padding:0;
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px 28px;
+    font-size:15.5px;
+  }
+  ol.legende li{display:flex; gap:10px; align-items:baseline;}
+  .lnr{
+    font-family:var(--display); font-size:11px; flex:0 0 22px; height:22px;
+    display:inline-flex; align-items:center; justify-content:center;
+    border:1.5px solid var(--corten); border-radius:50%; color:var(--corten);
+    transform:translateY(3px); font-variant-numeric:tabular-nums;
+  }
+
+  /* ---------- Tabellen ---------- */
+  .tabelle{overflow-x:auto; margin:22px 0;}
+  table{border-collapse:collapse; width:100%; font-size:15.5px;}
+  th{
+    font-family:var(--display); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    text-align:left; color:var(--ink-soft); padding:8px 14px 8px 0;
+    border-bottom:2px solid var(--ink);
+  }
+  td{padding:9px 14px 9px 0; border-bottom:1px solid var(--line); vertical-align:top;}
+  td.num{font-variant-numeric:tabular-nums; text-align:right; padding-right:24px; white-space:nowrap;}
+  th.num{text-align:right; padding-right:24px;}
+  tr.summe td{border-top:2px solid var(--ink); border-bottom:0; font-weight:bold;}
+
+  /* ---------- Material ---------- */
+  .material{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:20px; margin:26px 0;}
+  .mat{border:1px solid var(--line); background:var(--surface);}
+  .mat .probe{height:110px; border-bottom:1px solid var(--line);}
+  .mat .text{padding:12px 14px 14px;}
+  .mat b{font-family:var(--display); font-size:13px; letter-spacing:.1em; text-transform:uppercase; display:block; margin-bottom:4px;}
+  .mat small{color:var(--ink-soft); font-size:14px; line-height:1.5; display:block;}
+  .p-laerche{background:repeating-linear-gradient(90deg,#9B8262 0 9px,#8A7052 9px 11px,#A38A67 11px 20px,#7E684D 20px 22px);}
+  .p-corten{background:radial-gradient(circle at 25% 30%,#B45A28 0 18%,transparent 40%),radial-gradient(circle at 70% 65%,#8C3D16 0 24%,transparent 52%),radial-gradient(circle at 45% 80%,#C96A38 0 12%,transparent 30%),#9A4A20;}
+  .p-sandstein{background:radial-gradient(circle at 30% 40%,#D9AE8C 0 3px,transparent 4px),radial-gradient(circle at 70% 20%,#B98466 0 2px,transparent 3px),radial-gradient(circle at 55% 75%,#C39678 0 3px,transparent 4px),linear-gradient(180deg,#CC9F7E,#C08F6D);}
+  .p-kies{background:radial-gradient(circle at 20% 30%,#BBB1A0 0 5px,transparent 6px),radial-gradient(circle at 60% 60%,#A79D8C 0 6px,transparent 7px),radial-gradient(circle at 85% 25%,#C4BBAB 0 4px,transparent 5px),radial-gradient(circle at 40% 80%,#998F7E 0 5px,transparent 6px),#B0A695;}
+  .p-wiese{background:repeating-linear-gradient(80deg,#A6A972 0 3px,#8E9660 3px 6px,#B4B57E 6px 9px);}
+  .p-ziegel{background:repeating-linear-gradient(0deg,#3A3A3C 0 14px,#2C2C2E 14px 16px);}
+
+  /* ---------- Hinweiskasten ---------- */
+  .hinweis{
+    border-left:4px solid var(--corten); background:var(--surface);
+    padding:16px 22px; margin:30px 0; max-width:72ch;
+  }
+  .hinweis p{margin:6px 0;}
+
+  footer.fuss{
+    margin-top:64px; padding-top:24px; border-top:3px double var(--line);
+    font-family:var(--display); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-soft);
+    display:flex; flex-wrap:wrap; gap:8px 32px; justify-content:space-between;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    section.blatt{scroll-margin-top:24px;}
+  }
+</style>
+
+<div class="wrap">
+
+<header class="kopf">
+  <p class="eyebrow">Entwurfskonzept · Vorentwurf zur Diskussion · Juli 2026</p>
+  <h1>Haus am Waldrand</h1>
+  <p class="untertitel">Wohnhaus, Wege und Garten auf Flurstück 7348 · Grenzweg 12, 69245 Bammental.
+  Modern und ruhig in der Form, natürlich im Material: vorvergraute Lärche, Cortenstahl und
+  Neckartäler Sandstein – und ein Garten, der mit wenig Pflege von Jahr zu Jahr schöner wird.</p>
+  <div class="kennzahlen">
+    <div class="kz"><b>1.389 m²</b><span>Grundstück</span></div>
+    <div class="kz"><b>208 m²</b><span>zulässige Bebauung (0,15)</span></div>
+    <div class="kz"><b>57 m²</b><span>Haus 8,40 × 6,80 m</span></div>
+    <div class="kz"><b>50 m²</b><span>Terrasse</span></div>
+    <div class="kz"><b>3,69 kWp</b><span>Photovoltaik</span></div>
+  </div>
+</header>
+
+<!-- ============ BLATT 01 · LAGEPLAN ============ -->
+<section class="blatt" id="lageplan">
+  <div class="blattkopf"><span class="blattnr">Blatt 01</span><h2>Lageplan &amp; Zonierung</h2></div>
+  <p class="lead">Das Grundstück liegt am Übergang von Siedlung und Wald: Grenzweg im Norden,
+  Bammertsbergweg im Osten, dahinter steigt der Waldrand an. Der Entwurf legt alles Gebaute an die
+  Ränder im Nordosten – Haus, Carport, Lager – und lässt die Mitte als große, ruhige Wiese frei.</p>
+
+  <figure>
+    <div class="planrahmen">
+    <svg viewBox="0 0 940 660" role="img" aria-label="Lageplan Flurstück 7348 mit Haus, Wegen und Gartenzonen">
+      <defs>
+        <pattern id="wiese" width="14" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(8)">
+          <path d="M2 10 L3 5 M7 11 L8 6 M11 9 L12 4" stroke="var(--moss-soft)" stroke-width="1" opacity=".55" fill="none"/>
+        </pattern>
+        <pattern id="pv" width="12" height="12" patternUnits="userSpaceOnUse">
+          <rect width="12" height="12" fill="none"/>
+          <path d="M0 6 H12 M6 0 V12" stroke="var(--water)" stroke-width="1" opacity=".8"/>
+        </pattern>
+      </defs>
+
+      <!-- Wald im Norden und Westen -->
+      <path d="M0 0 H700 L660 40 Q520 60 380 92 Q220 128 90 190 L60 240 Q40 330 30 420 L0 470 Z"
+            fill="var(--moss)" opacity=".28"/>
+      <g fill="var(--moss)" opacity=".5">
+        <circle cx="90" cy="60" r="26"/><circle cx="160" cy="40" r="20"/><circle cx="240" cy="66" r="24"/>
+        <circle cx="330" cy="36" r="22"/><circle cx="430" cy="52" r="26"/><circle cx="530" cy="30" r="20"/>
+        <circle cx="60" cy="140" r="22"/><circle cx="130" cy="110" r="18"/><circle cx="40" cy="240" r="24"/>
+        <circle cx="26" cy="340" r="20"/><circle cx="600" cy="18" r="18"/>
+      </g>
+
+      <!-- Straßen -->
+      <path d="M40 205 L640 78" stroke="var(--road)" stroke-width="26" fill="none"/>
+      <path d="M648 66 L764 520" stroke="var(--road)" stroke-width="26" fill="none"/>
+      <text x="240" y="150" font-size="13" letter-spacing="3" fill="var(--ink-soft)" transform="rotate(-12 240 150)">GRENZWEG</text>
+      <text x="726" y="270" font-size="13" letter-spacing="3" fill="var(--ink-soft)" transform="rotate(76 726 270)">BAMMERTSBERGWEG</text>
+
+      <!-- Grundstück -->
+      <polygon points="140,190 640,92 735,470 185,545"
+               fill="var(--meadow)" stroke="var(--ink)" stroke-width="2.5"/>
+      <polygon points="140,190 640,92 735,470 185,545" fill="url(#wiese)"/>
+
+      <!-- Trockenmauer + Waldsaum Nord (12) -->
+      <path d="M165 205 L610 118" stroke="var(--sandstone)" stroke-width="7" stroke-dasharray="14 5" fill="none"/>
+      <path d="M165 214 L610 127" stroke="var(--moss)" stroke-width="10" opacity=".35" fill="none"/>
+
+      <!-- Naturhecke Ost (11) -->
+      <g fill="var(--moss)" opacity=".65">
+        <circle cx="668" cy="200" r="14"/><circle cx="680" cy="240" r="15"/><circle cx="690" cy="282" r="13"/>
+        <circle cx="700" cy="322" r="15"/><circle cx="710" cy="364" r="13"/><circle cx="718" cy="404" r="14"/>
+        <circle cx="726" cy="444" r="12"/>
+      </g>
+
+      <!-- Wildblumenwiese Süd (9): gemähte Schneise -->
+      <path d="M300 380 Q420 470 620 470" stroke="var(--ground)" stroke-width="16" fill="none" stroke-linecap="round" opacity=".9"/>
+
+      <!-- Obstwiese West (8) -->
+      <g stroke="var(--moss)" stroke-width="2" fill="var(--meadow)">
+        <circle cx="228" cy="255" r="19"/><circle cx="216" cy="322" r="19"/>
+        <circle cx="228" cy="392" r="19"/><circle cx="246" cy="458" r="19"/><circle cx="300" cy="490" r="19"/>
+      </g>
+      <g fill="var(--moss)">
+        <circle cx="228" cy="255" r="2.5"/><circle cx="216" cy="322" r="2.5"/>
+        <circle cx="228" cy="392" r="2.5"/><circle cx="246" cy="458" r="2.5"/><circle cx="300" cy="490" r="2.5"/>
+      </g>
+
+      <!-- Präriebeet (10) -->
+      <path d="M258 300 Q235 360 300 372 Q380 386 452 352 Q470 330 448 316 Q400 350 330 340 Q290 332 296 296 Z"
+            fill="var(--moss-soft)" opacity=".5"/>
+
+      <!-- Zuwegung / Hauptweg (4) -->
+      <path d="M672 172 Q600 210 520 226 Q480 234 452 238" stroke="var(--corten-deep)" stroke-width="15" fill="none" stroke-linecap="round"/>
+      <path d="M672 172 Q600 210 520 226 Q480 234 452 238" stroke="var(--sandstone)" stroke-width="11" fill="none" stroke-linecap="round"/>
+
+      <!-- Trittplatten (Wiese) -->
+      <path d="M470 320 Q520 340 560 336" stroke="var(--sandstone)" stroke-width="7" stroke-dasharray="2 12" stroke-linecap="round" fill="none"/>
+      <path d="M600 350 Q610 390 596 414" stroke="var(--sandstone)" stroke-width="7" stroke-dasharray="2 12" stroke-linecap="round" fill="none"/>
+
+      <!-- Carport + Stellplätze (3) -->
+      <g transform="rotate(14 636 210)">
+        <rect x="604" y="152" width="64" height="116" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="604" y="152" width="64" height="116" fill="url(#pv)"/>
+        <path d="M604 190 H668 M604 228 H668" stroke="var(--ink)" stroke-width="1"/>
+      </g>
+
+      <!-- Haus (1) -->
+      <g transform="rotate(-9 396 236)">
+        <rect x="342" y="192" width="109" height="88" fill="var(--wood)" stroke="var(--ink)" stroke-width="2.5"/>
+        <path d="M342 236 H451" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="6 4"/>
+        <rect x="447" y="214" width="6" height="44" fill="var(--corten)"/>
+      </g>
+
+      <!-- Terrasse (2): Holzdeck + Sandstein -->
+      <g transform="rotate(-9 300 320)">
+        <rect x="252" y="282" width="52" height="82" fill="var(--wood)" opacity=".75" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="304" y="282" width="48" height="82" fill="var(--sandstone)" opacity=".85" stroke="var(--ink)" stroke-width="1.5"/>
+        <path d="M258 282 V364 M264 282 V364 M270 282 V364 M276 282 V364 M282 282 V364 M288 282 V364 M294 282 V364 M300 282 V364" stroke="var(--ink)" stroke-width=".5" opacity=".4"/>
+      </g>
+
+      <!-- Hochbeete (6) -->
+      <g fill="var(--corten)" stroke="var(--corten-deep)" stroke-width="1">
+        <rect x="480" y="262" width="34" height="12" transform="rotate(-9 497 268)"/>
+        <rect x="486" y="282" width="34" height="12" transform="rotate(-9 503 288)"/>
+        <rect x="492" y="302" width="34" height="12" transform="rotate(-9 509 308)"/>
+      </g>
+
+      <!-- Bestandsbaum + Feuerstelle (7) -->
+      <circle cx="612" cy="300" r="40" fill="var(--moss)" opacity=".4"/>
+      <circle cx="596" cy="318" r="20" fill="var(--p-kies,#B0A695)" opacity=".001"/>
+      <circle cx="596" cy="318" r="20" fill="var(--sandstone)" opacity=".45"/>
+      <circle cx="596" cy="318" r="6" fill="var(--corten)"/>
+
+      <!-- Lager (5) -->
+      <g transform="rotate(14 600 420)">
+        <rect x="562" y="396" width="76" height="50" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="562" y="396" width="76" height="50" fill="url(#pv)" opacity=".7"/>
+      </g>
+
+      <!-- Zisterne -->
+      <circle cx="392" cy="168" r="13" fill="none" stroke="var(--water)" stroke-width="2" stroke-dasharray="4 3"/>
+      <text x="392" y="172" font-size="11" text-anchor="middle" fill="var(--water)">Z</text>
+
+      <!-- Nummern -->
+      <g font-size="12" text-anchor="middle" font-weight="bold">
+        <g fill="var(--ground)" stroke="var(--corten)" stroke-width="1.5">
+          <circle cx="396" cy="236" r="11"/><circle cx="300" cy="322" r="11"/><circle cx="655" cy="212" r="11"/>
+          <circle cx="540" cy="222" r="11"/><circle cx="606" cy="424" r="11"/><circle cx="520" cy="290" r="11"/>
+          <circle cx="596" cy="348" r="11"/><circle cx="262" cy="290" r="11"/><circle cx="420" cy="450" r="11"/>
+          <circle cx="330" cy="356" r="11"/><circle cx="706" cy="382" r="11"/><circle cx="360" cy="150" r="11"/>
+        </g>
+        <g fill="var(--ink)">
+          <text x="396" y="240">1</text><text x="300" y="326">2</text><text x="655" y="216">3</text>
+          <text x="540" y="226">4</text><text x="606" y="428">5</text><text x="520" y="294">6</text>
+          <text x="596" y="352">7</text><text x="262" y="294">8</text><text x="420" y="454">9</text>
+          <text x="330" y="360">10</text><text x="706" y="386">11</text><text x="360" y="154">12</text>
+        </g>
+      </g>
+
+      <!-- Nordpfeil + Maßstabshinweis -->
+      <g transform="translate(884 96)">
+        <path d="M0 22 L0 -22 M0 -22 L-8 -6 M0 -22 L8 -6" stroke="var(--ink)" stroke-width="2" fill="none"/>
+        <text x="0" y="42" font-size="13" text-anchor="middle" fill="var(--ink)">N</text>
+      </g>
+      <text x="30" y="636" font-size="11" letter-spacing="2" fill="var(--ink-soft)">SCHEMATISCHER ENTWURFSPLAN · NICHT MASSSTÄBLICH · GRUNDLAGE: LIEGENSCHAFTSKARTE 1:500 &amp; LAGEPLAN 06/2023</text>
+    </svg>
+    </div>
+    <figcaption>Blatt 01 · Entwurfslageplan Flurstück 7348</figcaption>
+  </figure>
+
+  <ol class="legende">
+    <li><span class="lnr">1</span>Wohnhaus 8,40 × 6,80 m, First parallel zum Grenzweg</li>
+    <li><span class="lnr">2</span>Terrasse 50 m² – Lärchendeck &amp; Sandsteinplatten, nach Südwesten</li>
+    <li><span class="lnr">3</span>Carport mit PV-Dach (3,69 kWp), 3 Stellplätze</li>
+    <li><span class="lnr">4</span>Hauptweg – Sandstein in Cortenstahl-Kante</li>
+    <li><span class="lnr">5</span>Werkzeug- &amp; Holzlager 4 × 6 m</li>
+    <li><span class="lnr">6</span>Küchengarten – 3 Corten-Hochbeete</li>
+    <li><span class="lnr">7</span>Feuerstelle unter dem Bestandsbaum</li>
+    <li><span class="lnr">8</span>Obstwiese – bestehende Jungbäume, ergänzt</li>
+    <li><span class="lnr">9</span>Wildblumenwiese mit gemähten Wegschneisen</li>
+    <li><span class="lnr">10</span>Präriebeet – Gräser &amp; Stauden, Kiesmulch</li>
+    <li><span class="lnr">11</span>Freiwachsende Naturhecke am Bammertsbergweg</li>
+    <li><span class="lnr">12</span>Sandstein-Trockenmauer &amp; Waldsaum</li>
+  </ol>
+
+  <h3>Flächenbilanz (nach Vorentwurf 06/2023)</h3>
+  <div class="tabelle">
+    <table>
+      <tr><th>Fläche</th><th class="num">Maß</th><th class="num">m²</th></tr>
+      <tr><td>Wohnhaus</td><td class="num">8,40 × 6,80 m</td><td class="num">57,12</td></tr>
+      <tr><td>Terrasse</td><td class="num">–</td><td class="num">50,00</td></tr>
+      <tr><td>3 Stellplätze</td><td class="num">je 2,50 × 5,50 m</td><td class="num">41,25</td></tr>
+      <tr><td>Zuwegung</td><td class="num">–</td><td class="num">30,00</td></tr>
+      <tr><td>Werkzeug- &amp; Holzlager</td><td class="num">4,00 × 6,00 m</td><td class="num">24,00</td></tr>
+      <tr><td>Kleinabstellfläche</td><td class="num">8,00 × 2,00 m</td><td class="num">16,00</td></tr>
+      <tr class="summe"><td>Summe</td><td class="num">zulässig: 208,35 m²</td><td class="num">218,37</td></tr>
+    </table>
+  </div>
+  <div class="hinweis">
+    <p><strong>Hinweis:</strong> Die Summe liegt rund 10 m² über dem zulässigen Wert von 0,15 × 1.389 m².
+    Empfehlung: Stellplätze als <em>Schotterrasen / Rasenfugenpflaster</em> ausführen und die Zuwegung auf das
+    Nötigste reduzieren – wasserdurchlässige Beläge werden je nach Festsetzung nicht oder nur anteilig
+    angerechnet. Vorab mit dem Bauamt Bammental bzw. dem Landratsamt Rhein-Neckar-Kreis abstimmen.</p>
+  </div>
+</section>
+
+<!-- ============ BLATT 02 · HAUS ============ -->
+<section class="blatt" id="haus">
+  <div class="blattkopf"><span class="blattnr">Blatt 02</span><h2>Hausgestaltung</h2></div>
+  <p class="lead">Ein klarer, eingeschossiger Holzbau mit Satteldach – die archaische Hausform, präzise
+  detailliert: keine Dachüberstände an den Giebeln, verdeckte Rinnen, ein Material je Fläche. So wirkt
+  das kleine Haus modern und selbstverständlich zugleich, wie ein ruhiges Stück Waldrand.</p>
+
+  <figure>
+    <div class="planrahmen">
+    <svg viewBox="0 0 780 400" role="img" aria-label="Ansicht Südwest des Wohnhauses">
+      <!-- Waldkulisse -->
+      <g fill="var(--moss)" opacity=".3">
+        <circle cx="90" cy="180" r="60"/><circle cx="170" cy="150" r="48"/>
+        <circle cx="640" cy="160" r="55"/><circle cx="716" cy="190" r="46"/>
+      </g>
+      <!-- Dach -->
+      <polygon points="196,178 390,120 584,178 584,192 390,136 196,192" fill="var(--ink)"/>
+      <!-- Fassade -->
+      <rect x="210" y="190" width="360" height="130" fill="var(--wood)"/>
+      <g stroke="var(--ink)" stroke-width="1" opacity=".35">
+        <path d="M222 190 V320 M234 190 V320 M246 190 V320 M258 190 V320 M270 190 V320 M282 190 V320 M294 190 V320 M306 190 V320 M318 190 V320 M330 190 V320 M342 190 V320 M354 190 V320 M366 190 V320 M378 190 V320 M390 190 V320 M402 190 V320 M414 190 V320 M426 190 V320 M438 190 V320 M450 190 V320 M462 190 V320 M474 190 V320 M486 190 V320 M498 190 V320 M510 190 V320 M522 190 V320 M534 190 V320 M546 190 V320 M558 190 V320"/>
+      </g>
+      <!-- Verglasung Südwest -->
+      <rect x="238" y="204" width="126" height="116" fill="var(--water)" opacity=".55"/>
+      <path d="M280 204 V320 M322 204 V320" stroke="var(--ink)" stroke-width="3"/>
+      <rect x="238" y="204" width="126" height="116" fill="none" stroke="var(--ink)" stroke-width="3"/>
+      <!-- Corten-Portal Eingang -->
+      <rect x="472" y="200" width="74" height="120" fill="var(--corten)"/>
+      <rect x="488" y="214" width="42" height="106" fill="var(--ink)" opacity=".85"/>
+      <circle cx="524" cy="272" r="2.5" fill="var(--sandstone)"/>
+      <!-- Sockel -->
+      <rect x="206" y="320" width="368" height="16" fill="var(--sandstone)"/>
+      <!-- Terrassendeck -->
+      <rect x="120" y="336" width="330" height="8" fill="var(--wood)" opacity=".8"/>
+      <!-- Geländelinie -->
+      <path d="M40 344 H740" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M40 352 H740" stroke="var(--ink)" stroke-width=".8" opacity=".4"/>
+      <!-- Gräser -->
+      <g stroke="var(--moss-soft)" stroke-width="1.5" fill="none">
+        <path d="M100 344 q2 -18 -4 -26 M106 344 q0 -16 6 -24 M112 344 q3 -12 -1 -20"/>
+        <path d="M600 344 q2 -18 -4 -26 M606 344 q0 -16 6 -24 M612 344 q3 -12 -1 -20"/>
+        <path d="M680 344 q2 -14 -4 -22 M686 344 q0 -14 5 -20"/>
+      </g>
+      <!-- Beschriftungen -->
+      <g font-size="11.5" fill="var(--ink-soft)" letter-spacing="1.5">
+        <path d="M390 118 V96 H420" stroke="var(--line)" stroke-width="1" fill="none"/>
+        <text x="426" y="100">SATTELDACH ~38°, ZIEGEL ANTHRAZIT, OHNE ÜBERSTAND</text>
+        <path d="M430 250 H600 V236" stroke="var(--line)" stroke-width="1" fill="none"/>
+        <text x="608" y="240">LÄRCHE VERTIKAL,</text>
+        <text x="608" y="256">VORVERGRAUT</text>
+        <path d="M300 330 V368" stroke="var(--line)" stroke-width="1" fill="none"/>
+        <text x="180" y="384">SOCKEL SANDSTEIN · LÄRCHENDECK</text>
+        <path d="M509 328 V368" stroke="var(--line)" stroke-width="1" fill="none"/>
+        <text x="470" y="384">EINGANGSPORTAL CORTENSTAHL</text>
+        <path d="M240 196 V80 H270" stroke="var(--line)" stroke-width="1" fill="none"/>
+        <text x="276" y="84">FESTVERGLASUNG / HEBESCHIEBETÜR NACH SÜDWEST</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>Blatt 02 · Ansicht Südwest (Prinzip)</figcaption>
+  </figure>
+
+  <div class="zweispaltig">
+    <div>
+      <h3>Konstruktion &amp; Hülle</h3>
+      <p>Holzrahmenbau auf Streifen- oder Schraubfundamenten, 8,40 × 6,80 m. Fassade aus
+      <strong>sägerauer Lärche, vertikal, vorvergraut</strong> – sie muss nie gestrichen werden und
+      nimmt in zwei, drei Jahren den silbergrauen Ton des Waldrands an. Satteldach mit anthrazitfarbenem
+      Ziegel oder Stehfalz, giebelseitig ohne Überstand für die klare, moderne Silhouette.
+      Der <strong>Sockel aus Neckartäler Sandstein</strong> bindet das Haus an den Ort – derselbe Stein
+      kehrt in Mauern und Wegen wieder.</p>
+    </div>
+    <div>
+      <h3>Innen &amp; Ausrichtung</h3>
+      <p>Ein offener Wohn-, Ess- und Kochraum orientiert sich mit großer Hebeschiebetür nach
+      <strong>Südwesten</strong> zu Terrasse und Abendsonne; Schlafraum und Bad liegen ruhig zur
+      Waldseite. Der Eingang an der Ostseite wird als <strong>Cortenstahl-Portal</strong> gefasst –
+      ein einziger kräftiger Akzent, der Witterung nicht fürchtet. Sichtbare Holzoberflächen innen
+      (Weißtanne oder Fichte geseift), Boden geschliffener Estrich oder Eichendielen.</p>
+      <p>Das PV-Feld (9 Module, 3,69 kWp) liegt auf dem Süddach von Carport bzw. Lager – das Hausdach
+      bleibt ruhig.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLATT 03 · WEGE ============ -->
+<section class="blatt" id="wege">
+  <div class="blattkopf"><span class="blattnr">Blatt 03</span><h2>Weggestaltung</h2></div>
+  <p class="lead">Drei Wegetypen, klar unterschieden nach Gebrauch: befestigt nur, wo täglich gegangen
+  und gefahren wird – alles andere bleibt Wiese. Das spart Fläche in der Bilanz, Kosten im Bau und
+  Arbeit in der Pflege.</p>
+
+  <div class="tabelle">
+    <table>
+      <tr><th>Typ</th><th>Nutzung</th><th>Aufbau</th><th>Pflege</th></tr>
+      <tr>
+        <td><strong>Zufahrt &amp; Stellplätze</strong></td>
+        <td>Auto, täglich</td>
+        <td>Schotterrasen bzw. Rasenfugenpflaster aus Sandstein-Kleinpflaster, wasserdurchlässig</td>
+        <td>mähen wie Wiese, kein Winterdienstproblem</td>
+      </tr>
+      <tr>
+        <td><strong>Hauptweg</strong> Carport → Eingang → Terrasse</td>
+        <td>zu Fuß, täglich, trockenen Fußes</td>
+        <td>Neckartäler Sandsteinplatten (Bahnenware, 60–80 mm) im Splittbett, beidseitig <strong>Cortenstahl-Kante 10 mm</strong> als präziser Abschluss zur Wiese</td>
+        <td>1× jährlich Fugen nachsanden – fertig</td>
+      </tr>
+      <tr>
+        <td><strong>Gartenpfade</strong></td>
+        <td>gelegentlich</td>
+        <td>Einzelne Sandstein-Trittplatten in der Wiese + <strong>gemähte Schneisen</strong> durch die Blumenwiese</td>
+        <td>Schneise beim Rasenmähen mitmähen, sonst nichts</td>
+      </tr>
+    </table>
+  </div>
+
+  <figure>
+    <div class="planrahmen">
+    <svg viewBox="0 0 560 210" role="img" aria-label="Querschnitt Hauptweg">
+      <!-- Wiese links/rechts -->
+      <g stroke="var(--moss-soft)" stroke-width="1.5" fill="none">
+        <path d="M40 120 q2 -16 -4 -24 M48 120 q0 -14 6 -20 M56 120 q3 -12 -1 -18 M64 120 q-2 -14 3 -20"/>
+        <path d="M496 120 q2 -16 -4 -24 M504 120 q0 -14 6 -20 M512 120 q3 -12 -1 -18 M520 120 q-2 -14 3 -20"/>
+      </g>
+      <!-- Erdreich -->
+      <rect x="20" y="120" width="520" height="60" fill="var(--surface)"/>
+      <path d="M20 120 H540" stroke="var(--ink)" stroke-width="1.5"/>
+      <!-- Tragschicht -->
+      <rect x="120" y="140" width="320" height="34" fill="var(--road)"/>
+      <!-- Splittbett -->
+      <rect x="120" y="128" width="320" height="12" fill="var(--meadow)"/>
+      <!-- Platte -->
+      <rect x="124" y="112" width="312" height="16" fill="var(--sandstone)" stroke="var(--ink)" stroke-width="1.5"/>
+      <path d="M228 112 V128 M332 112 V128" stroke="var(--ink)" stroke-width="1"/>
+      <!-- Cortenkanten -->
+      <rect x="118" y="104" width="5" height="72" fill="var(--corten)"/>
+      <rect x="437" y="104" width="5" height="72" fill="var(--corten)"/>
+      <!-- Beschriftung -->
+      <g font-size="11" fill="var(--ink-soft)" letter-spacing="1.2">
+        <text x="150" y="100">SANDSTEINPLATTE 60–80 MM</text>
+        <path d="M120 176 V192" stroke="var(--line)" stroke-width="1"/>
+        <text x="30" y="204">CORTENKANTE 10 MM</text>
+        <path d="M456 134 H472" stroke="var(--line)" stroke-width="1"/>
+        <text x="476" y="138">SPLITTBETT 2/5</text>
+        <path d="M456 158 H472" stroke="var(--line)" stroke-width="1"/>
+        <text x="476" y="162">SCHOTTER 0/32,</text>
+        <text x="476" y="176">CA. 25 CM</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>Blatt 03 · Regelquerschnitt Hauptweg, Breite ca. 1,20 m</figcaption>
+  </figure>
+
+  <p>Die Cortenstahl-Kante ist das verbindende Detail des ganzen Grundstücks: Sie fasst Wege,
+  Präriebeet und Feuerstelle mit derselben rostbraunen Linie, hält die Wiese sauber vom Belag getrennt
+  und macht das Trimmen der Kanten überflüssig.</p>
+</section>
+
+<!-- ============ BLATT 04 · GARTEN ============ -->
+<section class="blatt" id="garten">
+  <div class="blattkopf"><span class="blattnr">Blatt 04</span><h2>Gartengestaltung</h2></div>
+  <p class="lead">Kein Zierrasen, keine Beete, die wöchentlich Arbeit fordern – stattdessen wenige,
+  große Zonen mit robusten, standortgerechten Pflanzen. Am Waldrand von Bammental heißt das: Wiese,
+  Obstbäume, Gräser und eine wilde Hecke. Je natürlicher die Pflanzung, desto geringer die Pflege.</p>
+
+  <div class="zweispaltig">
+    <div>
+      <h3>Wildblumenwiese (Süd &amp; Mitte)</h3>
+      <p>Die große Mitte bleibt Wiese – aus dem Bestand entwickelt, mit regionalem Saatgut angereichert
+      (Margerite, Wiesensalbei, Flockenblume, Schafgarbe). <strong>Mahd nur 2× jährlich</strong>
+      (Juni und September), die Wegschneisen und ein Saum um Terrasse und Feuerstelle werden regelmäßig
+      kurz gemäht. So entsteht der Kontrast gepflegt/wild, der den Garten modern wirken lässt.</p>
+
+      <h3>Obstwiese (West)</h3>
+      <p>Die bereits gepflanzten Jungbäume am Westzaun bleiben und werden zur kleinen Obstwiese ergänzt:
+      Apfel, Zwetschge, Quitte, Walnuss als Hochstämme. Baumscheiben in den ersten Jahren gemulcht,
+      danach läuft die Wiese unter den Kronen durch. Ein Obstbaumschnitt pro Winter genügt.</p>
+
+      <h3>Präriebeet an der Terrasse</h3>
+      <p>Der einzige „gestaltete“ Pflanzbereich, in Cortenkante gefasst, auf mineralischem Mulch
+      (5–7 cm Splitt – unterdrückt Beikraut, speichert Wärme):
+      <strong>Rutenhirse, Lampenputzergras, Purpur-Sonnenhut, Steppensalbei, Katzenminze,
+      Hohe Fetthenne, Perowskie, Schafgarbe.</strong> Ein Rückschnitt Ende Februar, sonst keine Pflege,
+      keine Bewässerung nach dem Anwachsen – und Struktur bis in den Winter.</p>
+    </div>
+    <div>
+      <h3>Naturhecke (Ost, am Bammertsbergweg)</h3>
+      <p>Freiwachsende Wildgehölzhecke als grüner Rücken zur Straße:
+      <strong>Felsenbirne, Kornelkirsche, Hasel, Schwarzer Holunder, Hundsrose, Hainbuche.</strong>
+      Blüte, Herbstfärbung, Vogelschutz – und nur alle 1–2 Jahre ein Auslichtungsschnitt im Winter
+      statt dreimal jährlich Formschnitt.</p>
+
+      <h3>Waldsaum &amp; Trockenmauer (Nord)</h3>
+      <p>Den leichten Geländeversprung zum Grenzweg fängt eine <strong>Trockenmauer aus Neckartäler
+      Sandstein</strong> (ohne Mörtel) ab – Lebensraum für Eidechsen, null Pflege. Davor ein schattenfester
+      Saum aus <strong>Golderdbeere, Sterndolde, Farnen und Waldgräsern</strong>, der den Übergang zum
+      Wald weich zeichnet.</p>
+
+      <h3>Küchengarten &amp; Feuerstelle</h3>
+      <p>Drei <strong>Hochbeete aus Cortenstahl</strong> (je ca. 2,0 × 0,8 m) nahe Haus und Zisterne –
+      rückenfreundlich, schneckenarm, mit Tropfschlauch aus dem Regenwasser versorgt.
+      Unter dem großen Bestandsbaum im Nordosten liegt ein runder Kiesplatz mit
+      <strong>Corten-Feuerschale</strong> und Sitzblöcken aus Sandstein – der Abendplatz mit Blick
+      über die Wiese.</p>
+    </div>
+  </div>
+
+  <h3>Wasser &amp; Boden</h3>
+  <p>Regenwasser von Haus-, Carport- und Lagerdach sammelt eine <strong>Zisterne (ca. 5 m³)</strong> für
+  Hochbeete und Jungbäume; der Überlauf versickert über eine flache Mulde in der Wiese. Alle Beläge außer
+  dem Hauptweg sind wasserdurchlässig – gut für die Bilanz, gut für den Boden, kein Gully nötig.</p>
+</section>
+
+<!-- ============ BLATT 05 · MATERIAL ============ -->
+<section class="blatt" id="material">
+  <div class="blattkopf"><span class="blattnr">Blatt 05</span><h2>Materialpalette</h2></div>
+  <p class="lead">Sechs Materialien für das ganze Grundstück – alle unbeschichtet, alle dürfen altern.
+  Nichts muss gestrichen, versiegelt oder ersetzt werden; die Patina ist Teil des Entwurfs.</p>
+
+  <div class="material">
+    <div class="mat"><div class="probe p-laerche"></div><div class="text">
+      <b>Lärche, vorvergraut</b><small>Fassade vertikal, Terrassendeck, Carport &amp; Lager. Sägerau, unbehandelt – vergraut gleichmäßig.</small>
+    </div></div>
+    <div class="mat"><div class="probe p-corten"></div><div class="text">
+      <b>Cortenstahl</b><small>Eingangsportal, Wegkanten, Hochbeete, Feuerschale, Hausnummer. Wartungsfrei, warmer Rostton zum Grün.</small>
+    </div></div>
+    <div class="mat"><div class="probe p-sandstein"></div><div class="text">
+      <b>Neckartäler Sandstein</b><small>Sockel, Wegplatten, Trockenmauer, Sitzblöcke. Der regionale Stein des Neckartals – bindet den Ort ein.</small>
+    </div></div>
+    <div class="mat"><div class="probe p-kies"></div><div class="text">
+      <b>Splitt &amp; Kies</b><small>Beetmulch, Feuerplatz, Traufstreifen. Mineralisch, unkrautarm, versickerungsfähig.</small>
+    </div></div>
+    <div class="mat"><div class="probe p-wiese"></div><div class="text">
+      <b>Wiese &amp; Schotterrasen</b><small>Die größte „Belagsfläche“: Blumenwiese, Mähwege, befahrbarer Schotterrasen an Zufahrt.</small>
+    </div></div>
+    <div class="mat"><div class="probe p-ziegel"></div><div class="text">
+      <b>Ziegel anthrazit</b><small>Dach als ruhige, dunkle Fläche – alternativ Stehfalz. Zurückhaltender Kontrast zum warmen Holz.</small>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ BLATT 06 · PFLEGE ============ -->
+<section class="blatt" id="pflege">
+  <div class="blattkopf"><span class="blattnr">Blatt 06</span><h2>Pflegekonzept</h2></div>
+  <p class="lead">Der ganze Garten ist auf einen realistischen Aufwand von grob
+  <strong>40–50 Stunden im Jahr</strong> ausgelegt – konzentriert auf wenige Termine statt
+  wöchentlicher Routine.</p>
+
+  <div class="tabelle">
+    <table>
+      <tr><th>Aufgabe</th><th>Rhythmus</th><th>Zeitpunkt</th><th class="num">Aufwand / Jahr</th></tr>
+      <tr><td>Wiesenmahd (Balkenmäher, Mähgut abräumen)</td><td>2×</td><td>Juni &amp; September</td><td class="num">2 × ½ Tag</td></tr>
+      <tr><td>Mähwege &amp; Säume kurz mähen</td><td>alle 2–3 Wochen, Apr–Okt</td><td>laufend</td><td class="num">~15 min je Gang</td></tr>
+      <tr><td>Präriebeet komplett zurückschneiden</td><td>1×</td><td>Ende Februar</td><td class="num">½ Tag</td></tr>
+      <tr><td>Obstbaumschnitt</td><td>1×</td><td>Winter</td><td class="num">½ Tag</td></tr>
+      <tr><td>Naturhecke auslichten</td><td>alle 1–2 Jahre</td><td>Winter</td><td class="num">½ Tag</td></tr>
+      <tr><td>Wegfugen nachsanden, Kies nachziehen</td><td>1×</td><td>Frühjahr</td><td class="num">2 h</td></tr>
+      <tr><td>Hochbeete bestellen &amp; gießen (Tropfschlauch/Zisterne)</td><td>Saison</td><td>Apr–Okt</td><td class="num">nach Lust</td></tr>
+      <tr><td>Fassade, Corten, Sandstein, Trockenmauer</td><td>–</td><td>–</td><td class="num">0 h</td></tr>
+    </table>
+  </div>
+
+  <h3>Was bewusst wegfällt</h3>
+  <p>Kein Zierrasen (kein wöchentliches Mähen, kein Düngen, kein Sprengen), keine geschnittenen
+  Formhecken, keine gestrichenen Holzflächen, keine Beete mit offener Erde, keine automatische
+  Rasenbewässerung. Die Wiese bleibt auch im trockenen Hochsommer sich selbst überlassen –
+  sie erholt sich, das gehört zum Bild.</p>
+
+  <div class="hinweis">
+    <p><strong>Nächste Schritte:</strong></p>
+    <p>1 · Flächenbilanz und Ausführung der Stellplätze mit der Genehmigungsbehörde klären (Bauvoranfrage liegt als Vorentwurf 06/2023 vor).</p>
+    <p>2 · Geländeaufmaß mit Höhen für Trockenmauer und Terrasse; Baumbestand (Bestandsbaum NO, Jungbäume West) einmessen.</p>
+    <p>3 · Werkplanung Haus (Grundriss 57 m², Holzrahmenbau) und Freianlagen; Wiesenansaat idealerweise im Herbst vor dem Hausbau-Endspurt.</p>
+    <p>4 · Der vorhandene Bauwagen kann während der Bauzeit bleiben – und danach, aufgearbeitet, als charmantes Gartenkabinett am Lagerplatz weiterleben.</p>
+  </div>
+</section>
+
+<footer class="fuss">
+  <span>Haus am Waldrand · Grenzweg 12 · 69245 Bammental</span>
+  <span>Flurstück 7348 · Gemarkung Bammental · Rhein-Neckar-Kreis</span>
+  <span>Entwurfskonzept · Stand Juli 2026</span>
+</footer>
+
+</div>
