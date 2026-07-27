@@ -17,11 +17,10 @@ HOEHE = 62.0            # Gesamthoehe der Birne
 
 # Aussenkontur: Halbbreite (a) und Halbtiefe (b) ueber der Hoehe h
 # h = 0 ist oben (Kopf), h = HOEHE ist unten (Boden)
-A_KOPF, B_KOPF = 11.0, 9.0     # Kragen oben
 A_GRIFF, B_GRIFF = 15.0, 11.0  # Griffzone (30 x 22 mm)
 A_BAUCH, B_BAUCH = 26.0, 14.0  # groesste Stelle (52 x 28 mm)
 
-H_KRAGEN_ENDE = 10.0    # Ende der Kragenaufweitung
+H_KRONE = 10.0          # Hoehe der gerundeten Kopfkuppe
 H_GRIFF_ENDE = 36.0     # Ende der zylindrischen Griffzone
 H_BAUCH = 46.0          # Hoehe der groessten Breite
 DOM_HALBACHSE = 24.19    # bestimmt, wie stark der Boden abgeflacht wird
@@ -33,6 +32,13 @@ D_SCHNUR = 5.0          # Durchmesser oben, fuer die Schnur
 D_KAMMER = 12.0         # Durchmesser unten, hier verschwindet der Knoten
 H_KAMMER_OBEN = 40.0    # ab hier nach unten hat die Bohrung Kammermass
 KONUS_HOEHE = 3.5       # 45-Grad-Uebergang, druckbar und selbstzentrierend
+
+# Uebergang Kuppe -> Schnureinfuehrung
+R_EINLAUF = 1.6         # Verrundung, mit der die Kuppe in die Bohrung laeuft
+KRONE_R = D_SCHNUR / 2.0 + R_EINLAUF
+# Aussenflaeche und Bohrung treffen sich auf diesem Ringradius. Beide laufen
+# dort waagerecht aus, der Uebergang ist also knickfrei. Der Radius ist
+# zugleich die Auflage, ueber die die Schnur laeuft - keine Kante, die scheuert.
 
 # Netzaufloesung
 # 96 Segmente ergeben bei 26 mm Radius eine Abweichung von 0,014 mm –
@@ -53,10 +59,13 @@ def smoothstep(t):
 
 def kontur(h):
     """Halbbreite und Halbtiefe der Aussenkontur auf Hoehe h."""
-    if h <= H_KRAGEN_ENDE:
-        t = smoothstep(h / H_KRAGEN_ENDE)
-        return (A_KOPF + (A_GRIFF - A_KOPF) * t,
-                B_KOPF + (B_GRIFF - B_KOPF) * t)
+    if h <= H_KRONE:
+        # Viertelellipse: oben waagerechte, unten senkrechte Tangente.
+        # Die Kuppe geht damit ohne Knick in die Griffzone ueber.
+        t = 1.0 - h / H_KRONE
+        f = math.sqrt(max(0.0, 1.0 - t * t))
+        return (KRONE_R + (A_GRIFF - KRONE_R) * f,
+                KRONE_R + (B_GRIFF - KRONE_R) * f)
 
     if h <= H_GRIFF_ENDE:
         return (A_GRIFF, B_GRIFF)
@@ -78,6 +87,12 @@ def bohrung(h):
     r_unten = D_KAMMER / 2.0
     h_konus_start = H_KAMMER_OBEN - KONUS_HOEHE
 
+    if h <= R_EINLAUF:
+        # Trichterverrundung: setzt am Kuppenscheitel waagerecht an und
+        # laeuft senkrecht in die Bohrungswand aus.
+        return KRONE_R - math.sqrt(
+            max(0.0, R_EINLAUF ** 2 - (R_EINLAUF - h) ** 2))
+
     if h <= h_konus_start:
         return r_oben
     if h >= H_KAMMER_OBEN:
@@ -90,10 +105,15 @@ def bohrung(h):
 
 def hoehenstufen():
     """Hoehenwerte, an denen ein Ring erzeugt wird – Knickstellen exakt getroffen."""
-    fest = {0.0, H_KRAGEN_ENDE, H_GRIFF_ENDE, H_BAUCH, HOEHE,
-            H_KAMMER_OBEN - KONUS_HOEHE, H_KAMMER_OBEN}
+    fest = {0.0, H_KRONE, H_GRIFF_ENDE, H_BAUCH, HOEHE,
+            H_KAMMER_OBEN - KONUS_HOEHE, H_KAMMER_OBEN, R_EINLAUF}
     werte = {i * HOEHE / STUFEN for i in range(STUFEN + 1)}
     werte |= fest
+    # Kuppe und Einlauftrichter laufen am Scheitel waagerecht aus, dort aendert
+    # sich der Radius je Hoehenschritt am staerksten. Quadratische Verteilung
+    # legt die Stuetzstellen genau dorthin.
+    werte |= {H_KRONE * (i / 48.0) ** 2 for i in range(49)}
+    werte |= {R_EINLAUF * (i / 32.0) ** 2 for i in range(33)}
     return sorted(w for w in werte if 0.0 <= w <= HOEHE)
 
 
@@ -129,11 +149,8 @@ def baue_netz():
             dreiecke.append((ai, bi, di))     # Normale in die Bohrung
             dreiecke.append((bi, ci, di))
 
-    # Ringflaeche oben (Kopf, Normale +z)
-    for j in range(n):
-        k = (j + 1) % n
-        dreiecke.append((aussen[0][j], aussen[0][k], innen[0][k]))
-        dreiecke.append((aussen[0][j], innen[0][k], innen[0][j]))
+    # Oben gibt es keine Ringflaeche mehr: Aussenkuppe und Einlauftrichter
+    # treffen sich auf demselben Ring, die Flaechen gehen direkt ineinander ueber.
 
     # Ringflaeche unten (Standflaeche, Normale -z)
     for j in range(n):
@@ -185,6 +202,25 @@ def pruefe(dreiecke):
     return len(ecken), len(kanten), offen
 
 
+def duennste_wand():
+    """Kleinste Wandstaerke zwischen Aussenflaeche und Bohrung.
+
+    Gemessen ab Unterkante der Einlaufverrundung. Oberhalb davon laufen
+    Kuppe und Trichter bewusst auf demselben Ring zusammen – dort geht die
+    waagerecht gemessene Staerke gegen null, ohne dass eine Kante entsteht.
+    """
+    schritte = 4000
+    best = None
+    for i in range(schritte + 1):
+        h = R_EINLAUF + (HOEHE - R_EINLAUF) * i / schritte
+        a, b = kontur(h)
+        r = bohrung(h)
+        for wert in (a - r, b - r):
+            if best is None or wert < best[0]:
+                best = (wert, h)
+    return best
+
+
 def volumen(dreiecke):
     """Signiertes Volumen in mm^3 ueber das Divergenztheorem."""
     v = 0.0
@@ -203,6 +239,7 @@ if __name__ == "__main__":
     vol = volumen(netz)
 
     a_boden, b_boden = kontur(HOEHE)
+    wand, wand_h = duennste_wand()
     print(f"Datei          {DATEI}")
     print(f"Dreiecke       {len(netz)}")
     print(f"Ecken/Kanten   {ecken} / {kanten}")
@@ -214,3 +251,6 @@ if __name__ == "__main__":
     print(f"Standflaeche   {2*a_boden:.1f} x {2*b_boden:.1f} mm")
     print(f"Bohrung        oben {D_SCHNUR:.1f} mm, Kammer {D_KAMMER:.1f} mm "
           f"x {HOEHE-H_KAMMER_OBEN:.0f} mm tief")
+    print(f"Kopfkuppe      {H_KRONE:.0f} mm hoch, Scheitelring "
+          f"{2*KRONE_R:.1f} mm, Einlaufradius {R_EINLAUF:.1f} mm")
+    print(f"Duennste Wand  {wand:.2f} mm bei h = {wand_h:.1f} mm")
