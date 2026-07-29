@@ -270,20 +270,34 @@ variante(
     n_quer=4.5, griff=(21.0, 25.0),
     notiz="Querliegender Steg, 86 mm lang. Wird wie eine Turnstange gegriffen.")
 
-# 2 – Die Hantel: Taille zwischen zwei Verdickungen
-variante(
-    "hantel", "Die Hantel", "tuerzwerg-griff-hantel.stl",
-    Profil([
-        (0.0,  KRONE_R, KRONE_R, "lin"),
-        (9.0,  17.0,  9.5,  "kuppe"),
-        (18.0, 12.0,  8.5,  "smooth"),
-        (38.0, 12.0,  8.5,  "lin"),
-        (50.0, 26.0, 13.0,  "smooth"),
-        (60.0, 22.0, 11.0,  "cap"),
-    ]),
-    Bohrung(d_kammer=12.0, h_kammer=46.0, hoehe=60.0, kopf="kuppe"),
-    n_quer=2.0, griff=(24.0, 17.0),
-    notiz="Symmetrisch aufgebaut: Verdickung oben, Taille als Griff, Bauch unten.")
+# 2 – Die Hantel: Taille zwischen zwei Verdickungen.
+# Die Taille ist die einzige Stellschraube, die sich beim Greifen bemerkbar
+# macht, deshalb steht sie als Parameter. Der Uebergang von der oberen
+# Verdickung zur Taille laeuft ueber 13 mm – schmalere Taillen wuerden bei
+# kuerzerem Uebergang die 45-Grad-Grenze reissen und Stuetzen noetig machen.
+def hantel(breite, tiefe, empfehlung=False):
+    a, b = breite / 2.0, tiefe / 2.0
+    variante(
+        "hantel%02d" % round(breite),
+        "Die Hantel · Taille %.0f mm" % breite,
+        "tuerzwerg-griff-hantel-%02d.stl" % round(breite),
+        Profil([
+            (0.0,  KRONE_R, KRONE_R, "lin"),
+            (9.0,  16.0,  9.0,  "kuppe"),
+            (22.0, a,     b,    "smooth"),
+            (44.0, a,     b,    "lin"),
+            (54.0, 26.0, 13.0,  "smooth"),
+            (64.0, 22.0, 11.0,  "cap"),
+        ]),
+        Bohrung(d_kammer=12.0, h_kammer=50.0, hoehe=64.0, kopf="kuppe"),
+        n_quer=2.0, griff=(breite, tiefe),
+        notiz=("Taille als Griff, Verdickung oben, Bauch unten."
+               + (" Vorgeschlagene Mitte." if empfehlung else "")))
+
+
+hantel(22.0, 15.0)
+hantel(20.0, 14.0, empfehlung=True)
+hantel(18.0, 13.0)
 
 # 3 – Der Taler: flache Scheibe
 variante(
