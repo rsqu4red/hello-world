@@ -49,10 +49,29 @@ class Profil:
     genug zum Drucken bleibt.
     """
 
-    def __init__(self, punkte):
+    def __init__(self, punkte, rillen=None):
         self.punkte = punkte
+        # rillen = (h_von, h_bis, periode, tiefe) – gedrechselte Zierrillen.
+        # Die Kerbe folgt einer Kosinuswelle, die an beiden Bandgrenzen auf
+        # null steht; die Bandhoehe muss ein Vielfaches der Periode sein,
+        # sonst entsteht dort ein Absatz. Weichere Kerben als eine V-Nut,
+        # dafuer druckbar: die groesste Neigung ist tiefe * pi / periode.
+        self.rillen = rillen
+
+    def _kerbe(self, h):
+        if not self.rillen:
+            return 0.0
+        h0, h1, periode, tiefe = self.rillen
+        if not (h0 <= h <= h1):
+            return 0.0
+        return tiefe * 0.5 * (1.0 - math.cos(2.0 * math.pi * (h - h0) / periode))
 
     def __call__(self, h):
+        a, b = self._roh(h)
+        d = self._kerbe(h)
+        return (a - d, b - d)
+
+    def _roh(self, h):
         pkt = self.punkte
         for i in range(len(pkt) - 1):
             h0, a0, b0, _ = pkt[i]
@@ -74,7 +93,12 @@ class Profil:
 
     @property
     def knicke(self):
-        return {p[0] for p in self.punkte}
+        stellen = {p[0] for p in self.punkte}
+        if self.rillen:
+            h0, h1, periode, _ = self.rillen
+            n = max(1, int(round((h1 - h0) / periode)) * 14)
+            stellen |= {h0 + (h1 - h0) * i / n for i in range(n + 1)}
+        return stellen
 
 
 class Bohrung:
@@ -299,6 +323,45 @@ hantel(22.0, 15.0)
 hantel(20.0, 14.0, empfehlung=True)
 hantel(18.0, 13.0)
 
+# 2b – Der Drechsel: Springseilgriff, auf den Kopf gestellt.
+# Vorlage ist ein gedrechselter Holzgriff. Umgedreht kommt das schlanke
+# Schaftende nach oben, wo die Schnur einlaeuft, der lange Schaft wird zum
+# Griff, und die Olive sitzt unten als Rutschstopp – ergonomisch genau
+# richtig herum, weil die Hand beim Ziehen nach unten wegrutscht.
+variante(
+    "drechsel", "Der Drechsel", "tuerzwerg-griff-drechsel.stl",
+    Profil([
+        (0.0,   KRONE_R, KRONE_R, "lin"),
+        (7.0,    9.0,  9.0, "kuppe"),    # gerundetes Schaftende oben
+        (44.0,  10.0, 10.0, "lin"),      # Schaft, leicht konisch: Griff
+        (56.0,  10.0, 10.0, "lin"),      # Rillenband
+        (64.0,   8.0,  8.0, "smooth"),   # Hals
+        (82.0,  18.0, 18.0, "smooth"),   # Olive, groesste Stelle
+        (104.0, 11.0, 11.0, "cap"),      # Olive laeuft auf die Standflaeche
+    ], rillen=(44.0, 56.0, 4.0, 1.1)),
+    Bohrung(d_kammer=12.0, h_kammer=86.0, hoehe=104.0, kopf="kuppe"),
+    n_quer=2.0, griff=(20.0, 20.0),
+    notiz="Gedrechselter Griff nach Vorlage, umgedreht. Schaft als Griff, "
+          "Olive unten.")
+
+# 2c – Der Drechsel kompakt: dieselbe Sprache, aber die Olive gross genug,
+# dass das Teil auch die Kleinballprobe aus eigener Groesse besteht.
+variante(
+    "drechsel_kompakt", "Der Drechsel · kompakt",
+    "tuerzwerg-griff-drechsel-kompakt.stl",
+    Profil([
+        (0.0,  KRONE_R, KRONE_R, "lin"),
+        (6.0,   9.0,  9.0, "kuppe"),
+        (38.0, 10.0, 10.0, "lin"),
+        (50.0, 10.0, 10.0, "lin"),
+        (57.0,  8.5,  8.5, "smooth"),
+        (70.0, 24.0, 24.0, "smooth"),
+        (92.0, 17.0, 17.0, "cap"),
+    ], rillen=(38.0, 50.0, 4.0, 1.1)),
+    Bohrung(d_kammer=12.0, h_kammer=74.0, hoehe=92.0, kopf="kuppe"),
+    n_quer=2.0, griff=(20.0, 20.0),
+    notiz="Wie der Drechsel, aber mit 48 mm Olive und kuerzerem Schaft.")
+
 # 3 – Der Taler: flache Scheibe
 variante(
     "taler", "Der Taler", "tuerzwerg-griff-taler.stl",
@@ -329,14 +392,29 @@ variante(
 
 
 def kennzahlen(v):
-    profil, bohr = v["profil"], v["bohr"]
+    """Masse und das Mass, auf das es bei den Pruefkoerpern ankommt.
+
+    'engste_oeffnung' ist der kleinste Lochdurchmesser, durch den das Teil
+    ueberhaupt hindurchkaeme – Minimum ueber die drei Hauptrichtungen. Fuer
+    den Durchgang laengs der Achse zaehlt der Umkreis des groessten
+    Querschnitts, nicht dessen Diagonale: ein runder Querschnitt braucht nur
+    seinen Durchmesser, ein rechteckiger seine Diagonale.
+    """
+    profil, n = v["profil"], v["n_quer"]
     hoehe = profil.hoehe
-    breite = max(profil(hoehe * i / 400)[0] for i in range(401)) * 2
-    tiefe = max(profil(hoehe * i / 400)[1] for i in range(401)) * 2
-    diag = math.sqrt(min(breite, tiefe) ** 2 + hoehe ** 2)
-    if tiefe < breite:
-        diag = min(diag, math.sqrt(breite ** 2 + tiefe ** 2))
-    return dict(breite=breite, tiefe=tiefe, hoehe=hoehe, diagonale=diag)
+    proben = [profil(hoehe * i / 600) for i in range(601)]
+    breite = max(p[0] for p in proben) * 2
+    tiefe = max(p[1] for p in proben) * 2
+
+    umkreis = 0.0
+    for j in range(180):
+        x, y = superellipse(breite / 2, tiefe / 2, n, j, 720)
+        umkreis = max(umkreis, 2.0 * math.hypot(x, y))
+
+    engste = min(umkreis,                                  # laengs der Achse
+                 math.hypot(tiefe, hoehe),                 # quer, schmale Seite
+                 math.hypot(breite, hoehe))                # quer, breite Seite
+    return dict(breite=breite, tiefe=tiefe, hoehe=hoehe, engste=engste)
 
 
 if __name__ == "__main__":
@@ -358,5 +436,8 @@ if __name__ == "__main__":
               f"Umfang {umfang:.0f} mm")
         print(f"  Duennste Wand {wand:.2f} mm")
         print(f"  Max Ueberhang {ueber:.1f} Grad bei h = {ueber_h:.1f} mm")
-        print(f"  Kleinste Diagonale {k['diagonale']:.1f} mm "
-              f"(Zylinder 31,7 / Kleinball 44,5)")
+        eng = k["engste"]
+        print(f"  Engste Oeffnung    {eng:.1f} mm  "
+              f"-> Kleinball 44,5: {'besteht' if eng > 44.5 else 'faellt durch'}"
+              f" | Zylinder 31,7 x 57,1: "
+              f"{'besteht' if (eng > 31.7 or k['hoehe'] > 57.1) else 'PRUEFEN'}")
