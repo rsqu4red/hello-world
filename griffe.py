@@ -332,17 +332,17 @@ variante(
     "drechsel", "Der Drechsel", "tuerzwerg-griff-drechsel.stl",
     Profil([
         (0.0,   KRONE_R, KRONE_R, "lin"),
-        (7.0,    9.0,  9.0, "kuppe"),    # gerundetes Schaftende oben
-        (44.0,  10.0, 10.0, "lin"),      # Schaft, leicht konisch: Griff
-        (56.0,  10.0, 10.0, "lin"),      # Rillenband
-        (64.0,   8.0,  8.0, "smooth"),   # Hals
-        (82.0,  18.0, 18.0, "smooth"),   # Olive, groesste Stelle
-        (104.0, 11.0, 11.0, "cap"),      # Olive laeuft auf die Standflaeche
-    ], rillen=(44.0, 56.0, 4.0, 1.1)),
+        (8.0,    9.25,  9.25, "kuppe"),   # gerundetes Schaftende oben
+        (27.0,   8.25,  8.25, "smooth"),  # Taille: hier fassen die Finger
+        (52.0,  10.0,  10.0, "smooth"),   # Schulter, trennt Griff von Olive
+        (62.0,   8.0,   8.0, "smooth"),   # Hals
+        (82.0,  18.0,  18.0, "smooth"),   # Olive, groesste Stelle
+        (104.0, 11.0,  11.0, "cap"),      # Olive laeuft auf die Standflaeche
+    ]),
     Bohrung(d_kammer=12.0, h_kammer=86.0, hoehe=104.0, kopf="kuppe"),
-    n_quer=2.0, griff=(20.0, 20.0),
-    notiz="Gedrechselter Griff nach Vorlage, umgedreht. Schaft als Griff, "
-          "Olive unten.")
+    n_quer=2.0, griff=(16.5, 16.5),
+    notiz="Gedrechselter Griff nach Vorlage, umgedreht. Schaft mit Taille als "
+          "Griff, Olive unten.")
 
 # 2c – Der Drechsel kompakt: dieselbe Sprache, aber die Olive gross genug,
 # dass das Teil auch die Kleinballprobe aus eigener Groesse besteht.
@@ -351,15 +351,15 @@ variante(
     "tuerzwerg-griff-drechsel-kompakt.stl",
     Profil([
         (0.0,  KRONE_R, KRONE_R, "lin"),
-        (6.0,   9.0,  9.0, "kuppe"),
-        (38.0, 10.0, 10.0, "lin"),
-        (50.0, 10.0, 10.0, "lin"),
-        (57.0,  8.5,  8.5, "smooth"),
-        (70.0, 24.0, 24.0, "smooth"),
-        (92.0, 17.0, 17.0, "cap"),
-    ], rillen=(38.0, 50.0, 4.0, 1.1)),
+        (7.0,   9.25,  9.25, "kuppe"),
+        (24.0,  8.25,  8.25, "smooth"),
+        (46.0, 10.0,  10.0, "smooth"),
+        (55.0,  8.5,   8.5, "smooth"),
+        (70.0, 24.0,  24.0, "smooth"),
+        (92.0, 17.0,  17.0, "cap"),
+    ]),
     Bohrung(d_kammer=12.0, h_kammer=74.0, hoehe=92.0, kopf="kuppe"),
-    n_quer=2.0, griff=(20.0, 20.0),
+    n_quer=2.0, griff=(16.5, 16.5),
     notiz="Wie der Drechsel, aber mit 48 mm Olive und kuerzerem Schaft.")
 
 # 3 – Der Taler: flache Scheibe
