@@ -144,6 +144,12 @@ def hoehenstufen(profil, bohr):
     werte |= {R_EINLAUF * (i / 28.0) ** 2 for i in range(29)}
     kuppe_bis = min((p[0] for p in profil.punkte if p[0] > 0), default=hoehe)
     werte |= {kuppe_bis * (i / 40.0) ** 2 for i in range(41)}
+    # Die Abtastreihen treffen sich an manchen Stellen rechnerisch, aber nicht
+    # bitgenau – 0,1 aus der einen und 0,1 aus der anderen sind zwei
+    # verschiedene Fliesskommazahlen. Ohne Quantisierung bleiben beide stehen
+    # und erzeugen zwei Ringe an praktisch derselben Hoehe, also entartete
+    # Dreiecke und ein Netz, das die Dichtheitspruefung nicht besteht.
+    werte = {round(w, 6) for w in werte}
     return sorted(w for w in werte if 0.0 <= w <= hoehe)
 
 
@@ -361,6 +367,64 @@ variante(
     Bohrung(d_kammer=12.0, h_kammer=74.0, hoehe=92.0, kopf="kuppe"),
     n_quer=2.0, griff=(16.5, 16.5),
     notiz="Wie der Drechsel, aber mit 48 mm Olive und kuerzerem Schaft.")
+
+# ---- Tierformen -------------------------------------------------------------
+# Das Netz entsteht aus gestapelten Querschnitten um eine senkrechte Achse.
+# Ohren, Schnaebel und Beine sind damit nicht darstellbar; die Tiere muessen
+# allein ueber ihre Proportion erkennbar sein, so wie gedrechseltes
+# Holzspielzeug. Alle drei behalten die bewaehrte Griffgeometrie: rund, rund
+# 17 mm, mit Verdickung darunter als Rutschstopp. Die Rumpfe sind abgeflacht,
+# damit die Masse nicht davonlaeuft.
+
+# T1 – Die Giraffe: der lange Hals ist der Griff.
+variante(
+    "giraffe", "Die Giraffe", "tuerzwerg-griff-giraffe.stl",
+    Profil([
+        (0.0,   KRONE_R, KRONE_R, "lin"),
+        (10.0,  11.0, 11.0, "kuppe"),   # Kopf Ø 22
+        (20.0,   8.5,  8.5, "smooth"),  # Nacken
+        (60.0,   8.75, 8.75, "smooth"), # Hals: 40 mm Griff
+        (72.0,  17.0, 10.5, "smooth"),  # Schulter
+        (88.0,  23.0, 12.6, "smooth"),  # Rumpf 46 x 25, abgeflacht
+        (114.0, 19.0, 10.41, "cap"),    # Standflaeche 38 x 21
+    ]),
+    Bohrung(d_kammer=11.0, h_kammer=94.0, hoehe=114.0, kopf="kuppe"),
+    n_quer=2.0, griff=(17.0, 17.0),
+    notiz="Der lange Hals ist die Griffzone – 40 mm, die laengste von allen.")
+
+# T2 – Die Biene: die Wespentaille ist der Griff, der Hinterleib gestreift.
+variante(
+    "biene", "Die Biene", "tuerzwerg-griff-biene.stl",
+    Profil([
+        (0.0,   KRONE_R, KRONE_R, "lin"),
+        (8.0,   12.0, 12.0, "kuppe"),   # Kopf Ø 24
+        (16.0,  10.0, 10.0, "smooth"),  # Hals
+        (26.0,  14.0, 11.0, "smooth"),  # Thorax
+        (38.0,   8.5,  8.5, "smooth"),  # Wespentaille beginnt
+        (70.0,   8.75, 8.75, "smooth"), # Taille: 32 mm Griff
+        (86.0,  23.0, 12.6, "smooth"),  # Hinterleib 46 x 25, abgeflacht
+        (106.0, 19.2, 10.52, "cap"),
+    ], rillen=(81.0, 101.0, 5.0, 0.7)),  # vier Streifen auf dem Hinterleib
+    Bohrung(d_kammer=11.0, h_kammer=88.0, hoehe=106.0, kopf="kuppe"),
+    n_quer=2.0, griff=(17.0, 17.0),
+    notiz="Kopf, Thorax, Wespentaille als Griff, gestreifter Hinterleib.")
+
+# T3 – Die Ente: kurzer Hals als Griff, plumper Rumpf als Rutschstopp.
+variante(
+    "ente", "Die Ente", "tuerzwerg-griff-ente.stl",
+    Profil([
+        (0.0,   KRONE_R, KRONE_R, "lin"),
+        (9.0,   11.0, 11.0, "kuppe"),   # Kopf Ø 22
+        (18.0,   8.5,  8.5, "smooth"),  # Hals
+        (52.0,   9.0,  9.0, "smooth"),  # Hals: 34 mm Griff
+        (64.0,  17.0, 10.5, "smooth"),  # Brust
+        (80.0,  24.0, 13.2, "smooth"),  # Rumpf 48 x 26, abgeflacht
+        (100.0, 20.0, 11.0, "cap"),
+    ]),
+    Bohrung(d_kammer=11.0, h_kammer=82.0, hoehe=100.0, kopf="kuppe"),
+    n_quer=2.0, griff=(17.0, 17.0),
+    notiz="Kleiner Kopf, Hals als Griff, plumper Rumpf – kompakteste Tierform.")
+
 
 # 3 – Der Taler: flache Scheibe
 variante(
