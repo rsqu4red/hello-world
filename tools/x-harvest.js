@@ -17,6 +17,12 @@
  *      and untouched. Background tabs get throttled and scrolling stalls.
  *   4. When it finishes it downloads x-<name>-<n>posts.json.
  *
+ * HOW TO STOP IT EARLY (without losing what it has collected)
+ *   Type either of these in the console at any time and press Enter:
+ *     stopHarvest()   finish the current scroll, download what it has, stop
+ *     saveHarvest()   download what it has right now and KEEP running
+ *   Reloading the page also stops it, but discards everything collected.
+ *
  * RECOMMENDED PAGES
  *   Profile "Posts" tab   -> his own posts
  *   Profile "Replies" tab -> exits are often posted as replies. Run it here too.
@@ -31,9 +37,38 @@
   const IDLE_LIMIT = 20; // stop after this many scrolls that surface nothing new
   const SCROLL_PAUSE = 800; // ms between scrolls; raise if posts load slowly
 
+  if (window.__harvest && window.__harvest.running) {
+    console.warn('A harvest is already running in this tab. Use stopHarvest() first.');
+    return;
+  }
+
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const posts = new Map();
   let oldest = null;
+
+  const save = (note = 'partial') => {
+    const rows = [...posts.values()].sort((a, b) => a.date.localeCompare(b.date));
+    if (!rows.length) {
+      console.warn('Nothing captured yet, so nothing to save.');
+      return 0;
+    }
+    const name = `x-${KEEP_AUTHOR || 'all'}-${rows.length}posts-${note}.json`;
+    const url = URL.createObjectURL(
+      new Blob([JSON.stringify(rows, null, 2)], { type: 'application/json' })
+    );
+    Object.assign(document.createElement('a'), { href: url, download: name }).click();
+    URL.revokeObjectURL(url);
+    console.log(`Saved ${name} (${rows[0].date} through ${rows[rows.length - 1].date}).`);
+    return rows.length;
+  };
+
+  // Exposed so you can stop or snapshot the run from the console mid-flight.
+  const state = (window.__harvest = { running: true, stop: false, posts, save });
+  window.stopHarvest = () => {
+    state.stop = true;
+    return 'Stopping after the current scroll, then downloading.';
+  };
+  window.saveHarvest = () => save('snapshot');
 
   const harvest = () => {
     for (const article of document.querySelectorAll('article[data-testid="tweet"]')) {
@@ -63,14 +98,21 @@
     }
   };
 
+  console.log('Running. stopHarvest() to stop and save, saveHarvest() to snapshot.');
+
   let idle = 0;
+  let reason = 'reached the end of the timeline';
   while (idle < IDLE_LIMIT) {
     const before = posts.size;
     harvest();
     idle = posts.size > before ? 0 : idle + 1;
 
+    if (state.stop) {
+      reason = 'you asked it to stop';
+      break;
+    }
     if (oldest && oldest < STOP_BEFORE) {
-      console.log(`Reached ${oldest}, which is past the ${STOP_BEFORE} cutoff. Stopping.`);
+      reason = `reached ${oldest}, past the ${STOP_BEFORE} cutoff`;
       break;
     }
 
@@ -80,20 +122,12 @@
   }
 
   harvest();
+  state.running = false;
 
-  const rows = [...posts.values()].sort((a, b) => a.date.localeCompare(b.date));
-  if (!rows.length) {
-    console.warn('Nothing captured. Check that KEEP_AUTHOR matches the handle on this page.');
+  const count = save(state.stop ? 'partial' : 'complete');
+  if (!count) {
+    console.warn('Check that KEEP_AUTHOR matches the handle on this page.');
     return;
   }
-
-  const name = `x-${KEEP_AUTHOR || 'all'}-${rows.length}posts.json`;
-  const url = URL.createObjectURL(
-    new Blob([JSON.stringify(rows, null, 2)], { type: 'application/json' })
-  );
-  Object.assign(document.createElement('a'), { href: url, download: name }).click();
-  URL.revokeObjectURL(url);
-
-  console.log(`Done. ${rows.length} posts, ${rows[0].date} through ${rows[rows.length - 1].date}.`);
-  console.log(`Saved as ${name}`);
+  console.log(`Done — ${reason}. ${count} posts.`);
 })();
