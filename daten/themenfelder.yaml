@@ -1,0 +1,140 @@
+# Themenfelder der Produktionssteuerung
+#
+# Jedes Thema, das in der Abteilung landet, bekommt genau ein Themenfeld.
+# Kein Themenfeld ohne benannte Verantwortung - das ist die Kernregel,
+# damit "alle Themen landen bei uns" nicht in "niemand ist zuständig" endet.
+#
+# kategorie:
+#   betreiberpflicht = gesetzliche/normative Pflicht als Anlagenbetreiber
+#   arbeitsschutz    = Schutz der Beschäftigten
+#   assets           = Anlagen, Komponenten, Instandhaltung
+#   ressourcen       = Fahrzeuge, Werkzeuge, Software, Personal
+#   governance       = Steuerung, Daten, Nachweise
+
+meta:
+  stand: 2026-08-17
+  pflege: PS-RWM
+  freigabe: PS-AL
+
+themenfelder:
+  - id: TF-ARB
+    name: Arbeitsschutz
+    kategorie: arbeitsschutz
+    owner: PS-TFV
+    fachfunktion: FKT-SIFA
+    kritikalitaet: hoch
+    beschreibung: Gefährdungsbeurteilung, Unterweisung, PSA, Arbeitsverfahren.
+
+  - id: TF-BRA
+    name: Brandschutz
+    kategorie: betreiberpflicht
+    owner: PS-TFV
+    fachfunktion: FKT-BSB
+    kritikalitaet: hoch
+    beschreibung: Baulicher, anlagentechnischer und organisatorischer Brandschutz an Betriebsstätten und Anlagen.
+
+  - id: TF-OBJ
+    name: Objektschutz und Anlagensicherung
+    kategorie: betreiberpflicht
+    owner: PS-TFV
+    fachfunktion: FKT-OSV
+    kritikalitaet: hoch
+    beschreibung: Zutritt, Perimeter, Schließanlagen, Meldeanlagen, Sicherung unbesetzter Anlagen.
+
+  - id: TF-ELE
+    name: Elektrische Anlagensicherheit
+    kategorie: betreiberpflicht
+    owner: PS-TFV
+    fachfunktion: FKT-VEFK
+    kritikalitaet: hoch
+    beschreibung: Schalthandlungen, Arbeiten unter Spannung, Freischaltung, Anlagenverantwortung.
+
+  - id: TF-IHS
+    name: Instandhaltungsstrategie und -anleitungen
+    kategorie: assets
+    owner: PS-TFV
+    kritikalitaet: hoch
+    beschreibung: Wartungspläne, Instandhaltungsanleitungen, Prüfzyklen, Freigabe von Arbeitsanweisungen.
+
+  - id: TF-ENT
+    name: Entstörung und Bereitschaft
+    kategorie: assets
+    owner: PS-TFV
+    kritikalitaet: hoch
+    beschreibung: Entstörungsorganisation, Rufbereitschaft, Reaktionszeiten, Störungsdokumentation.
+
+  - id: TF-ERN
+    name: Anlagenerneuerung und Investanstoß
+    kategorie: assets
+    owner: PS-TFV
+    kritikalitaet: mittel
+    beschreibung: Zustandsbewertung, Erneuerungsbedarf melden, Übergabe an Projektmanagement und Rückübernahme.
+
+  - id: TF-KOM
+    name: Anlagenkomponenten und Ersatzteile
+    kategorie: assets
+    owner: PS-TFV
+    kritikalitaet: mittel
+    beschreibung: Komponentenkatalog, Zulassung von Bauteilen, Ersatzteilbevorratung, Obsoleszenz.
+
+  - id: TF-ARM
+    name: Arbeitsmittel und Prüfmittel
+    kategorie: betreiberpflicht
+    owner: PS-TFV
+    fachfunktion: FKT-SIFA
+    kritikalitaet: hoch
+    beschreibung: Wiederkehrende Prüfungen von Arbeitsmitteln, Leitern, Hebezeugen, Messgeräten.
+
+  - id: TF-GEF
+    name: Gefahrstoffe
+    kategorie: betreiberpflicht
+    owner: PS-TFV
+    fachfunktion: FKT-GEF
+    kritikalitaet: mittel
+    beschreibung: Gefahrstoffverzeichnis, Lagerung, Betriebsanweisungen, Isoliergase und Betriebsmittel.
+
+  - id: TF-LIZ
+    name: Lizenz- und Genehmigungsmanagement
+    kategorie: betreiberpflicht
+    owner: PS-TFV
+    kritikalitaet: hoch
+    beschreibung: Betriebsgenehmigungen, Konzessionen, behördliche Auflagen, Prüfbescheinigungen, Fristen.
+
+  - id: TF-SWL
+    name: Software-Lizenzen
+    kategorie: ressourcen
+    owner: PS-TFV
+    fachfunktion: SST-IT
+    kritikalitaet: mittel
+    beschreibung: Lizenzbestand, Zuweisung, Verlängerung, Compliance gegenüber Herstellern.
+
+  - id: TF-FUH
+    name: Fuhrpark
+    kategorie: ressourcen
+    owner: PS-TFV
+    fachfunktion: FKT-FPV
+    kritikalitaet: mittel
+    beschreibung: Halterpflichten, Führerscheinkontrolle, UVV-Prüfung, Ladungssicherung, Beschaffung.
+
+  - id: TF-QUA
+    name: Qualifikation und Unterweisung
+    kategorie: arbeitsschutz
+    owner: PS-TFV
+    fachfunktion: SST-HR
+    kritikalitaet: hoch
+    beschreibung: Befähigungen, Schulungsmatrix, Nachweise, Wiederholungsintervalle.
+
+  - id: TF-KRI
+    name: Informationssicherheit und KRITIS
+    kategorie: betreiberpflicht
+    owner: PS-TFV
+    fachfunktion: FKT-ISB
+    kritikalitaet: hoch
+    beschreibung: Sicherheit der Betriebs- und Leittechnik, Nachweispflichten, Meldewege.
+
+  - id: TF-DOK
+    name: Anlagendokumentation und Datenqualität
+    kategorie: governance
+    owner: PS-TFV
+    kritikalitaet: mittel
+    beschreibung: Anlagenstammdaten, Schaltbilder, Nachführung nach Bau- und Instandhaltungsmaßnahmen.

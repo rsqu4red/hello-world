@@ -1,0 +1,75 @@
+# Betriebsbereiche der Anlagenbetreibereinheit
+#
+# PLATZHALTER: Namen, Standorte und Kopfzahlen sind Beispielwerte.
+# Vor dem Produktivstart durch die echten Bereichsbezeichnungen ersetzen.
+# Die IDs (BB-*) werden in Standards und im Cockpit referenziert - IDs
+# nur ändern, wenn gleichzeitig alle Referenzen mitgezogen werden.
+
+meta:
+  stand: 2026-08-17
+  pflege: PS-RWM
+  freigabe: PS-AL
+
+betriebsbereiche:
+  - id: BB-NORD
+    name: Betriebsbereich Nord
+    sitz: Hamburg
+    mitarbeitende: 92
+    leitung: BB-L
+    koordination_ps: PS-BBK
+    anlagenklassen: [umspannwerk, ortsnetzstation, kabelnetz]
+    bereitschaft: true
+
+  - id: BB-NORDOST
+    name: Betriebsbereich Nordost
+    sitz: Rostock
+    mitarbeitende: 71
+    leitung: BB-L
+    koordination_ps: PS-BBK
+    anlagenklassen: [umspannwerk, ortsnetzstation, freileitung]
+    bereitschaft: true
+
+  - id: BB-OST
+    name: Betriebsbereich Ost
+    sitz: Leipzig
+    mitarbeitende: 88
+    leitung: BB-L
+    koordination_ps: PS-BBK
+    anlagenklassen: [umspannwerk, ortsnetzstation, kabelnetz, freileitung]
+    bereitschaft: true
+
+  - id: BB-MITTE
+    name: Betriebsbereich Mitte
+    sitz: Kassel
+    mitarbeitende: 79
+    leitung: BB-L
+    koordination_ps: PS-BBK
+    anlagenklassen: [umspannwerk, ortsnetzstation, kabelnetz]
+    bereitschaft: true
+
+  - id: BB-WEST
+    name: Betriebsbereich West
+    sitz: Dortmund
+    mitarbeitende: 104
+    leitung: BB-L
+    koordination_ps: PS-BBK
+    anlagenklassen: [umspannwerk, ortsnetzstation, kabelnetz, gasdruckregelanlage]
+    bereitschaft: true
+
+  - id: BB-SUEDWEST
+    name: Betriebsbereich Südwest
+    sitz: Mannheim
+    mitarbeitende: 83
+    leitung: BB-L
+    koordination_ps: PS-BBK
+    anlagenklassen: [umspannwerk, ortsnetzstation, kabelnetz]
+    bereitschaft: true
+
+  - id: BB-SUED
+    name: Betriebsbereich Süd
+    sitz: Augsburg
+    mitarbeitende: 83
+    leitung: BB-L
+    koordination_ps: PS-BBK
+    anlagenklassen: [umspannwerk, ortsnetzstation, freileitung]
+    bereitschaft: true

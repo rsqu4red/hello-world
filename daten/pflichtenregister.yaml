@@ -1,0 +1,201 @@
+# Pflichtenregister der Anlagenbetreibereinheit
+#
+# WICHTIG - Rechtsstand:
+# Die hier genannten Quellen sind fachliche Arbeitshypothesen der
+# Produktionssteuerung. Erst wenn "rechtsstand_geprueft: true" gesetzt ist
+# UND ein Prüfvermerk von SST-REW vorliegt, gilt die Pflicht als bestätigt.
+# Kein Agent darf dieses Feld selbst auf true setzen - das ist ein
+# menschlicher Freigabeakt. Siehe .kiro/steering/40-agenten-team.md.
+#
+# abdeckung wird NICHT hier gepflegt, sondern vom Werkzeug aus den
+# Standards abgeleitet (standards/**/*.md, Feld pflichten:).
+
+meta:
+  stand: 2026-08-17
+  pflege: PS-TFV
+  freigabe: PS-AL
+  letzte_rechtspruefung: null
+
+pflichten:
+  - id: PFL-001
+    titel: Gefährdungsbeurteilung erstellen und aktuell halten
+    themenfeld: TF-ARB
+    quelle: ArbSchG, DGUV Vorschrift 1
+    turnus: jährlich und anlassbezogen
+    traeger: BB-L
+    delegation_von: SST-GF
+    rechtsstand_geprueft: false
+    bemerkung: Anlassbezogen bei neuen Arbeitsverfahren, Unfällen, geänderten Anlagen.
+
+  - id: PFL-002
+    titel: Beschäftigte unterweisen
+    themenfeld: TF-ARB
+    quelle: ArbSchG, DGUV Vorschrift 1
+    turnus: jährlich
+    traeger: BB-MV
+    delegation_von: BB-L
+    rechtsstand_geprueft: false
+
+  - id: PFL-003
+    titel: Elektrische Anlagen und ortsveränderliche Betriebsmittel prüfen
+    themenfeld: TF-ELE
+    quelle: DGUV Vorschrift 3, BetrSichV
+    turnus: fristabhängig je Betriebsmittelart
+    traeger: FKT-VEFK
+    delegation_von: BB-L
+    rechtsstand_geprueft: false
+
+  - id: PFL-004
+    titel: Anlagenverantwortung für elektrische Anlagen benennen
+    themenfeld: TF-ELE
+    quelle: DIN VDE 0105-100
+    turnus: dauerhaft, Prüfung bei Personalwechsel
+    traeger: FKT-VEFK
+    delegation_von: PS-AL
+    rechtsstand_geprueft: false
+
+  - id: PFL-005
+    titel: Brandschutzordnung erstellen und bekannt machen
+    themenfeld: TF-BRA
+    quelle: DIN 14096, Landesbauordnung
+    turnus: alle 2 Jahre prüfen
+    traeger: FKT-BSB
+    delegation_von: BB-L
+    rechtsstand_geprueft: false
+
+  - id: PFL-006
+    titel: Feuerlöscheinrichtungen prüfen und instand halten
+    themenfeld: TF-BRA
+    quelle: ASR A2.2, DIN 14406
+    turnus: alle 2 Jahre
+    traeger: BB-L
+    rechtsstand_geprueft: false
+
+  - id: PFL-007
+    titel: Flucht- und Rettungswege freihalten und kennzeichnen
+    themenfeld: TF-BRA
+    quelle: ArbStättV, ASR A2.3
+    turnus: laufend, Kontrolle quartalsweise
+    traeger: BB-MV
+    rechtsstand_geprueft: false
+
+  - id: PFL-008
+    titel: Unbesetzte Anlagen gegen unbefugten Zutritt sichern
+    themenfeld: TF-OBJ
+    quelle: EnWG Betreiberverantwortung, DIN VDE 0101
+    turnus: laufend, Kontrolle halbjährlich
+    traeger: BB-L
+    rechtsstand_geprueft: false
+
+  - id: PFL-009
+    titel: Schließberechtigungen und Schlüsselausgabe nachweisen
+    themenfeld: TF-OBJ
+    quelle: interne Sicherungsvorgabe
+    turnus: jährlich
+    traeger: FKT-OSV
+    rechtsstand_geprueft: false
+
+  - id: PFL-010
+    titel: Arbeitsmittel wiederkehrend prüfen
+    themenfeld: TF-ARM
+    quelle: BetrSichV
+    turnus: fristabhängig je Arbeitsmittel
+    traeger: BB-MV
+    rechtsstand_geprueft: false
+
+  - id: PFL-011
+    titel: Persönliche Schutzausrüstung bereitstellen und prüfen
+    themenfeld: TF-ARB
+    quelle: PSA-Benutzungsverordnung, DGUV Regel 112-198
+    turnus: jährlich, PSA gegen Absturz zusätzlich vor jeder Benutzung
+    traeger: BB-MV
+    rechtsstand_geprueft: false
+
+  - id: PFL-012
+    titel: Gefahrstoffverzeichnis führen
+    themenfeld: TF-GEF
+    quelle: GefStoffV
+    turnus: jährlich
+    traeger: FKT-GEF
+    rechtsstand_geprueft: false
+
+  - id: PFL-013
+    titel: Fahrzeuge nach UVV prüfen
+    themenfeld: TF-FUH
+    quelle: DGUV Vorschrift 70
+    turnus: jährlich
+    traeger: FKT-FPV
+    rechtsstand_geprueft: false
+
+  - id: PFL-014
+    titel: Führerscheinkontrolle durchführen
+    themenfeld: TF-FUH
+    quelle: Halterhaftung StVG, StVO
+    turnus: halbjährlich
+    traeger: BB-MV
+    delegation_von: FKT-FPV
+    rechtsstand_geprueft: false
+
+  - id: PFL-015
+    titel: Behördliche Auflagen und Genehmigungsfristen überwachen
+    themenfeld: TF-LIZ
+    quelle: Genehmigungsbescheide, EnWG
+    turnus: laufend, Fristenprüfung quartalsweise
+    traeger: PS-TFV
+    rechtsstand_geprueft: false
+
+  - id: PFL-016
+    titel: Software nur im Rahmen erworbener Lizenzen einsetzen
+    themenfeld: TF-SWL
+    quelle: UrhG, Herstellerverträge
+    turnus: jährlich
+    traeger: SST-IT
+    rechtsstand_geprueft: false
+
+  - id: PFL-017
+    titel: Nachweis der IT-Sicherheit für kritische Anlagen erbringen
+    themenfeld: TF-KRI
+    quelle: BSIG, IT-Sicherheitskatalog
+    turnus: alle 2 Jahre
+    traeger: FKT-ISB
+    rechtsstand_geprueft: false
+
+  - id: PFL-018
+    titel: Anlagendokumentation nach Änderungen nachführen
+    themenfeld: TF-DOK
+    quelle: DIN VDE 0105-100, interne Vorgabe
+    turnus: anlassbezogen, Kontrolle quartalsweise
+    traeger: BB-MV
+    rechtsstand_geprueft: false
+
+  - id: PFL-019
+    titel: Instandhaltungsmaßnahmen planen und nachweisen
+    themenfeld: TF-IHS
+    quelle: EnWG, DIN 31051
+    turnus: laufend, Planung jährlich
+    traeger: PS-TFV
+    rechtsstand_geprueft: false
+
+  - id: PFL-020
+    titel: Störungsbereitschaft sicherstellen
+    themenfeld: TF-ENT
+    quelle: EnWG Versorgungssicherheit
+    turnus: dauerhaft
+    traeger: PS-DIS
+    rechtsstand_geprueft: false
+
+  - id: PFL-021
+    titel: Befähigungen und Qualifikationsnachweise vorhalten
+    themenfeld: TF-QUA
+    quelle: DGUV Vorschrift 1, BetrSichV
+    turnus: jährlich
+    traeger: BB-L
+    rechtsstand_geprueft: false
+
+  - id: PFL-022
+    titel: Zustandsbewertung als Grundlage für Erneuerung liefern
+    themenfeld: TF-ERN
+    quelle: interne Asset-Vorgabe, EnWG
+    turnus: jährlich
+    traeger: PS-TFV
+    rechtsstand_geprueft: false

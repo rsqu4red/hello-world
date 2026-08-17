@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Neuen Standard anlegen",
+  "description": "Baut aus einer fachlichen Absicht einen prüffähigen Standard: Aufgaben mit Takt, Frist, Verantwortung und Nachweis, verknüpfte Pflichten, Kennzahlen, Eskalation. Ergebnis ist ein Entwurf, der die Prüfung besteht.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": []
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Arbeite als A2 Standard-Architekt.\n\nKläre zuerst mit mir, falls noch offen: Themenfeld, Titel, was genau geregelt werden soll, wer es heute schon tut, und welcher Nachweis heute schon entsteht. Frage nach dem tatsächlichen Ablauf, nicht nach dem gewünschten — ein Standard, der die Praxis ignoriert, wird nicht gelebt.\n\nDann:\n1. `python3 werkzeuge/ps.py neu <TF-ID> \"<Titel>\"` — nie von Hand anlegen, die ID-Vergabe läuft über das Werkzeug.\n2. Formuliere die Aufgaben. Das ist die eigentliche Arbeit. Je Aufgabe: aktives Verb am Anfang, Takt aus der festen Liste, Frist passend zum Takt, genau ein A mit realistischer Verantwortung, mindestens ein R, beratende Funktionen unter C, ein Nachweis der tatsächlich entstehen kann, ein System das es im Haus gibt.\n3. Verknüpfe die Pflichten aus daten/pflichtenregister.yaml. Fehlt eine, ergänze sie dort zuerst — mit rechtsstand_geprueft: false.\n4. Ergänze zwei bis drei Kennzahlen mit realer Datenquelle und eine dreistufige Eskalation.\n5. Schreibe den Fließtext in den acht vorgegebenen Abschnitten. Abschnitt 4 verweist auf die Aufgaben-IDs.\n6. `python3 werkzeuge/ps.py pruefen` bis fehlerfrei, dann `python3 werkzeuge/ps.py cockpit`.\n\nDer Standard bleibt im Status entwurf. Nenne mir zum Schluss die drei Punkte, die in der Abstimmung am ehesten strittig werden, und welche Schnittstellenpartner beteiligt werden müssen."
+  }
+}

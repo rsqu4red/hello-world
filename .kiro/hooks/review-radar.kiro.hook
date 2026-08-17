@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Review-Radar — fällige Standards durchgehen",
+  "description": "Monatlicher Durchgang durch überfällige und bald fällige Reviews. Prüft je Standard, ob sich seit dem letzten Review etwas geändert hat, und schlägt Termine vor.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": []
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Arbeite als A7 Review-Radar.\n\n1. `python3 werkzeuge/ps.py faellig --tage 90`.\n2. Gehe jeden gelisteten Standard durch. Lies ihn und prüfe, ob sich seit dem Datum in letzter_review etwas geändert hat, das den Inhalt berührt: Organisation, Anlagenbestand, Vorfälle, Schnittstellenvereinbarungen, Hinweise von SST-REW, neue oder geänderte Standards mit Überschneidung.\n3. Empfiehl je Standard genau eines:\n   - unverändert bestätigen (dann letzter_review auf heute setzen, Patch-Version, Historienzeile)\n   - überarbeiten (mit konkreter Liste, was zu ändern ist)\n   - aussetzen oder archivieren (mit Begründung)\n4. Prüfe zusätzlich, ob ein außerplanmäßiger Reviewanlass vorliegt, der nicht im Zyklus steht: Unfall, Großstörung, behördliche Feststellung, Reorganisation, neuer Dienstleistervertrag.\n5. Wenn du Standards unverändert bestätigt hast: `python3 werkzeuge/ps.py pruefen` und `python3 werkzeuge/ps.py cockpit`.\n\nAusgabe: Tabelle mit Standard-ID, Verantwortung, Empfehlung, Terminvorschlag. Bestätige einen Standard nur dann als unverändert, wenn du ihn tatsächlich gelesen hast."
+  }
+}

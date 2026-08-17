@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Neues Thema aufnehmen (Triage)",
+  "description": "Für alles, was neu in der Abteilung landet: ordnet das Thema einem Themenfeld zu, prüft ob es bereits geregelt ist, und empfiehlt das weitere Vorgehen. Der erste Schritt, bevor irgendjemand einen Standard schreibt.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": []
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Arbeite als A1 Themen-Triage.\n\nFrage mich zuerst nach dem Thema, falls ich es nicht schon beschrieben habe: Worum geht es, wer hat es aufgebracht, gibt es einen Anlass (Vorfall, Prüfung, Anfrage einer Abteilung, neue Anlage)?\n\nDann:\n1. Verschaffe dir die Lage: `python3 werkzeuge/ps.py status`.\n2. Ordne das Thema genau einem Themenfeld aus daten/themenfelder.yaml zu. Passt keines, schlage ein neues vor — mit Verantwortung, Kritikalität und Kürzel.\n3. Lies die bestehenden Standards dieses Themenfelds. Prüfe ehrlich, ob das Thema bereits geregelt ist. Häufigster Fall: Es gibt eine Regelung, sie ist nur nicht bekannt — dann ist die Empfehlung Kommunikation, nicht ein neuer Standard.\n4. Prüfe im Pflichtenregister, ob eine bereits erfasste Betreiberpflicht berührt ist.\n5. Empfiehl genau eines: bestehenden Standard ergänzen (welchen, welche Aufgabe), neuer Standard (Themenfeld, geschätzter Umfang), oder kein Regelungsbedarf (mit Begründung).\n\nAusgabe: kurzer Vermerk mit Thema, Themenfeld, Fundlage, Empfehlung, geschätztem Aufwand und der Frage, die PS-AL entscheiden muss. Lege noch keinen Standard an — das entscheidet ein Mensch."
+  }
+}

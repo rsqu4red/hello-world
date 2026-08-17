@@ -1,0 +1,93 @@
+# Schnittstellenvereinbarungen der Produktionssteuerung
+#
+# Für jeden Partner steht hier, was wir liefern und was wir erwarten.
+# Damit ist eine Diskussion "das hättet ihr machen müssen" jederzeit
+# auf ein Dokument zurückführbar statt auf Erinnerung.
+#
+# reifegrad: entwurf | abgestimmt | vereinbart
+#   vereinbart = beidseitig unterschrieben oder protokolliert bestätigt
+
+meta:
+  stand: 2026-08-17
+  pflege: PS-RWM
+  freigabe: PS-AL
+
+schnittstellen:
+  - partner: SST-AM
+    thema: Instandhaltungsstrategie und Erneuerungsplanung
+    reifegrad: abgestimmt
+    wir_liefern:
+      - Zustandsbewertung je Anlagenklasse, jährlich bis 30.09.
+      - Erneuerungsanstöße mit technischer Begründung, laufend
+      - Rückmeldung zur Umsetzbarkeit von Strategievorgaben, 20 Arbeitstage nach Eingang
+    wir_erwarten:
+      - Verbindliche Instandhaltungsstrategie je Anlagenklasse, jährlich bis 31.10.
+      - Budgetrahmen für Instandhaltung und Instandsetzung bis 30.11.
+      - Entscheidung über gemeldete Erneuerungsanstöße binnen 40 Arbeitstagen
+    eskalation: PS-AL an Leitung Anlagenmanagement
+    turnus_jourfixe: monatlich
+
+  - partner: SST-SDL
+    thema: Ausführung Instandhaltung, Instandsetzung, Entstörung
+    reifegrad: vereinbart
+    wir_liefern:
+      - Gültige Instandhaltungsanleitungen und Standards vor Leistungsbeginn
+      - Beauftragung mit eindeutiger Leistungsbeschreibung und Termin
+      - Ansprechpartner je Betriebsbereich und Bereitschaftskontakt 24/7
+    wir_erwarten:
+      - Rückmeldung Auftragsstatus im System, spätestens 2 Arbeitstage nach Ausführung
+      - Störungsmeldung an Leitstelle unverzüglich, Dokumentation binnen 24 Stunden
+      - Nachweis der Qualifikation des eingesetzten Personals vor Ersteinsatz
+      - Einhaltung der Reaktionszeiten gemäß Vertrag
+    eskalation: PS-DIS, dann PS-AL, dann Vertragsmanagement
+    turnus_jourfixe: wöchentlich
+
+  - partner: SST-PM
+    thema: Erneuerungsprojekte und Anlagenübergabe
+    reifegrad: abgestimmt
+    wir_liefern:
+      - Betriebliche Anforderungen und Randbedingungen zu Projektbeginn
+      - Benennung der Anlagenverantwortung für die Bauphase
+      - Teilnahme an Abnahmen
+    wir_erwarten:
+      - Einbindung der Produktionssteuerung ab Vorplanung, nicht erst zur Abnahme
+      - Vollständige Dokumentation zur Übergabe, Checkliste UEBERGABE-01
+      - Übergabeprotokoll mit Restpunktenliste und Terminen
+    eskalation: PS-AL an Leitung Projektmanagement
+    turnus_jourfixe: monatlich
+
+  - partner: SST-NF
+    thema: Schalthandlungen und Störungsbearbeitung
+    reifegrad: vereinbart
+    wir_liefern:
+      - Aktuelle Anlagenverantwortliche und Erreichbarkeiten
+      - Freigabe geplanter Schalthandlungen im vereinbarten Vorlauf
+    wir_erwarten:
+      - Unverzügliche Information bei Störungen mit Kundenbetroffenheit
+      - Rückmeldung nach Wiederversorgung mit Störungsdaten
+    eskalation: PS-DIS an Schichtleitung Netzführung
+    turnus_jourfixe: monatlich
+
+  - partner: SST-IT
+    thema: Software-Lizenzen und Fachanwendungen
+    reifegrad: entwurf
+    wir_liefern:
+      - Bedarfsmeldung mit Kostenstelle und Nutzerkreis
+      - Jährliche Bestätigung des tatsächlichen Nutzerkreises bis 31.03.
+    wir_erwarten:
+      - Lizenzbestandsliste je Kostenstelle, quartalsweise
+      - Vorwarnung vor Vertragsverlängerung, 90 Tage vor Ablauf
+    eskalation: PS-AL an IT-Leitung
+    turnus_jourfixe: quartalsweise
+
+  - partner: SST-REW
+    thema: Rechtsstand und Betreiberpflichten
+    reifegrad: abgestimmt
+    wir_liefern:
+      - Liste der von uns getragenen Betreiberpflichten, jährlich
+      - Meldung neuer Anwendungsfälle
+    wir_erwarten:
+      - Bestätigung des Rechtsstands je Standard bei Erstfreigabe und Änderung
+      - Information über relevante Rechtsänderungen binnen 20 Arbeitstagen
+    eskalation: PS-AL an Recht und Compliance
+    turnus_jourfixe: quartalsweise

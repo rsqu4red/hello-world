@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Standard geändert — prüfen und Cockpit nachziehen",
+  "description": "Läuft nach jeder Änderung an einem Standard. Prüft das Regelwerk, meldet Fehler und Warnungen und baut das Cockpit neu, damit die Gesamtsicht nie hinter dem Regelwerk zurückbleibt.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["standards/**/*.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Ein Standard wurde geändert. Arbeite als A4 RACI-Wächter und A8 Cockpit-Kurator:\n\n1. Führe `python3 werkzeuge/ps.py pruefen` aus.\n2. Behebe alle FEHLER, die den geänderten Standard betreffen. Fehler in anderen Dateien nur melden, nicht ungefragt ändern.\n3. Prüfe die geänderten Aufgaben gegen die RACI-Regeln: genau ein A, A trägt die Verantwortung realistisch, beratende Funktionen stehen unter C, Frist passt zum Takt, Nachweis ist ein Dokument, das tatsächlich entstehen kann.\n4. Prüfe, ob die Änderungshistorie und die Version fortgeschrieben wurden. Wenn nicht, ergänze beides — Major nur, wenn sich Pflichten für die Betriebsbereiche geändert haben.\n5. Baue das Cockpit neu: `python3 werkzeuge/ps.py cockpit`.\n\nBerichte in höchstens zehn Zeilen: was geändert wurde, welche Fehler behoben wurden, welche Warnungen offen bleiben und warum. Setze weder den Status auf gueltig noch rechtsstand_geprueft auf true."
+  }
+}

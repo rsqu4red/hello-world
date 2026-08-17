@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Schnittstellen-Check vor dem Jourfixe",
+  "description": "Bereitet den Jourfixe mit Anlagenmanagement, Servicedienstleister, Projektmanagement oder IT vor: welche Zusagen stehen, welche fehlen, was ist offen.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": []
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Arbeite als A5 Schnittstellen-Lotse.\n\nFrage mich, für welchen Partner der Jourfixe vorbereitet werden soll (SST-AM, SST-SDL, SST-PM, SST-NF, SST-IT, SST-EK, SST-REW).\n\n1. Lies die Vereinbarung in daten/organisation/schnittstellen.yaml.\n2. Sammle alle Standards, die diesen Partner im Feld schnittstellen nennen, und alle Aufgaben, in denen er als R, A, C oder I vorkommt: `python3 werkzeuge/ps.py rollenblatt <SST-ID>`.\n3. Stelle gegenüber:\n   - Was wir dem Partner zugesagt haben und in welchen Standards das verankert ist.\n   - Was wir vom Partner erwarten und ob diese Erwartung in der Vereinbarung steht. Erwartungen, die nur in Standards stehen, sind einseitig — das ist der wichtigste Befund.\n   - Zusagen mit Reifegrad entwurf, auf die sich Standards bereits stützen.\n4. Formuliere daraus eine Tagesordnung mit höchstens fünf Punkten, jeder mit gewünschtem Ergebnis.\n\nAusgabe: Tagesordnung plus eine Liste der Punkte, die nach dem Termin in schnittstellen.yaml nachgetragen werden müssen."
+  }
+}

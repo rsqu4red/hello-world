@@ -1,0 +1,1142 @@
+<title>Cockpit Produktionssteuerung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --ground: #f5f7f8;
+  --surface: #ffffff;
+  --surface-still: #eef1f3;
+  --ink: #14191d;
+  --ink-leise: #5a6672;
+  --ink-still: #7e8994;
+  --linie: #dde2e6;
+  --linie-stark: #c3ccd3;
+  --akzent: #1d5a72;
+  --akzent-leise: #e4eef2;
+  --ok: #2c7350;
+  --ok-feld: #e3f0e9;
+  --warn: #8f6511;
+  --warn-feld: #f7eed9;
+  --krit: #a83730;
+  --krit-feld: #f8e6e4;
+  --schrift-titel: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --schrift-text: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --schrift-daten: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #10151a;
+    --surface: #172026;
+    --surface-still: #1e2930;
+    --ink: #e7ecef;
+    --ink-leise: #a2aeb8;
+    --ink-still: #7d8993;
+    --linie: #2a363e;
+    --linie-stark: #3c4a54;
+    --akzent: #82b8ce;
+    --akzent-leise: #1c2e38;
+    --ok: #6fbd92;
+    --ok-feld: #162c22;
+    --warn: #d8ab54;
+    --warn-feld: #2e2718;
+    --krit: #e08a83;
+    --krit-feld: #33201e;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #10151a;
+  --surface: #172026;
+  --surface-still: #1e2930;
+  --ink: #e7ecef;
+  --ink-leise: #a2aeb8;
+  --ink-still: #7d8993;
+  --linie: #2a363e;
+  --linie-stark: #3c4a54;
+  --akzent: #82b8ce;
+  --akzent-leise: #1c2e38;
+  --ok: #6fbd92;
+  --ok-feld: #162c22;
+  --warn: #d8ab54;
+  --warn-feld: #2e2718;
+  --krit: #e08a83;
+  --krit-feld: #33201e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--schrift-text);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.huelle {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+/* --- Kopf --- */
+.kopf {
+  padding: 48px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 2px solid var(--linie-stark);
+  padding-bottom: 26px;
+}
+.kopf .marke {
+  font-family: var(--schrift-daten);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--akzent);
+}
+.kopf h1 {
+  font-family: var(--schrift-titel);
+  font-size: clamp(30px, 4.4vw, 46px);
+  line-height: 1.1;
+  font-weight: 600;
+  margin: 0;
+  text-wrap: balance;
+  letter-spacing: -0.015em;
+}
+.kopf p {
+  margin: 0;
+  color: var(--ink-leise);
+  max-width: 62ch;
+}
+.stand {
+  font-family: var(--schrift-daten);
+  font-size: 12px;
+  color: var(--ink-still);
+}
+
+/* --- Navigation --- */
+.sprungmarken {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--ground) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--linie);
+  margin: 0 -24px;
+  padding: 10px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  font-size: 13px;
+}
+.sprungmarken a {
+  color: var(--ink-leise);
+  text-decoration: none;
+  padding: 2px 0;
+  border-bottom: 2px solid transparent;
+}
+.sprungmarken a:hover { color: var(--akzent); border-bottom-color: var(--akzent); }
+.sprungmarken a:focus-visible { outline: 2px solid var(--akzent); outline-offset: 3px; }
+
+/* --- Abschnitte --- */
+section { display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 64px; }
+section > header { display: flex; flex-direction: column; gap: 4px; }
+section h2 {
+  font-family: var(--schrift-titel);
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+section header p { margin: 0; color: var(--ink-leise); max-width: 72ch; font-size: 14px; }
+
+/* --- Kennzahlen --- */
+.kennzahlen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: 12px;
+}
+.kachel {
+  background: var(--surface);
+  border: 1px solid var(--linie);
+  border-left: 3px solid var(--linie-stark);
+  border-radius: 3px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.kachel.ok { border-left-color: var(--ok); }
+.kachel.warn { border-left-color: var(--warn); }
+.kachel.krit { border-left-color: var(--krit); }
+.kachel .wert {
+  font-family: var(--schrift-daten);
+  font-size: 30px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.kachel.ok .wert { color: var(--ok); }
+.kachel.warn .wert { color: var(--warn); }
+.kachel.krit .wert { color: var(--krit); }
+.kachel .titel {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-leise);
+}
+.kachel .fuss { font-size: 12px; color: var(--ink-still); }
+
+/* --- Tabellen --- */
+.tabellenrahmen {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--linie);
+  border-radius: 3px;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-leise);
+  font-weight: 600;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--linie-stark);
+  white-space: nowrap;
+  background: var(--surface-still);
+}
+tbody td { padding: 9px 14px; border-bottom: 1px solid var(--linie); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-still); }
+td.zahl, th.zahl { text-align: right; font-family: var(--schrift-daten); font-variant-numeric: tabular-nums; }
+td.kennung { font-family: var(--schrift-daten); font-size: 12.5px; white-space: nowrap; }
+td.knapp { white-space: nowrap; }
+
+/* --- Marken --- */
+.marker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  white-space: nowrap;
+  background: var(--surface-still);
+  color: var(--ink-leise);
+  border: 1px solid var(--linie-stark);
+}
+.marker.ok { background: var(--ok-feld); color: var(--ok); border-color: transparent; }
+.marker.warn { background: var(--warn-feld); color: var(--warn); border-color: transparent; }
+.marker.krit { background: var(--krit-feld); color: var(--krit); border-color: transparent; }
+.marker.akzent { background: var(--akzent-leise); color: var(--akzent); border-color: transparent; }
+.raci {
+  font-family: var(--schrift-daten);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: var(--akzent-leise);
+  color: var(--akzent);
+}
+
+/* --- Handlungsbedarf --- */
+.befunde { display: flex; flex-direction: column; gap: 8px; }
+.befund {
+  display: grid;
+  grid-template-columns: 116px 148px 1fr;
+  gap: 14px;
+  align-items: baseline;
+  background: var(--surface);
+  border: 1px solid var(--linie);
+  border-left: 3px solid var(--linie-stark);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+}
+.befund.warn { border-left-color: var(--warn); }
+.befund.krit { border-left-color: var(--krit); }
+.befund .ort { font-family: var(--schrift-daten); font-size: 12.5px; color: var(--ink-leise); }
+@media (max-width: 700px) {
+  .befund { grid-template-columns: 1fr; gap: 3px; }
+}
+
+/* --- Aufklappbares --- */
+details {
+  background: var(--surface);
+  border: 1px solid var(--linie);
+  border-radius: 3px;
+}
+details + details { margin-top: 8px; }
+summary {
+  cursor: pointer;
+  padding: 11px 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: baseline;
+  list-style: none;
+  font-size: 14px;
+}
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: "▸";
+  color: var(--ink-still);
+  font-size: 11px;
+  transition: transform 0.12s ease;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+details[open] > summary { border-bottom: 1px solid var(--linie); }
+summary:hover { background: var(--surface-still); }
+summary:focus-visible { outline: 2px solid var(--akzent); outline-offset: -2px; }
+summary .name { font-weight: 600; }
+summary .kennung { font-family: var(--schrift-daten); font-size: 12px; color: var(--ink-leise); }
+summary .rechts { margin-left: auto; display: flex; gap: 8px; align-items: baseline; }
+.inhalt { padding: 0; }
+.inhalt > .tabellenrahmen { border: none; border-radius: 0; }
+
+/* --- Schnittstellenkarten --- */
+.karten { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; }
+.karte {
+  background: var(--surface);
+  border: 1px solid var(--linie);
+  border-radius: 3px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.karte h3 {
+  margin: 0;
+  font-family: var(--schrift-titel);
+  font-size: 17px;
+  font-weight: 600;
+}
+.karte .thema { font-size: 13px; color: var(--ink-leise); margin: 0; }
+.karte h4 {
+  margin: 0 0 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-still);
+  font-weight: 600;
+}
+.karte ul { margin: 0; padding-left: 17px; font-size: 13px; display: flex; flex-direction: column; gap: 3px; }
+.karte li::marker { color: var(--ink-still); }
+.karte .fuss {
+  font-size: 12px;
+  color: var(--ink-still);
+  border-top: 1px solid var(--linie);
+  padding-top: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+/* --- Taktband --- */
+.taktband { display: flex; flex-direction: column; gap: 6px; }
+.taktzeile { display: grid; grid-template-columns: 132px 1fr 44px; gap: 12px; align-items: center; font-size: 13px; }
+.taktzeile .balken { background: var(--surface-still); border-radius: 2px; height: 20px; overflow: hidden; }
+.taktzeile .balken span { display: block; height: 100%; background: var(--akzent); opacity: 0.72; }
+.taktzeile .anzahl { font-family: var(--schrift-daten); font-variant-numeric: tabular-nums; text-align: right; color: var(--ink-leise); }
+
+/* --- Fuss --- */
+.fussnote {
+  border-top: 1px solid var(--linie);
+  padding-top: 20px;
+  font-size: 12.5px;
+  color: var(--ink-still);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fussnote code {
+  font-family: var(--schrift-daten);
+  background: var(--surface-still);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+a { color: var(--akzent); }
+
+@media print {
+  .sprungmarken { display: none; }
+  details { break-inside: avoid; }
+  details:not([open]) > summary::before { content: ""; }
+}
+</style>
+<div class="huelle">
+
+<header class="kopf">
+  <div class="marke">Produktionssteuerung · Anlagenbetrieb</div>
+  <h1>Cockpit Produktionssteuerung</h1>
+  <p>Alle Vorgaben der Abteilung an einer Stelle: welcher Standard gilt, wer
+     verantwortet ihn, was ist bis wann zu tun und wo klafft eine Lücke.
+     Diese Seite wird aus dem Regelwerk erzeugt und nicht von Hand gepflegt.</p>
+  <div class="stand">Stand 17.08.2026 · 6 Standards ·
+     35 Aufgaben · 7 Betriebsbereiche ·
+     600 Mitarbeitende</div>
+</header>
+
+<nav class="sprungmarken"><a href="#lagebild">Lagebild</a><a href="#handlungsbedarf">Handlungsbedarf</a><a href="#themenfelder">Themenfelder</a><a href="#standards">Standards</a><a href="#rollen">Wer macht was</a><a href="#takt">Jahrestakt</a><a href="#schnittstellen">Schnittstellen</a><a href="#bereiche">Betriebsbereiche</a><a href="#pflichten">Pflichtenregister</a></nav>
+
+<section id="lagebild">
+  <header>
+    <h2>Lagebild</h2>
+    <p>Sieben Zahlen, die in der Abteilungsrunde reichen. Alles darunter ist die Herleitung.</p>
+  </header>
+  <div class="kennzahlen"><div class="kachel"><div class="wert">6</div><div class="titel">Standards</div><div class="fuss">4 gültig, 2 in Arbeit</div></div><div class="kachel"><div class="wert">35</div><div class="titel">verbindliche Aufgaben</div><div class="fuss">mit Takt, Frist und Nachweis</div></div><div class="kachel warn"><div class="wert">55%</div><div class="titel">Pflichten gedeckt</div><div class="fuss">12 von 22 Betreiberpflichten</div></div><div class="kachel krit"><div class="wert">1</div><div class="titel">Reviews überfällig</div><div class="fuss">1 weitere in den nächsten 90 Tagen</div></div><div class="kachel warn"><div class="wert">4</div><div class="titel">Rechtsstand offen</div><div class="fuss">gültig ohne Bestätigung SST-REW</div></div><div class="kachel warn"><div class="wert">10</div><div class="titel">Themenfelder ohne Standard</div><div class="fuss">von 16 Themenfeldern</div></div></div>
+</section>
+
+
+<section id="handlungsbedarf">
+  <header>
+    <h2>Handlungsbedarf</h2>
+    <p>Aus der Prüfung des Regelwerks abgeleitet, nach Dringlichkeit sortiert.
+       Fehler blockieren die Freigabe, Punkte zum Klären gehören in die nächste
+       Abteilungsrunde. 17 weitere Vormerkungen sind ausgeblendet.</p>
+  </header>
+  <div class="befunde"><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-001</span><span>Pflicht ohne Standard: Gefährdungsbeurteilung erstellen und aktuell halten</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-003</span><span>Pflicht ohne Standard: Elektrische Anlagen und ortsveränderliche Betriebsmittel prüfen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-008</span><span>Pflicht ohne Standard: Unbesetzte Anlagen gegen unbefugten Zutritt sichern</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-009</span><span>Pflicht ohne Standard: Schließberechtigungen und Schlüsselausgabe nachweisen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-010</span><span>Pflicht ohne Standard: Arbeitsmittel wiederkehrend prüfen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-011</span><span>Pflicht ohne Standard: Persönliche Schutzausrüstung bereitstellen und prüfen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-012</span><span>Pflicht ohne Standard: Gefahrstoffverzeichnis führen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-015</span><span>Pflicht ohne Standard: Behördliche Auflagen und Genehmigungsfristen überwachen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-017</span><span>Pflicht ohne Standard: Nachweis der IT-Sicherheit für kritische Anlagen erbringen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">PFL-019</span><span>Pflicht ohne Standard: Instandhaltungsmaßnahmen planen und nachweisen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">STD-ARB-001</span><span>gültig, aber Rechtsstand nicht durch SST-REW bestätigt</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">STD-ARB-001</span><span>Review seit 77 Tagen überfällig (fällig war 2026-06-01)</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">STD-BRA-001</span><span>gültig, aber Rechtsstand nicht durch SST-REW bestätigt</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">STD-ENT-001</span><span>gültig, aber Rechtsstand nicht durch SST-REW bestätigt</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">STD-FUH-001</span><span>gültig, aber Rechtsstand nicht durch SST-REW bestätigt</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">TF-ARM</span><span>Themenfeld ohne Standard: Arbeitsmittel und Prüfmittel</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">TF-ELE</span><span>Themenfeld ohne Standard: Elektrische Anlagensicherheit</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">TF-IHS</span><span>Themenfeld ohne Standard: Instandhaltungsstrategie und -anleitungen</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">TF-KRI</span><span>Themenfeld ohne Standard: Informationssicherheit und KRITIS</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">TF-LIZ</span><span>Themenfeld ohne Standard: Lizenz- und Genehmigungsmanagement</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">TF-OBJ</span><span>Themenfeld ohne Standard: Objektschutz und Anlagensicherung</span></div><div class="befund warn"><span><span class="marker warn">zu klären</span></span><span class="ort">TF-QUA</span><span>Themenfeld ohne Standard: Qualifikation und Unterweisung</span></div></div>
+</section>
+
+
+<section id="themenfelder">
+  <header>
+    <h2>Themenfelder</h2>
+    <p>Jedes Thema, das in der Abteilung landet, hat genau ein Feld und genau eine
+       Verantwortung. Felder ohne Standard sind keine Nachlässigkeit, sondern die
+       Arbeitsvorratsliste — sichtbar statt vergessen.</p>
+  </header>
+  <div class="tabellenrahmen">
+    <table>
+      <thead><tr>
+        <th>Feld</th><th>Themenfeld</th><th>Kritikalität</th><th>Verantwortung</th>
+        <th class="zahl">Std.</th><th class="zahl">Aufg.</th><th class="zahl">Pflichten</th><th>Stand</th>
+      </tr></thead>
+      <tbody><tr><td class="kennung">TF-ARB</td><td><strong>Arbeitsschutz</strong><br><span style="color:var(--ink-still);font-size:12.5px">Gefährdungsbeurteilung, Unterweisung, PSA, Arbeitsverfahren.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV<br>FKT-SIFA</td><td class="zahl">1</td><td class="zahl">6</td><td class="zahl">2 / 3</td><td class="knapp"><span class="marker ok">geregelt</span></td></tr><tr><td class="kennung">TF-BRA</td><td><strong>Brandschutz</strong><br><span style="color:var(--ink-still);font-size:12.5px">Baulicher, anlagentechnischer und organisatorischer Brandschutz an Betriebsstätten und Anlagen.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV<br>FKT-BSB</td><td class="zahl">1</td><td class="zahl">7</td><td class="zahl">3 / 3</td><td class="knapp"><span class="marker ok">geregelt</span></td></tr><tr><td class="kennung">TF-OBJ</td><td><strong>Objektschutz und Anlagensicherung</strong><br><span style="color:var(--ink-still);font-size:12.5px">Zutritt, Perimeter, Schließanlagen, Meldeanlagen, Sicherung unbesetzter Anlagen.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV<br>FKT-OSV</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 2</td><td class="knapp"><span class="marker krit">kein Standard</span></td></tr><tr><td class="kennung">TF-ELE</td><td><strong>Elektrische Anlagensicherheit</strong><br><span style="color:var(--ink-still);font-size:12.5px">Schalthandlungen, Arbeiten unter Spannung, Freischaltung, Anlagenverantwortung.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV<br>FKT-VEFK</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 2</td><td class="knapp"><span class="marker krit">kein Standard</span></td></tr><tr><td class="kennung">TF-IHS</td><td><strong>Instandhaltungsstrategie und -anleitungen</strong><br><span style="color:var(--ink-still);font-size:12.5px">Wartungspläne, Instandhaltungsanleitungen, Prüfzyklen, Freigabe von Arbeitsanweisungen.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 1</td><td class="knapp"><span class="marker krit">kein Standard</span></td></tr><tr><td class="kennung">TF-ENT</td><td><strong>Entstörung und Bereitschaft</strong><br><span style="color:var(--ink-still);font-size:12.5px">Entstörungsorganisation, Rufbereitschaft, Reaktionszeiten, Störungsdokumentation.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV</td><td class="zahl">1</td><td class="zahl">7</td><td class="zahl">2 / 1</td><td class="knapp"><span class="marker ok">geregelt</span></td></tr><tr><td class="kennung">TF-ERN</td><td><strong>Anlagenerneuerung und Investanstoß</strong><br><span style="color:var(--ink-still);font-size:12.5px">Zustandsbewertung, Erneuerungsbedarf melden, Übergabe an Projektmanagement und Rückübernahme.</span></td><td class="knapp">mittel</td><td class="kennung">PS-TFV</td><td class="zahl">1</td><td class="zahl">6</td><td class="zahl">2 / 1</td><td class="knapp"><span class="marker warn">in Arbeit</span></td></tr><tr><td class="kennung">TF-KOM</td><td><strong>Anlagenkomponenten und Ersatzteile</strong><br><span style="color:var(--ink-still);font-size:12.5px">Komponentenkatalog, Zulassung von Bauteilen, Ersatzteilbevorratung, Obsoleszenz.</span></td><td class="knapp">mittel</td><td class="kennung">PS-TFV</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 0</td><td class="knapp"><span class="marker warn">kein Standard</span></td></tr><tr><td class="kennung">TF-ARM</td><td><strong>Arbeitsmittel und Prüfmittel</strong><br><span style="color:var(--ink-still);font-size:12.5px">Wiederkehrende Prüfungen von Arbeitsmitteln, Leitern, Hebezeugen, Messgeräten.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV<br>FKT-SIFA</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 1</td><td class="knapp"><span class="marker krit">kein Standard</span></td></tr><tr><td class="kennung">TF-GEF</td><td><strong>Gefahrstoffe</strong><br><span style="color:var(--ink-still);font-size:12.5px">Gefahrstoffverzeichnis, Lagerung, Betriebsanweisungen, Isoliergase und Betriebsmittel.</span></td><td class="knapp">mittel</td><td class="kennung">PS-TFV<br>FKT-GEF</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 1</td><td class="knapp"><span class="marker warn">kein Standard</span></td></tr><tr><td class="kennung">TF-LIZ</td><td><strong>Lizenz- und Genehmigungsmanagement</strong><br><span style="color:var(--ink-still);font-size:12.5px">Betriebsgenehmigungen, Konzessionen, behördliche Auflagen, Prüfbescheinigungen, Fristen.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 1</td><td class="knapp"><span class="marker krit">kein Standard</span></td></tr><tr><td class="kennung">TF-SWL</td><td><strong>Software-Lizenzen</strong><br><span style="color:var(--ink-still);font-size:12.5px">Lizenzbestand, Zuweisung, Verlängerung, Compliance gegenüber Herstellern.</span></td><td class="knapp">mittel</td><td class="kennung">PS-TFV<br>SST-IT</td><td class="zahl">1</td><td class="zahl">4</td><td class="zahl">1 / 1</td><td class="knapp"><span class="marker warn">in Arbeit</span></td></tr><tr><td class="kennung">TF-FUH</td><td><strong>Fuhrpark</strong><br><span style="color:var(--ink-still);font-size:12.5px">Halterpflichten, Führerscheinkontrolle, UVV-Prüfung, Ladungssicherung, Beschaffung.</span></td><td class="knapp">mittel</td><td class="kennung">PS-TFV<br>FKT-FPV</td><td class="zahl">1</td><td class="zahl">5</td><td class="zahl">2 / 2</td><td class="knapp"><span class="marker ok">geregelt</span></td></tr><tr><td class="kennung">TF-QUA</td><td><strong>Qualifikation und Unterweisung</strong><br><span style="color:var(--ink-still);font-size:12.5px">Befähigungen, Schulungsmatrix, Nachweise, Wiederholungsintervalle.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV<br>SST-HR</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 1</td><td class="knapp"><span class="marker krit">kein Standard</span></td></tr><tr><td class="kennung">TF-KRI</td><td><strong>Informationssicherheit und KRITIS</strong><br><span style="color:var(--ink-still);font-size:12.5px">Sicherheit der Betriebs- und Leittechnik, Nachweispflichten, Meldewege.</span></td><td class="knapp">hoch</td><td class="kennung">PS-TFV<br>FKT-ISB</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 1</td><td class="knapp"><span class="marker krit">kein Standard</span></td></tr><tr><td class="kennung">TF-DOK</td><td><strong>Anlagendokumentation und Datenqualität</strong><br><span style="color:var(--ink-still);font-size:12.5px">Anlagenstammdaten, Schaltbilder, Nachführung nach Bau- und Instandhaltungsmaßnahmen.</span></td><td class="knapp">mittel</td><td class="kennung">PS-TFV</td><td class="zahl">0</td><td class="zahl">0</td><td class="zahl">0 / 1</td><td class="knapp"><span class="marker warn">kein Standard</span></td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="standards">
+  <header>
+    <h2>Standards</h2>
+    <p>Aufklappen zeigt die verbindlichen Aufgaben mit Takt, Frist, Verantwortung
+       und Nachweis. Was hier nicht steht, ist nicht vorgegeben.</p>
+  </header>
+  <div>
+<details>
+  <summary>
+    <span class="kennung">STD-ARB-001</span>
+    <span class="name">Jährliche Unterweisung der Beschäftigten</span>
+    <span class="rechts">
+      <span class="marker">v2.1.0</span>
+      <span class="marker krit">Review 77 Tage überfällig</span>
+      <span class="marker ok">gültig</span>
+    </span>
+  </summary>
+  <div class="inhalt">
+    <div class="tabellenrahmen">
+      <table>
+        <thead><tr><th>Nr.</th><th>Aufgabe</th><th>Takt</th><th>Frist</th>
+        <th>verantwortet</th><th>führt aus</th><th>Nachweis</th></tr></thead>
+        <tbody><tr><td class="kennung">A1</td><td>Unterweisungsthemen des Folgejahres festlegen und veröffentlichen</td><td class="knapp">jährlich</td><td>bis 30.11. für das Folgejahr</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-TFV</td><td>Unterweisungsplan mit Themenliste</td></tr><tr><td class="kennung">A2</td><td>Unterweisungstermine im Bereich planen und Teilnehmende zuordnen</td><td class="knapp">jährlich</td><td>bis 31.01. des laufenden Jahres</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Terminplan je Meisterei</td></tr><tr><td class="kennung">A3</td><td>Unterweisung durchführen und Teilnahme dokumentieren</td><td class="knapp">jährlich</td><td>bis 31.10. des laufenden Jahres</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Unterschriebener Unterweisungsnachweis je Person</td></tr><tr><td class="kennung">A4</td><td>Neu eintretende oder versetzte Beschäftigte vor Tätigkeitsaufnahme unterweisen</td><td class="knapp">anlassbezogen</td><td>vor dem ersten Arbeitseinsatz</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Erstunterweisungsnachweis</td></tr><tr><td class="kennung">A5</td><td>Nachweis der Unterweisung des Dienstleisterpersonals einfordern</td><td class="knapp">jährlich</td><td>vor Ersteinsatz, danach jährlich bis 31.10.</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-BBK</td><td>Bestätigung des Dienstleisters je eingesetzter Person</td></tr><tr><td class="kennung">A6</td><td>Unterweisungsquote je Betriebsbereich auswerten und Lücken melden</td><td class="knapp">quartalsweise</td><td>bis zum 10. Arbeitstag nach Quartalsende</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-CON</td><td>Quartalsauswertung</td></tr></tbody>
+      </table>
+    </div>
+    <div class="karte" style="border:none;border-top:1px solid var(--linie);border-radius:0">
+      <div class="fuss" style="border:none;padding-top:0">
+        <span>Verantwortung PS-TFV</span>
+        <span>Freigabe PS-AL</span>
+        <span>gültig ab 2025-01-01</span>
+        <span>Reviewzyklus 12 Monate</span>
+        <span>Geltung: alle sieben Betriebsbereiche</span>
+        <span>Pflichten: PFL-002, PFL-021</span>
+        <span>Schnittstellen: SST-HR, SST-SDL</span>
+        <span><span class="marker warn">Rechtsstand offen</span></span>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">STD-BRA-001</span>
+    <span class="name">Organisatorischer Brandschutz an Betriebsstätten und Anlagen</span>
+    <span class="rechts">
+      <span class="marker">v1.3.0</span>
+      <span class="marker">Review 02/2027</span>
+      <span class="marker ok">gültig</span>
+    </span>
+  </summary>
+  <div class="inhalt">
+    <div class="tabellenrahmen">
+      <table>
+        <thead><tr><th>Nr.</th><th>Aufgabe</th><th>Takt</th><th>Frist</th>
+        <th>verantwortet</th><th>führt aus</th><th>Nachweis</th></tr></thead>
+        <tbody><tr><td class="kennung">A1</td><td>Brandschutzordnung Teil A, B und C je Betriebsstätte prüfen und fortschreiben</td><td class="knapp">zweijährlich</td><td>bis 30.06. des Prüfjahres</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> FKT-BSB</td><td>Fortschreibungsvermerk mit Datum und Unterschrift</td></tr><tr><td class="kennung">A2</td><td>Feuerlöscher und Wandhydranten prüfen lassen</td><td class="knapp">zweijährlich</td><td>vor Ablauf der Prüfplakette</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> SST-SDL</td><td>Prüfprotokoll und Plakette</td></tr><tr><td class="kennung">A3</td><td>Flucht- und Rettungswege sowie Brandschutztüren begehen und Mängel erfassen</td><td class="knapp">quartalsweise</td><td>bis zum Quartalsende</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Begehungsprotokoll mit Mängelliste</td></tr><tr><td class="kennung">A4</td><td>Brandschutzhelfer benennen, ausbilden und Ausbildung auffrischen</td><td class="knapp">dreijährlich</td><td>vor Ablauf der Ausbildungsgültigkeit</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Teilnahmebescheinigung und Benennungsliste</td></tr><tr><td class="kennung">A5</td><td>Räumungsübung an besetzten Standorten durchführen</td><td class="knapp">zweijährlich</td><td>bis 30.09. des Übungsjahres</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> FKT-BSB</td><td>Übungsprotokoll mit Auswertung</td></tr><tr><td class="kennung">A6</td><td>Brandschutzanforderungen in Erneuerungsprojekten vor Planungsfreigabe einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> FKT-BSB</td><td>Stellungnahme im Projektordner</td></tr><tr><td class="kennung">A7</td><td>Erledigung der Mängel aus Begehungen nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-BBK</td><td>Mängelstatusbericht</td></tr></tbody>
+      </table>
+    </div>
+    <div class="karte" style="border:none;border-top:1px solid var(--linie);border-radius:0">
+      <div class="fuss" style="border:none;padding-top:0">
+        <span>Verantwortung PS-TFV</span>
+        <span>Freigabe PS-AL</span>
+        <span>gültig ab 2026-03-01</span>
+        <span>Reviewzyklus 12 Monate</span>
+        <span>Geltung: alle sieben Betriebsbereiche</span>
+        <span>Pflichten: PFL-005, PFL-006, PFL-007</span>
+        <span>Schnittstellen: SST-SDL, SST-PM</span>
+        <span><span class="marker warn">Rechtsstand offen</span></span>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">STD-ENT-001</span>
+    <span class="name">Entstörung und Rufbereitschaft</span>
+    <span class="rechts">
+      <span class="marker">v3.0.0</span>
+      <span class="marker">Review 06/2027</span>
+      <span class="marker ok">gültig</span>
+    </span>
+  </summary>
+  <div class="inhalt">
+    <div class="tabellenrahmen">
+      <table>
+        <thead><tr><th>Nr.</th><th>Aufgabe</th><th>Takt</th><th>Frist</th>
+        <th>verantwortet</th><th>führt aus</th><th>Nachweis</th></tr></thead>
+        <tbody><tr><td class="kennung">A1</td><td>Bereitschaftsplan für das Folgequartal erstellen und veröffentlichen</td><td class="knapp">quartalsweise</td><td>bis 15. des Vormonats vor Quartalsbeginn</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Freigegebener Bereitschaftsplan</td></tr><tr><td class="kennung">A2</td><td>Erreichbarkeit und Besetzung der Bereitschaft täglich prüfen</td><td class="knapp">täglich</td><td>bis 07:00 Uhr</td><td class="kennung"><span class="raci">A</span> PS-DIS</td><td class="kennung"><span class="raci">R</span> PS-DIS</td><td>Tagesprotokoll Disposition</td></tr><tr><td class="kennung">A3</td><td>Störungsmeldung aufnehmen, klassifizieren und Einsatz auslösen</td><td class="knapp">laufend</td><td>Klassifizierung binnen 15 Minuten nach Eingang</td><td class="kennung"><span class="raci">A</span> PS-DIS</td><td class="kennung"><span class="raci">R</span> PS-DIS</td><td>Störungsdatensatz mit Zeitstempeln</td></tr><tr><td class="kennung">A4</td><td>Störung beheben und Anlagenzustand wiederherstellen</td><td class="knapp">laufend</td><td>gemäß Reaktionszeit der Störungsklasse</td><td class="kennung"><span class="raci">A</span> BB-MV</td><td class="kennung"><span class="raci">R</span> BB-MA, SST-SDL</td><td>Einsatzbericht mit Maßnahme und Ursache</td></tr><tr><td class="kennung">A5</td><td>Störungsdokumentation auf Vollständigkeit prüfen und nachfordern</td><td class="knapp">wöchentlich</td><td>bis Freitag 12:00 Uhr für die Vorwoche</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-DIS</td><td>Vollständigkeitsprüfung</td></tr><tr><td class="kennung">A6</td><td>Wiederkehrende Störungen auswerten und Erneuerungsanstoß prüfen</td><td class="knapp">quartalsweise</td><td>bis zum 15. Arbeitstag nach Quartalsende</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-TFV</td><td>Auswertung Häufungsanlagen mit Empfehlung</td></tr><tr><td class="kennung">A7</td><td>Großstörung nachbereiten und Erkenntnisse in Standards überführen</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Wiederversorgung</td><td class="kennung"><span class="raci">A</span> PS-AL</td><td class="kennung"><span class="raci">R</span> PS-TFV</td><td>Nachbereitungsbericht mit Maßnahmenplan</td></tr></tbody>
+      </table>
+    </div>
+    <div class="karte" style="border:none;border-top:1px solid var(--linie);border-radius:0">
+      <div class="fuss" style="border:none;padding-top:0">
+        <span>Verantwortung PS-TFV</span>
+        <span>Freigabe PS-AL</span>
+        <span>gültig ab 2026-07-01</span>
+        <span>Reviewzyklus 12 Monate</span>
+        <span>Geltung: alle sieben Betriebsbereiche</span>
+        <span>Pflichten: PFL-020, PFL-004</span>
+        <span>Schnittstellen: SST-NF, SST-SDL, SST-AM</span>
+        <span><span class="marker warn">Rechtsstand offen</span></span>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">STD-ERN-001</span>
+    <span class="name">Erneuerungsanstoß und Übergabe an das Projektmanagement</span>
+    <span class="rechts">
+      <span class="marker">v0.2.0</span>
+      <span class="marker">Review 08/2027</span>
+      <span class="marker neutral">Entwurf</span>
+    </span>
+  </summary>
+  <div class="inhalt">
+    <div class="tabellenrahmen">
+      <table>
+        <thead><tr><th>Nr.</th><th>Aufgabe</th><th>Takt</th><th>Frist</th>
+        <th>verantwortet</th><th>führt aus</th><th>Nachweis</th></tr></thead>
+        <tbody><tr><td class="kennung">A1</td><td>Zustandsbewertung je Anlagenklasse erheben und plausibilisieren</td><td class="knapp">jährlich</td><td>bis 31.08.</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> BB-L</td><td>Zustandsbewertung je Anlage</td></tr><tr><td class="kennung">A2</td><td>Erneuerungsanstoß mit technischer Begründung an das Anlagenmanagement melden</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Feststellung</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-TFV</td><td>Anstoßmeldung mit Zustandsdaten und Störungshistorie</td></tr><tr><td class="kennung">A3</td><td>Betriebliche Anforderungen zu Projektbeginn einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-BBK</td><td>Anforderungsliste im Projektordner</td></tr><tr><td class="kennung">A4</td><td>Anlagenverantwortung für die Bauphase benennen</td><td class="knapp">anlassbezogen</td><td>vor Baubeginn</td><td class="kennung"><span class="raci">A</span> FKT-VEFK</td><td class="kennung"><span class="raci">R</span> BB-L</td><td>Schriftliche Benennung</td></tr><tr><td class="kennung">A5</td><td>Anlage nach Fertigstellung übernehmen und Restpunkte festhalten</td><td class="knapp">anlassbezogen</td><td>am Tag der Abnahme</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> BB-L</td><td>Übergabeprotokoll mit Restpunkteliste</td></tr><tr><td class="kennung">A6</td><td>Erledigung der Restpunkte nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-BBK</td><td>Restpunktestatus</td></tr></tbody>
+      </table>
+    </div>
+    <div class="karte" style="border:none;border-top:1px solid var(--linie);border-radius:0">
+      <div class="fuss" style="border:none;padding-top:0">
+        <span>Verantwortung PS-TFV</span>
+        <span>Freigabe PS-AL</span>
+        <span>gültig ab 2026-11-01</span>
+        <span>Reviewzyklus 12 Monate</span>
+        <span>Geltung: alle sieben Betriebsbereiche</span>
+        <span>Pflichten: PFL-022, PFL-018</span>
+        <span>Schnittstellen: SST-AM, SST-PM, SST-NF</span>
+        <span><span class="marker warn">Rechtsstand offen</span></span>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">STD-FUH-001</span>
+    <span class="name">Halterpflichten im Fuhrpark</span>
+    <span class="rechts">
+      <span class="marker">v1.1.0</span>
+      <span class="marker warn">Review in 76 Tagen</span>
+      <span class="marker ok">gültig</span>
+    </span>
+  </summary>
+  <div class="inhalt">
+    <div class="tabellenrahmen">
+      <table>
+        <thead><tr><th>Nr.</th><th>Aufgabe</th><th>Takt</th><th>Frist</th>
+        <th>verantwortet</th><th>führt aus</th><th>Nachweis</th></tr></thead>
+        <tbody><tr><td class="kennung">A1</td><td>Führerscheinkontrolle für alle Fahrberechtigten durchführen</td><td class="knapp">halbjährlich</td><td>bis 31.03. und 30.09.</td><td class="kennung"><span class="raci">A</span> FKT-FPV</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Kontrollnachweis je Person mit Datum</td></tr><tr><td class="kennung">A2</td><td>UVV-Prüfung der Fahrzeuge und Aufbauten beauftragen und überwachen</td><td class="knapp">jährlich</td><td>vor Ablauf der letzten Prüfung</td><td class="kennung"><span class="raci">A</span> FKT-FPV</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>UVV-Prüfbericht</td></tr><tr><td class="kennung">A3</td><td>Fahrer:innen zu Ladungssicherung und Fahrzeugnutzung unterweisen</td><td class="knapp">jährlich</td><td>gemeinsam mit der Unterweisung nach STD-ARB-001</td><td class="kennung"><span class="raci">A</span> BB-L</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Unterweisungsnachweis</td></tr><tr><td class="kennung">A4</td><td>Fahrzeugschäden und Unfälle melden und auswerten</td><td class="knapp">anlassbezogen</td><td>Meldung binnen 24 Stunden, Auswertung quartalsweise</td><td class="kennung"><span class="raci">A</span> FKT-FPV</td><td class="kennung"><span class="raci">R</span> BB-MV</td><td>Schadensmeldung und Quartalsauswertung</td></tr><tr><td class="kennung">A5</td><td>Fahrzeugbedarf und Ersatzbeschaffung für das Folgejahr melden</td><td class="knapp">jährlich</td><td>bis 30.09.</td><td class="kennung"><span class="raci">A</span> FKT-FPV</td><td class="kennung"><span class="raci">R</span> BB-L</td><td>Bedarfsmeldung mit Begründung</td></tr></tbody>
+      </table>
+    </div>
+    <div class="karte" style="border:none;border-top:1px solid var(--linie);border-radius:0">
+      <div class="fuss" style="border:none;padding-top:0">
+        <span>Verantwortung PS-TFV</span>
+        <span>Freigabe PS-AL</span>
+        <span>gültig ab 2025-12-01</span>
+        <span>Reviewzyklus 12 Monate</span>
+        <span>Geltung: alle sieben Betriebsbereiche</span>
+        <span>Pflichten: PFL-013, PFL-014</span>
+        <span>Schnittstellen: SST-EK, SST-HR</span>
+        <span><span class="marker warn">Rechtsstand offen</span></span>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">STD-SWL-001</span>
+    <span class="name">Beschaffung und Nachweis von Software-Lizenzen</span>
+    <span class="rechts">
+      <span class="marker">v0.4.0</span>
+      <span class="marker">Review 08/2028</span>
+      <span class="marker warn">in Abstimmung</span>
+    </span>
+  </summary>
+  <div class="inhalt">
+    <div class="tabellenrahmen">
+      <table>
+        <thead><tr><th>Nr.</th><th>Aufgabe</th><th>Takt</th><th>Frist</th>
+        <th>verantwortet</th><th>führt aus</th><th>Nachweis</th></tr></thead>
+        <tbody><tr><td class="kennung">A1</td><td>Softwarebedarf melden mit Nutzerkreis, Kostenstelle und Begründung</td><td class="knapp">anlassbezogen</td><td>mindestens 30 Arbeitstage vor benötigtem Einsatzbeginn</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> BB-L</td><td>Bedarfsmeldung</td></tr><tr><td class="kennung">A2</td><td>Tatsächlichen Nutzerkreis je Fachanwendung bestätigen und ungenutzte Lizenzen zurückgeben</td><td class="knapp">jährlich</td><td>bis 31.03.</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-BBK</td><td>Bestätigte Nutzerliste je Anwendung</td></tr><tr><td class="kennung">A3</td><td>Auslaufende Lizenzverträge prüfen und Verlängerung oder Ablösung entscheiden</td><td class="knapp">quartalsweise</td><td>spätestens 90 Tage vor Vertragsablauf</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> PS-TFV</td><td>Entscheidungsvermerk</td></tr><tr><td class="kennung">A4</td><td>Einsatz von Software außerhalb des freigegebenen Katalogs melden</td><td class="knapp">anlassbezogen</td><td>unverzüglich bei Kenntnis</td><td class="kennung"><span class="raci">A</span> PS-TFV</td><td class="kennung"><span class="raci">R</span> BB-L</td><td>Meldung mit Bewertung</td></tr></tbody>
+      </table>
+    </div>
+    <div class="karte" style="border:none;border-top:1px solid var(--linie);border-radius:0">
+      <div class="fuss" style="border:none;padding-top:0">
+        <span>Verantwortung PS-TFV</span>
+        <span>Freigabe PS-AL</span>
+        <span>gültig ab 2026-10-01</span>
+        <span>Reviewzyklus 24 Monate</span>
+        <span>Geltung: alle sieben Betriebsbereiche</span>
+        <span>Pflichten: PFL-016</span>
+        <span>Schnittstellen: SST-IT, SST-EK</span>
+        <span><span class="marker warn">Rechtsstand offen</span></span>
+      </div>
+    </div>
+  </div>
+</details>
+</div>
+</section>
+
+
+<section id="rollen">
+  <header>
+    <h2>Wer macht was, wann</h2>
+    <p>Dieselben Aufgaben, nach Rolle sortiert statt nach Standard. Das ist die Sicht,
+       die in die Einheit geht: eine Rolle klappt auf und sieht ihre vollständige Liste.
+       <strong>A</strong> verantwortet das Ergebnis, <strong>R</strong> führt aus,
+       <strong>C</strong> wird beteiligt, <strong>I</strong> wird informiert.</p>
+  </header>
+  <div><h3 style="font-family:var(--schrift-titel);font-size:16px;margin:14px 0 6px">Produktionssteuerung</h3>
+<details>
+  <summary>
+    <span class="kennung">PS-AL</span>
+    <span class="name">Abteilungsleitung Produktionssteuerung</span>
+    <span class="rechts">
+      <span class="marker">1x besetzt</span>
+      <span class="marker">14 Aufgaben</span><span class="marker akzent">1 verantwortet</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">I</span></td><td>Erledigung der Mängel aus Begehungen nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Unterweisungsquote je Betriebsbereich auswerten und Lücken melden</td><td class="knapp">quartalsweise</td><td>bis zum 10. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Wiederkehrende Störungen auswerten und Erneuerungsanstoß prüfen</td><td class="knapp">quartalsweise</td><td>bis zum 15. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Auslaufende Lizenzverträge prüfen und Verlängerung oder Ablösung entscheiden</td><td class="knapp">quartalsweise</td><td>spätestens 90 Tage vor Vertragsablauf</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Unterweisungsthemen des Folgejahres festlegen und veröffentlichen</td><td class="knapp">jährlich</td><td>bis 30.11. für das Folgejahr</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Fahrzeugbedarf und Ersatzbeschaffung für das Folgejahr melden</td><td class="knapp">jährlich</td><td>bis 30.09.</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Tatsächlichen Nutzerkreis je Fachanwendung bestätigen und ungenutzte Lizenzen zurückgeben</td><td class="knapp">jährlich</td><td>bis 31.03.</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Brandschutzordnung Teil A, B und C je Betriebsstätte prüfen und fortschreiben</td><td class="knapp">zweijährlich</td><td>bis 30.06. des Prüfjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Räumungsübung an besetzten Standorten durchführen</td><td class="knapp">zweijährlich</td><td>bis 30.09. des Übungsjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Großstörung nachbereiten und Erkenntnisse in Standards überführen</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Wiederversorgung</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Erneuerungsanstoß mit technischer Begründung an das Anlagenmanagement melden</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Feststellung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Anlage nach Fertigstellung übernehmen und Restpunkte festhalten</td><td class="knapp">anlassbezogen</td><td>am Tag der Abnahme</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Fahrzeugschäden und Unfälle melden und auswerten</td><td class="knapp">anlassbezogen</td><td>Meldung binnen 24 Stunden, Auswertung quartalsweise</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Einsatz von Software außerhalb des freigegebenen Katalogs melden</td><td class="knapp">anlassbezogen</td><td>unverzüglich bei Kenntnis</td><td class="kennung">STD-SWL-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">PS-BBK</span>
+    <span class="name">Betriebsbereichskoordination (Produktionssteuerung)</span>
+    <span class="rechts">
+      <span class="marker">7x besetzt</span>
+      <span class="marker">15 Aufgaben</span><span class="marker">5 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Störungsdokumentation auf Vollständigkeit prüfen und nachfordern</td><td class="knapp">wöchentlich</td><td>bis Freitag 12:00 Uhr für die Vorwoche</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Erledigung der Mängel aus Begehungen nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Erledigung der Restpunkte nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Unterweisungsquote je Betriebsbereich auswerten und Lücken melden</td><td class="knapp">quartalsweise</td><td>bis zum 10. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Flucht- und Rettungswege sowie Brandschutztüren begehen und Mängel erfassen</td><td class="knapp">quartalsweise</td><td>bis zum Quartalsende</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Bereitschaftsplan für das Folgequartal erstellen und veröffentlichen</td><td class="knapp">quartalsweise</td><td>bis 15. des Vormonats vor Quartalsbeginn</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Unterweisungstermine im Bereich planen und Teilnehmende zuordnen</td><td class="knapp">jährlich</td><td>bis 31.01. des laufenden Jahres</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Unterweisung durchführen und Teilnahme dokumentieren</td><td class="knapp">jährlich</td><td>bis 31.10. des laufenden Jahres</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Nachweis der Unterweisung des Dienstleisterpersonals einfordern</td><td class="knapp">jährlich</td><td>vor Ersteinsatz, danach jährlich bis 31.10.</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Zustandsbewertung je Anlagenklasse erheben und plausibilisieren</td><td class="knapp">jährlich</td><td>bis 31.08.</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>UVV-Prüfung der Fahrzeuge und Aufbauten beauftragen und überwachen</td><td class="knapp">jährlich</td><td>vor Ablauf der letzten Prüfung</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Tatsächlichen Nutzerkreis je Fachanwendung bestätigen und ungenutzte Lizenzen zurückgeben</td><td class="knapp">jährlich</td><td>bis 31.03.</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Feuerlöscher und Wandhydranten prüfen lassen</td><td class="knapp">zweijährlich</td><td>vor Ablauf der Prüfplakette</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Betriebliche Anforderungen zu Projektbeginn einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Anlagenverantwortung für die Bauphase benennen</td><td class="knapp">anlassbezogen</td><td>vor Baubeginn</td><td class="kennung">STD-ERN-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">PS-CON</span>
+    <span class="name">Controlling und Kennzahlen</span>
+    <span class="rechts">
+      <span class="marker">1x besetzt</span>
+      <span class="marker">5 Aufgaben</span><span class="marker">1 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">R</span></td><td>Unterweisungsquote je Betriebsbereich auswerten und Lücken melden</td><td class="knapp">quartalsweise</td><td>bis zum 10. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Auslaufende Lizenzverträge prüfen und Verlängerung oder Ablösung entscheiden</td><td class="knapp">quartalsweise</td><td>spätestens 90 Tage vor Vertragsablauf</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Fahrzeugbedarf und Ersatzbeschaffung für das Folgejahr melden</td><td class="knapp">jährlich</td><td>bis 30.09.</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Tatsächlichen Nutzerkreis je Fachanwendung bestätigen und ungenutzte Lizenzen zurückgeben</td><td class="knapp">jährlich</td><td>bis 31.03.</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Softwarebedarf melden mit Nutzerkreis, Kostenstelle und Begründung</td><td class="knapp">anlassbezogen</td><td>mindestens 30 Arbeitstage vor benötigtem Einsatzbeginn</td><td class="kennung">STD-SWL-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">PS-DIS</span>
+    <span class="name">Disposition und Entstörungssteuerung</span>
+    <span class="rechts">
+      <span class="marker">4x besetzt</span>
+      <span class="marker">5 Aufgaben</span><span class="marker akzent">2 verantwortet</span><span class="marker">3 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">AR</span></td><td>Erreichbarkeit und Besetzung der Bereitschaft täglich prüfen</td><td class="knapp">täglich</td><td>bis 07:00 Uhr</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Störungsdokumentation auf Vollständigkeit prüfen und nachfordern</td><td class="knapp">wöchentlich</td><td>bis Freitag 12:00 Uhr für die Vorwoche</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Bereitschaftsplan für das Folgequartal erstellen und veröffentlichen</td><td class="knapp">quartalsweise</td><td>bis 15. des Vormonats vor Quartalsbeginn</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">AR</span></td><td>Störungsmeldung aufnehmen, klassifizieren und Einsatz auslösen</td><td class="knapp">laufend</td><td>Klassifizierung binnen 15 Minuten nach Eingang</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Störung beheben und Anlagenzustand wiederherstellen</td><td class="knapp">laufend</td><td>gemäß Reaktionszeit der Störungsklasse</td><td class="kennung">STD-ENT-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">PS-TFV</span>
+    <span class="name">Themenfeldverantwortung</span>
+    <span class="rechts">
+      <span class="marker">14x besetzt</span>
+      <span class="marker">21 Aufgaben</span><span class="marker akzent">17 verantwortet</span><span class="marker">5 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">A</span></td><td>Störungsdokumentation auf Vollständigkeit prüfen und nachfordern</td><td class="knapp">wöchentlich</td><td>bis Freitag 12:00 Uhr für die Vorwoche</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Erledigung der Mängel aus Begehungen nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Erledigung der Restpunkte nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Unterweisungsquote je Betriebsbereich auswerten und Lücken melden</td><td class="knapp">quartalsweise</td><td>bis zum 10. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">AR</span></td><td>Wiederkehrende Störungen auswerten und Erneuerungsanstoß prüfen</td><td class="knapp">quartalsweise</td><td>bis zum 15. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">AR</span></td><td>Auslaufende Lizenzverträge prüfen und Verlängerung oder Ablösung entscheiden</td><td class="knapp">quartalsweise</td><td>spätestens 90 Tage vor Vertragsablauf</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">AR</span></td><td>Unterweisungsthemen des Folgejahres festlegen und veröffentlichen</td><td class="knapp">jährlich</td><td>bis 30.11. für das Folgejahr</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Nachweis der Unterweisung des Dienstleisterpersonals einfordern</td><td class="knapp">jährlich</td><td>vor Ersteinsatz, danach jährlich bis 31.10.</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Zustandsbewertung je Anlagenklasse erheben und plausibilisieren</td><td class="knapp">jährlich</td><td>bis 31.08.</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Fahrer:innen zu Ladungssicherung und Fahrzeugnutzung unterweisen</td><td class="knapp">jährlich</td><td>gemeinsam mit der Unterweisung nach STD-ARB-001</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Tatsächlichen Nutzerkreis je Fachanwendung bestätigen und ungenutzte Lizenzen zurückgeben</td><td class="knapp">jährlich</td><td>bis 31.03.</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Brandschutzordnung Teil A, B und C je Betriebsstätte prüfen und fortschreiben</td><td class="knapp">zweijährlich</td><td>bis 30.06. des Prüfjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Räumungsübung an besetzten Standorten durchführen</td><td class="knapp">zweijährlich</td><td>bis 30.09. des Übungsjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Brandschutzhelfer benennen, ausbilden und Ausbildung auffrischen</td><td class="knapp">dreijährlich</td><td>vor Ablauf der Ausbildungsgültigkeit</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Brandschutzanforderungen in Erneuerungsprojekten vor Planungsfreigabe einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Großstörung nachbereiten und Erkenntnisse in Standards überführen</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Wiederversorgung</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">AR</span></td><td>Erneuerungsanstoß mit technischer Begründung an das Anlagenmanagement melden</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Feststellung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Betriebliche Anforderungen zu Projektbeginn einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Anlage nach Fertigstellung übernehmen und Restpunkte festhalten</td><td class="knapp">anlassbezogen</td><td>am Tag der Abnahme</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Softwarebedarf melden mit Nutzerkreis, Kostenstelle und Begründung</td><td class="knapp">anlassbezogen</td><td>mindestens 30 Arbeitstage vor benötigtem Einsatzbeginn</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Einsatz von Software außerhalb des freigegebenen Katalogs melden</td><td class="knapp">anlassbezogen</td><td>unverzüglich bei Kenntnis</td><td class="kennung">STD-SWL-001</td></tr></tbody>
+  </table></div></div>
+</details>
+<h3 style="font-family:var(--schrift-titel);font-size:16px;margin:14px 0 6px">Betriebsbereiche</h3>
+<details>
+  <summary>
+    <span class="kennung">BB-L</span>
+    <span class="name">Betriebsbereichsleitung</span>
+    <span class="rechts">
+      <span class="marker">7x besetzt</span>
+      <span class="marker">30 Aufgaben</span><span class="marker akzent">9 verantwortet</span><span class="marker">6 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">I</span></td><td>Erreichbarkeit und Besetzung der Bereitschaft täglich prüfen</td><td class="knapp">täglich</td><td>bis 07:00 Uhr</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Störungsdokumentation auf Vollständigkeit prüfen und nachfordern</td><td class="knapp">wöchentlich</td><td>bis Freitag 12:00 Uhr für die Vorwoche</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Erledigung der Mängel aus Begehungen nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Erledigung der Restpunkte nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Unterweisungsquote je Betriebsbereich auswerten und Lücken melden</td><td class="knapp">quartalsweise</td><td>bis zum 10. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Flucht- und Rettungswege sowie Brandschutztüren begehen und Mängel erfassen</td><td class="knapp">quartalsweise</td><td>bis zum Quartalsende</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Bereitschaftsplan für das Folgequartal erstellen und veröffentlichen</td><td class="knapp">quartalsweise</td><td>bis 15. des Vormonats vor Quartalsbeginn</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Wiederkehrende Störungen auswerten und Erneuerungsanstoß prüfen</td><td class="knapp">quartalsweise</td><td>bis zum 15. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Führerscheinkontrolle für alle Fahrberechtigten durchführen</td><td class="knapp">halbjährlich</td><td>bis 31.03. und 30.09.</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Unterweisungsthemen des Folgejahres festlegen und veröffentlichen</td><td class="knapp">jährlich</td><td>bis 30.11. für das Folgejahr</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Unterweisungstermine im Bereich planen und Teilnehmende zuordnen</td><td class="knapp">jährlich</td><td>bis 31.01. des laufenden Jahres</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Unterweisung durchführen und Teilnahme dokumentieren</td><td class="knapp">jährlich</td><td>bis 31.10. des laufenden Jahres</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Nachweis der Unterweisung des Dienstleisterpersonals einfordern</td><td class="knapp">jährlich</td><td>vor Ersteinsatz, danach jährlich bis 31.10.</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Zustandsbewertung je Anlagenklasse erheben und plausibilisieren</td><td class="knapp">jährlich</td><td>bis 31.08.</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Fahrer:innen zu Ladungssicherung und Fahrzeugnutzung unterweisen</td><td class="knapp">jährlich</td><td>gemeinsam mit der Unterweisung nach STD-ARB-001</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Fahrzeugbedarf und Ersatzbeschaffung für das Folgejahr melden</td><td class="knapp">jährlich</td><td>bis 30.09.</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Brandschutzordnung Teil A, B und C je Betriebsstätte prüfen und fortschreiben</td><td class="knapp">zweijährlich</td><td>bis 30.06. des Prüfjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Feuerlöscher und Wandhydranten prüfen lassen</td><td class="knapp">zweijährlich</td><td>vor Ablauf der Prüfplakette</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Räumungsübung an besetzten Standorten durchführen</td><td class="knapp">zweijährlich</td><td>bis 30.09. des Übungsjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Brandschutzhelfer benennen, ausbilden und Ausbildung auffrischen</td><td class="knapp">dreijährlich</td><td>vor Ablauf der Ausbildungsgültigkeit</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Neu eintretende oder versetzte Beschäftigte vor Tätigkeitsaufnahme unterweisen</td><td class="knapp">anlassbezogen</td><td>vor dem ersten Arbeitseinsatz</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Brandschutzanforderungen in Erneuerungsprojekten vor Planungsfreigabe einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Großstörung nachbereiten und Erkenntnisse in Standards überführen</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Wiederversorgung</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Erneuerungsanstoß mit technischer Begründung an das Anlagenmanagement melden</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Feststellung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Betriebliche Anforderungen zu Projektbeginn einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Anlagenverantwortung für die Bauphase benennen</td><td class="knapp">anlassbezogen</td><td>vor Baubeginn</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Anlage nach Fertigstellung übernehmen und Restpunkte festhalten</td><td class="knapp">anlassbezogen</td><td>am Tag der Abnahme</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Fahrzeugschäden und Unfälle melden und auswerten</td><td class="knapp">anlassbezogen</td><td>Meldung binnen 24 Stunden, Auswertung quartalsweise</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Softwarebedarf melden mit Nutzerkreis, Kostenstelle und Begründung</td><td class="knapp">anlassbezogen</td><td>mindestens 30 Arbeitstage vor benötigtem Einsatzbeginn</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Einsatz von Software außerhalb des freigegebenen Katalogs melden</td><td class="knapp">anlassbezogen</td><td>unverzüglich bei Kenntnis</td><td class="kennung">STD-SWL-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">BB-MA</span>
+    <span class="name">Mitarbeitende im Betrieb (Monteur:innen, Technik)</span>
+    <span class="rechts">
+      <span class="marker">480x besetzt</span>
+      <span class="marker">1 Aufgaben</span><span class="marker">1 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">R</span></td><td>Störung beheben und Anlagenzustand wiederherstellen</td><td class="knapp">laufend</td><td>gemäß Reaktionszeit der Störungsklasse</td><td class="kennung">STD-ENT-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">BB-MV</span>
+    <span class="name">Meisterei- / Bezirksleitung</span>
+    <span class="rechts">
+      <span class="marker">31x besetzt</span>
+      <span class="marker">12 Aufgaben</span><span class="marker akzent">1 verantwortet</span><span class="marker">10 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">R</span></td><td>Flucht- und Rettungswege sowie Brandschutztüren begehen und Mängel erfassen</td><td class="knapp">quartalsweise</td><td>bis zum Quartalsende</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Bereitschaftsplan für das Folgequartal erstellen und veröffentlichen</td><td class="knapp">quartalsweise</td><td>bis 15. des Vormonats vor Quartalsbeginn</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Führerscheinkontrolle für alle Fahrberechtigten durchführen</td><td class="knapp">halbjährlich</td><td>bis 31.03. und 30.09.</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Unterweisungstermine im Bereich planen und Teilnehmende zuordnen</td><td class="knapp">jährlich</td><td>bis 31.01. des laufenden Jahres</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Unterweisung durchführen und Teilnahme dokumentieren</td><td class="knapp">jährlich</td><td>bis 31.10. des laufenden Jahres</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>UVV-Prüfung der Fahrzeuge und Aufbauten beauftragen und überwachen</td><td class="knapp">jährlich</td><td>vor Ablauf der letzten Prüfung</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Fahrer:innen zu Ladungssicherung und Fahrzeugnutzung unterweisen</td><td class="knapp">jährlich</td><td>gemeinsam mit der Unterweisung nach STD-ARB-001</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Brandschutzhelfer benennen, ausbilden und Ausbildung auffrischen</td><td class="knapp">dreijährlich</td><td>vor Ablauf der Ausbildungsgültigkeit</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Neu eintretende oder versetzte Beschäftigte vor Tätigkeitsaufnahme unterweisen</td><td class="knapp">anlassbezogen</td><td>vor dem ersten Arbeitseinsatz</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Fahrzeugschäden und Unfälle melden und auswerten</td><td class="knapp">anlassbezogen</td><td>Meldung binnen 24 Stunden, Auswertung quartalsweise</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Störungsmeldung aufnehmen, klassifizieren und Einsatz auslösen</td><td class="knapp">laufend</td><td>Klassifizierung binnen 15 Minuten nach Eingang</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Störung beheben und Anlagenzustand wiederherstellen</td><td class="knapp">laufend</td><td>gemäß Reaktionszeit der Störungsklasse</td><td class="kennung">STD-ENT-001</td></tr></tbody>
+  </table></div></div>
+</details>
+<h3 style="font-family:var(--schrift-titel);font-size:16px;margin:14px 0 6px">Bestellte Funktionen</h3>
+<details>
+  <summary>
+    <span class="kennung">FKT-BAD</span>
+    <span class="name">Betriebsärztlicher Dienst</span>
+    <span class="rechts">
+      <span class="marker">1x besetzt</span>
+      <span class="marker">1 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Unterweisungsthemen des Folgejahres festlegen und veröffentlichen</td><td class="knapp">jährlich</td><td>bis 30.11. für das Folgejahr</td><td class="kennung">STD-ARB-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">FKT-BSB</span>
+    <span class="name">Brandschutzbeauftragte:r</span>
+    <span class="rechts">
+      <span class="marker">2x besetzt</span>
+      <span class="marker">7 Aufgaben</span><span class="marker">3 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Flucht- und Rettungswege sowie Brandschutztüren begehen und Mängel erfassen</td><td class="knapp">quartalsweise</td><td>bis zum Quartalsende</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Brandschutzordnung Teil A, B und C je Betriebsstätte prüfen und fortschreiben</td><td class="knapp">zweijährlich</td><td>bis 30.06. des Prüfjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Feuerlöscher und Wandhydranten prüfen lassen</td><td class="knapp">zweijährlich</td><td>vor Ablauf der Prüfplakette</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Räumungsübung an besetzten Standorten durchführen</td><td class="knapp">zweijährlich</td><td>bis 30.09. des Übungsjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Brandschutzhelfer benennen, ausbilden und Ausbildung auffrischen</td><td class="knapp">dreijährlich</td><td>vor Ablauf der Ausbildungsgültigkeit</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Brandschutzanforderungen in Erneuerungsprojekten vor Planungsfreigabe einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Betriebliche Anforderungen zu Projektbeginn einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-ERN-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">FKT-FPV</span>
+    <span class="name">Fuhrparkverantwortung (Halterpflichten)</span>
+    <span class="rechts">
+      <span class="marker">1x besetzt</span>
+      <span class="marker">5 Aufgaben</span><span class="marker akzent">4 verantwortet</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">A</span></td><td>Führerscheinkontrolle für alle Fahrberechtigten durchführen</td><td class="knapp">halbjährlich</td><td>bis 31.03. und 30.09.</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>UVV-Prüfung der Fahrzeuge und Aufbauten beauftragen und überwachen</td><td class="knapp">jährlich</td><td>vor Ablauf der letzten Prüfung</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Fahrer:innen zu Ladungssicherung und Fahrzeugnutzung unterweisen</td><td class="knapp">jährlich</td><td>gemeinsam mit der Unterweisung nach STD-ARB-001</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Fahrzeugbedarf und Ersatzbeschaffung für das Folgejahr melden</td><td class="knapp">jährlich</td><td>bis 30.09.</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Fahrzeugschäden und Unfälle melden und auswerten</td><td class="knapp">anlassbezogen</td><td>Meldung binnen 24 Stunden, Auswertung quartalsweise</td><td class="kennung">STD-FUH-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">FKT-ISB</span>
+    <span class="name">Informationssicherheitsbeauftragte:r</span>
+    <span class="rechts">
+      <span class="marker">1x besetzt</span>
+      <span class="marker">1 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Einsatz von Software außerhalb des freigegebenen Katalogs melden</td><td class="knapp">anlassbezogen</td><td>unverzüglich bei Kenntnis</td><td class="kennung">STD-SWL-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">FKT-SIBE</span>
+    <span class="name">Sicherheitsbeauftragte:r</span>
+    <span class="rechts">
+      <span class="marker">22x besetzt</span>
+      <span class="marker">1 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Unterweisung durchführen und Teilnahme dokumentieren</td><td class="knapp">jährlich</td><td>bis 31.10. des laufenden Jahres</td><td class="kennung">STD-ARB-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">FKT-SIFA</span>
+    <span class="name">Fachkraft für Arbeitssicherheit</span>
+    <span class="rechts">
+      <span class="marker">3x besetzt</span>
+      <span class="marker">7 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Unterweisungsthemen des Folgejahres festlegen und veröffentlichen</td><td class="knapp">jährlich</td><td>bis 30.11. für das Folgejahr</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Fahrer:innen zu Ladungssicherung und Fahrzeugnutzung unterweisen</td><td class="knapp">jährlich</td><td>gemeinsam mit der Unterweisung nach STD-ARB-001</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Brandschutzordnung Teil A, B und C je Betriebsstätte prüfen und fortschreiben</td><td class="knapp">zweijährlich</td><td>bis 30.06. des Prüfjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Räumungsübung an besetzten Standorten durchführen</td><td class="knapp">zweijährlich</td><td>bis 30.09. des Übungsjahres</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Neu eintretende oder versetzte Beschäftigte vor Tätigkeitsaufnahme unterweisen</td><td class="knapp">anlassbezogen</td><td>vor dem ersten Arbeitseinsatz</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Großstörung nachbereiten und Erkenntnisse in Standards überführen</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Wiederversorgung</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Fahrzeugschäden und Unfälle melden und auswerten</td><td class="knapp">anlassbezogen</td><td>Meldung binnen 24 Stunden, Auswertung quartalsweise</td><td class="kennung">STD-FUH-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">FKT-VEFK</span>
+    <span class="name">Verantwortliche Elektrofachkraft</span>
+    <span class="rechts">
+      <span class="marker">8x besetzt</span>
+      <span class="marker">3 Aufgaben</span><span class="marker akzent">1 verantwortet</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Betriebliche Anforderungen zu Projektbeginn einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">A</span></td><td>Anlagenverantwortung für die Bauphase benennen</td><td class="knapp">anlassbezogen</td><td>vor Baubeginn</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Anlage nach Fertigstellung übernehmen und Restpunkte festhalten</td><td class="knapp">anlassbezogen</td><td>am Tag der Abnahme</td><td class="kennung">STD-ERN-001</td></tr></tbody>
+  </table></div></div>
+</details>
+<h3 style="font-family:var(--schrift-titel);font-size:16px;margin:14px 0 6px">Schnittstellen</h3>
+<details>
+  <summary>
+    <span class="kennung">SST-AM</span>
+    <span class="name">Anlagenmanagement</span>
+    <span class="rechts">
+      
+      <span class="marker">4 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Wiederkehrende Störungen auswerten und Erneuerungsanstoß prüfen</td><td class="knapp">quartalsweise</td><td>bis zum 15. Arbeitstag nach Quartalsende</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Zustandsbewertung je Anlagenklasse erheben und plausibilisieren</td><td class="knapp">jährlich</td><td>bis 31.08.</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Erneuerungsanstoß mit technischer Begründung an das Anlagenmanagement melden</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Feststellung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Anlage nach Fertigstellung übernehmen und Restpunkte festhalten</td><td class="knapp">anlassbezogen</td><td>am Tag der Abnahme</td><td class="kennung">STD-ERN-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">SST-EK</span>
+    <span class="name">Einkauf und Beschaffung</span>
+    <span class="rechts">
+      
+      <span class="marker">3 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Auslaufende Lizenzverträge prüfen und Verlängerung oder Ablösung entscheiden</td><td class="knapp">quartalsweise</td><td>spätestens 90 Tage vor Vertragsablauf</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Nachweis der Unterweisung des Dienstleisterpersonals einfordern</td><td class="knapp">jährlich</td><td>vor Ersteinsatz, danach jährlich bis 31.10.</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Fahrzeugbedarf und Ersatzbeschaffung für das Folgejahr melden</td><td class="knapp">jährlich</td><td>bis 30.09.</td><td class="kennung">STD-FUH-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">SST-GF</span>
+    <span class="name">Geschäftsführung</span>
+    <span class="rechts">
+      
+      <span class="marker">1 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">I</span></td><td>Großstörung nachbereiten und Erkenntnisse in Standards überführen</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Wiederversorgung</td><td class="kennung">STD-ENT-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">SST-HR</span>
+    <span class="name">Personal und Qualifizierung</span>
+    <span class="rechts">
+      
+      <span class="marker">4 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Führerscheinkontrolle für alle Fahrberechtigten durchführen</td><td class="knapp">halbjährlich</td><td>bis 31.03. und 30.09.</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Unterweisungstermine im Bereich planen und Teilnehmende zuordnen</td><td class="knapp">jährlich</td><td>bis 31.01. des laufenden Jahres</td><td class="kennung">STD-ARB-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Brandschutzhelfer benennen, ausbilden und Ausbildung auffrischen</td><td class="knapp">dreijährlich</td><td>vor Ablauf der Ausbildungsgültigkeit</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Neu eintretende oder versetzte Beschäftigte vor Tätigkeitsaufnahme unterweisen</td><td class="knapp">anlassbezogen</td><td>vor dem ersten Arbeitseinsatz</td><td class="kennung">STD-ARB-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">SST-IT</span>
+    <span class="name">IT und Software Asset Management</span>
+    <span class="rechts">
+      
+      <span class="marker">4 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Auslaufende Lizenzverträge prüfen und Verlängerung oder Ablösung entscheiden</td><td class="knapp">quartalsweise</td><td>spätestens 90 Tage vor Vertragsablauf</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Tatsächlichen Nutzerkreis je Fachanwendung bestätigen und ungenutzte Lizenzen zurückgeben</td><td class="knapp">jährlich</td><td>bis 31.03.</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Softwarebedarf melden mit Nutzerkreis, Kostenstelle und Begründung</td><td class="knapp">anlassbezogen</td><td>mindestens 30 Arbeitstage vor benötigtem Einsatzbeginn</td><td class="kennung">STD-SWL-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Einsatz von Software außerhalb des freigegebenen Katalogs melden</td><td class="knapp">anlassbezogen</td><td>unverzüglich bei Kenntnis</td><td class="kennung">STD-SWL-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">SST-NF</span>
+    <span class="name">Netzführung / Leitstelle</span>
+    <span class="rechts">
+      
+      <span class="marker">5 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">I</span></td><td>Bereitschaftsplan für das Folgequartal erstellen und veröffentlichen</td><td class="knapp">quartalsweise</td><td>bis 15. des Vormonats vor Quartalsbeginn</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Großstörung nachbereiten und Erkenntnisse in Standards überführen</td><td class="knapp">anlassbezogen</td><td>binnen 20 Arbeitstagen nach Wiederversorgung</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Anlagenverantwortung für die Bauphase benennen</td><td class="knapp">anlassbezogen</td><td>vor Baubeginn</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Störungsmeldung aufnehmen, klassifizieren und Einsatz auslösen</td><td class="knapp">laufend</td><td>Klassifizierung binnen 15 Minuten nach Eingang</td><td class="kennung">STD-ENT-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Störung beheben und Anlagenzustand wiederherstellen</td><td class="knapp">laufend</td><td>gemäß Reaktionszeit der Störungsklasse</td><td class="kennung">STD-ENT-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">SST-PM</span>
+    <span class="name">Projektmanagement</span>
+    <span class="rechts">
+      
+      <span class="marker">5 Aufgaben</span><span class="marker">nur beteiligt</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>Erledigung der Restpunkte nachhalten</td><td class="knapp">monatlich</td><td>bis zum 10. Arbeitstag des Folgemonats</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Brandschutzanforderungen in Erneuerungsprojekten vor Planungsfreigabe einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">I</span></td><td>Betriebliche Anforderungen zu Projektbeginn einbringen</td><td class="knapp">anlassbezogen</td><td>vor Abschluss der Vorplanung</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Anlagenverantwortung für die Bauphase benennen</td><td class="knapp">anlassbezogen</td><td>vor Baubeginn</td><td class="kennung">STD-ERN-001</td></tr><tr><td class="knapp"><span class="raci">C</span></td><td>Anlage nach Fertigstellung übernehmen und Restpunkte festhalten</td><td class="knapp">anlassbezogen</td><td>am Tag der Abnahme</td><td class="kennung">STD-ERN-001</td></tr></tbody>
+  </table></div></div>
+</details>
+
+<details>
+  <summary>
+    <span class="kennung">SST-SDL</span>
+    <span class="name">Servicedienstleister (intern und extern)</span>
+    <span class="rechts">
+      
+      <span class="marker">3 Aufgaben</span><span class="marker">2 führt aus</span>
+    </span>
+  </summary>
+  <div class="inhalt"><div class="tabellenrahmen"><table>
+    <thead><tr><th>Rolle</th><th>Aufgabe</th><th>Takt</th><th>Frist</th><th>Standard</th></tr></thead>
+    <tbody><tr><td class="knapp"><span class="raci">C</span></td><td>UVV-Prüfung der Fahrzeuge und Aufbauten beauftragen und überwachen</td><td class="knapp">jährlich</td><td>vor Ablauf der letzten Prüfung</td><td class="kennung">STD-FUH-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Feuerlöscher und Wandhydranten prüfen lassen</td><td class="knapp">zweijährlich</td><td>vor Ablauf der Prüfplakette</td><td class="kennung">STD-BRA-001</td></tr><tr><td class="knapp"><span class="raci">R</span></td><td>Störung beheben und Anlagenzustand wiederherstellen</td><td class="knapp">laufend</td><td>gemäß Reaktionszeit der Störungsklasse</td><td class="kennung">STD-ENT-001</td></tr></tbody>
+  </table></div></div>
+</details>
+</div>
+</section>
+
+
+<section id="takt">
+  <header>
+    <h2>Jahrestakt</h2>
+    <p>Wie sich die verbindlichen Aufgaben über die Wiederholzyklen verteilen —
+       von der täglichen Prüfung bis zur einmaligen Festlegung. Ein Übergewicht bei
+       „anlassbezogen" heißt: viel hängt daran, dass jemand den Anlass erkennt.</p>
+  </header>
+  <div class="taktband"><div class="taktzeile"><span>täglich</span><span class="balken"><span style="width:10%"></span></span><span class="anzahl">1</span></div><div class="taktzeile"><span>wöchentlich</span><span class="balken"><span style="width:10%"></span></span><span class="anzahl">1</span></div><div class="taktzeile"><span>monatlich</span><span class="balken"><span style="width:20%"></span></span><span class="anzahl">2</span></div><div class="taktzeile"><span>quartalsweise</span><span class="balken"><span style="width:50%"></span></span><span class="anzahl">5</span></div><div class="taktzeile"><span>halbjährlich</span><span class="balken"><span style="width:10%"></span></span><span class="anzahl">1</span></div><div class="taktzeile"><span>jährlich</span><span class="balken"><span style="width:90%"></span></span><span class="anzahl">9</span></div><div class="taktzeile"><span>zweijährlich</span><span class="balken"><span style="width:30%"></span></span><span class="anzahl">3</span></div><div class="taktzeile"><span>dreijährlich</span><span class="balken"><span style="width:10%"></span></span><span class="anzahl">1</span></div><div class="taktzeile"><span>anlassbezogen</span><span class="balken"><span style="width:100%"></span></span><span class="anzahl">10</span></div><div class="taktzeile"><span>laufend</span><span class="balken"><span style="width:20%"></span></span><span class="anzahl">2</span></div></div>
+</section>
+
+
+<section id="schnittstellen">
+  <header>
+    <h2>Schnittstellen</h2>
+    <p>Was wir liefern und was wir erwarten — je Partner an einer Stelle. Damit ist
+       „das hättet ihr machen müssen" auf ein Dokument zurückführbar statt auf Erinnerung.</p>
+  </header>
+  <div class="karten">
+<div class="karte">
+  <div>
+    <h3>Anlagenmanagement</h3>
+    <p class="thema">Instandhaltungsstrategie und Erneuerungsplanung</p>
+  </div>
+  <div><h4>Wir liefern</h4><ul><li>Zustandsbewertung je Anlagenklasse, jährlich bis 30.09.</li><li>Erneuerungsanstöße mit technischer Begründung, laufend</li><li>Rückmeldung zur Umsetzbarkeit von Strategievorgaben, 20 Arbeitstage nach Eingang</li></ul></div>
+  <div><h4>Wir erwarten</h4><ul><li>Verbindliche Instandhaltungsstrategie je Anlagenklasse, jährlich bis 31.10.</li><li>Budgetrahmen für Instandhaltung und Instandsetzung bis 30.11.</li><li>Entscheidung über gemeldete Erneuerungsanstöße binnen 40 Arbeitstagen</li></ul></div>
+  <div class="fuss">
+    <span class="marker warn">abgestimmt</span>
+    <span>Jourfixe monatlich</span>
+    <span>Eskalation: PS-AL an Leitung Anlagenmanagement</span>
+  </div>
+</div>
+
+<div class="karte">
+  <div>
+    <h3>Servicedienstleister (intern und extern)</h3>
+    <p class="thema">Ausführung Instandhaltung, Instandsetzung, Entstörung</p>
+  </div>
+  <div><h4>Wir liefern</h4><ul><li>Gültige Instandhaltungsanleitungen und Standards vor Leistungsbeginn</li><li>Beauftragung mit eindeutiger Leistungsbeschreibung und Termin</li><li>Ansprechpartner je Betriebsbereich und Bereitschaftskontakt 24/7</li></ul></div>
+  <div><h4>Wir erwarten</h4><ul><li>Rückmeldung Auftragsstatus im System, spätestens 2 Arbeitstage nach Ausführung</li><li>Störungsmeldung an Leitstelle unverzüglich, Dokumentation binnen 24 Stunden</li><li>Nachweis der Qualifikation des eingesetzten Personals vor Ersteinsatz</li><li>Einhaltung der Reaktionszeiten gemäß Vertrag</li></ul></div>
+  <div class="fuss">
+    <span class="marker ok">vereinbart</span>
+    <span>Jourfixe wöchentlich</span>
+    <span>Eskalation: PS-DIS, dann PS-AL, dann Vertragsmanagement</span>
+  </div>
+</div>
+
+<div class="karte">
+  <div>
+    <h3>Projektmanagement</h3>
+    <p class="thema">Erneuerungsprojekte und Anlagenübergabe</p>
+  </div>
+  <div><h4>Wir liefern</h4><ul><li>Betriebliche Anforderungen und Randbedingungen zu Projektbeginn</li><li>Benennung der Anlagenverantwortung für die Bauphase</li><li>Teilnahme an Abnahmen</li></ul></div>
+  <div><h4>Wir erwarten</h4><ul><li>Einbindung der Produktionssteuerung ab Vorplanung, nicht erst zur Abnahme</li><li>Vollständige Dokumentation zur Übergabe, Checkliste UEBERGABE-01</li><li>Übergabeprotokoll mit Restpunktenliste und Terminen</li></ul></div>
+  <div class="fuss">
+    <span class="marker warn">abgestimmt</span>
+    <span>Jourfixe monatlich</span>
+    <span>Eskalation: PS-AL an Leitung Projektmanagement</span>
+  </div>
+</div>
+
+<div class="karte">
+  <div>
+    <h3>Netzführung / Leitstelle</h3>
+    <p class="thema">Schalthandlungen und Störungsbearbeitung</p>
+  </div>
+  <div><h4>Wir liefern</h4><ul><li>Aktuelle Anlagenverantwortliche und Erreichbarkeiten</li><li>Freigabe geplanter Schalthandlungen im vereinbarten Vorlauf</li></ul></div>
+  <div><h4>Wir erwarten</h4><ul><li>Unverzügliche Information bei Störungen mit Kundenbetroffenheit</li><li>Rückmeldung nach Wiederversorgung mit Störungsdaten</li></ul></div>
+  <div class="fuss">
+    <span class="marker ok">vereinbart</span>
+    <span>Jourfixe monatlich</span>
+    <span>Eskalation: PS-DIS an Schichtleitung Netzführung</span>
+  </div>
+</div>
+
+<div class="karte">
+  <div>
+    <h3>IT und Software Asset Management</h3>
+    <p class="thema">Software-Lizenzen und Fachanwendungen</p>
+  </div>
+  <div><h4>Wir liefern</h4><ul><li>Bedarfsmeldung mit Kostenstelle und Nutzerkreis</li><li>Jährliche Bestätigung des tatsächlichen Nutzerkreises bis 31.03.</li></ul></div>
+  <div><h4>Wir erwarten</h4><ul><li>Lizenzbestandsliste je Kostenstelle, quartalsweise</li><li>Vorwarnung vor Vertragsverlängerung, 90 Tage vor Ablauf</li></ul></div>
+  <div class="fuss">
+    <span class="marker krit">Entwurf</span>
+    <span>Jourfixe quartalsweise</span>
+    <span>Eskalation: PS-AL an IT-Leitung</span>
+  </div>
+</div>
+
+<div class="karte">
+  <div>
+    <h3>Recht und Compliance</h3>
+    <p class="thema">Rechtsstand und Betreiberpflichten</p>
+  </div>
+  <div><h4>Wir liefern</h4><ul><li>Liste der von uns getragenen Betreiberpflichten, jährlich</li><li>Meldung neuer Anwendungsfälle</li></ul></div>
+  <div><h4>Wir erwarten</h4><ul><li>Bestätigung des Rechtsstands je Standard bei Erstfreigabe und Änderung</li><li>Information über relevante Rechtsänderungen binnen 20 Arbeitstagen</li></ul></div>
+  <div class="fuss">
+    <span class="marker warn">abgestimmt</span>
+    <span>Jourfixe quartalsweise</span>
+    <span>Eskalation: PS-AL an Recht und Compliance</span>
+  </div>
+</div>
+</div>
+</section>
+
+
+<section id="bereiche">
+  <header>
+    <h2>Betriebsbereiche</h2>
+    <p>Sieben Bereiche, eine Vorgabe. Die Spalten rechts zeigen, wie viele gültige
+       Standards und Aufgaben im jeweiligen Bereich tatsächlich ankommen.</p>
+  </header>
+  <div class="tabellenrahmen">
+    <table>
+      <thead><tr><th>Kürzel</th><th>Bereich</th><th>Sitz</th><th class="zahl">MA</th>
+      <th>Anlagenklassen</th><th>Bereitschaft</th><th class="zahl">Standards</th>
+      <th class="zahl">Aufgaben</th></tr></thead>
+      <tbody><tr><td class="kennung">BB-NORD</td><td><strong>Betriebsbereich Nord</strong></td><td class="knapp">Hamburg</td><td class="zahl">92</td><td>umspannwerk, ortsnetzstation, kabelnetz</td><td class="knapp">ja</td><td class="zahl">4</td><td class="zahl">25</td></tr><tr><td class="kennung">BB-NORDOST</td><td><strong>Betriebsbereich Nordost</strong></td><td class="knapp">Rostock</td><td class="zahl">71</td><td>umspannwerk, ortsnetzstation, freileitung</td><td class="knapp">ja</td><td class="zahl">4</td><td class="zahl">25</td></tr><tr><td class="kennung">BB-OST</td><td><strong>Betriebsbereich Ost</strong></td><td class="knapp">Leipzig</td><td class="zahl">88</td><td>umspannwerk, ortsnetzstation, kabelnetz, freileitung</td><td class="knapp">ja</td><td class="zahl">4</td><td class="zahl">25</td></tr><tr><td class="kennung">BB-MITTE</td><td><strong>Betriebsbereich Mitte</strong></td><td class="knapp">Kassel</td><td class="zahl">79</td><td>umspannwerk, ortsnetzstation, kabelnetz</td><td class="knapp">ja</td><td class="zahl">4</td><td class="zahl">25</td></tr><tr><td class="kennung">BB-WEST</td><td><strong>Betriebsbereich West</strong></td><td class="knapp">Dortmund</td><td class="zahl">104</td><td>umspannwerk, ortsnetzstation, kabelnetz, gasdruckregelanlage</td><td class="knapp">ja</td><td class="zahl">4</td><td class="zahl">25</td></tr><tr><td class="kennung">BB-SUEDWEST</td><td><strong>Betriebsbereich Südwest</strong></td><td class="knapp">Mannheim</td><td class="zahl">83</td><td>umspannwerk, ortsnetzstation, kabelnetz</td><td class="knapp">ja</td><td class="zahl">4</td><td class="zahl">25</td></tr><tr><td class="kennung">BB-SUED</td><td><strong>Betriebsbereich Süd</strong></td><td class="knapp">Augsburg</td><td class="zahl">83</td><td>umspannwerk, ortsnetzstation, freileitung</td><td class="knapp">ja</td><td class="zahl">4</td><td class="zahl">25</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="pflichten">
+  <header>
+    <h2>Pflichtenregister</h2>
+    <p>Die Betreiberpflichten, die wir tragen, und der Standard, der jede davon
+       operativ umsetzt. Die Spalte Rechtsstand ist bewusst getrennt: eine Pflicht gilt
+       erst dann als bestätigt, wenn Recht und Compliance sie geprüft hat — kein Agent
+       setzt dieses Feld.</p>
+  </header>
+  <div class="tabellenrahmen">
+    <table>
+      <thead><tr><th>Nr.</th><th>Pflicht</th><th>Feld</th><th>Quelle</th><th>Turnus</th>
+      <th>Träger</th><th>umgesetzt durch</th><th>Rechtsstand</th></tr></thead>
+      <tbody><tr><td class="kennung">PFL-001</td><td>Gefährdungsbeurteilung erstellen und aktuell halten</td><td class="kennung">TF-ARB</td><td>ArbSchG, DGUV Vorschrift 1</td><td>jährlich und anlassbezogen</td><td class="kennung">BB-L</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-002</td><td>Beschäftigte unterweisen</td><td class="kennung">TF-ARB</td><td>ArbSchG, DGUV Vorschrift 1</td><td>jährlich</td><td class="kennung">BB-MV</td><td class="knapp"><span class="marker ok">STD-ARB-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-003</td><td>Elektrische Anlagen und ortsveränderliche Betriebsmittel prüfen</td><td class="kennung">TF-ELE</td><td>DGUV Vorschrift 3, BetrSichV</td><td>fristabhängig je Betriebsmittelart</td><td class="kennung">FKT-VEFK</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-004</td><td>Anlagenverantwortung für elektrische Anlagen benennen</td><td class="kennung">TF-ELE</td><td>DIN VDE 0105-100</td><td>dauerhaft, Prüfung bei Personalwechsel</td><td class="kennung">FKT-VEFK</td><td class="knapp"><span class="marker ok">STD-ENT-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-005</td><td>Brandschutzordnung erstellen und bekannt machen</td><td class="kennung">TF-BRA</td><td>DIN 14096, Landesbauordnung</td><td>alle 2 Jahre prüfen</td><td class="kennung">FKT-BSB</td><td class="knapp"><span class="marker ok">STD-BRA-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-006</td><td>Feuerlöscheinrichtungen prüfen und instand halten</td><td class="kennung">TF-BRA</td><td>ASR A2.2, DIN 14406</td><td>alle 2 Jahre</td><td class="kennung">BB-L</td><td class="knapp"><span class="marker ok">STD-BRA-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-007</td><td>Flucht- und Rettungswege freihalten und kennzeichnen</td><td class="kennung">TF-BRA</td><td>ArbStättV, ASR A2.3</td><td>laufend, Kontrolle quartalsweise</td><td class="kennung">BB-MV</td><td class="knapp"><span class="marker ok">STD-BRA-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-008</td><td>Unbesetzte Anlagen gegen unbefugten Zutritt sichern</td><td class="kennung">TF-OBJ</td><td>EnWG Betreiberverantwortung, DIN VDE 0101</td><td>laufend, Kontrolle halbjährlich</td><td class="kennung">BB-L</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-009</td><td>Schließberechtigungen und Schlüsselausgabe nachweisen</td><td class="kennung">TF-OBJ</td><td>interne Sicherungsvorgabe</td><td>jährlich</td><td class="kennung">FKT-OSV</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-010</td><td>Arbeitsmittel wiederkehrend prüfen</td><td class="kennung">TF-ARM</td><td>BetrSichV</td><td>fristabhängig je Arbeitsmittel</td><td class="kennung">BB-MV</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-011</td><td>Persönliche Schutzausrüstung bereitstellen und prüfen</td><td class="kennung">TF-ARB</td><td>PSA-Benutzungsverordnung, DGUV Regel 112-198</td><td>jährlich, PSA gegen Absturz zusätzlich vor jeder Benutzung</td><td class="kennung">BB-MV</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-012</td><td>Gefahrstoffverzeichnis führen</td><td class="kennung">TF-GEF</td><td>GefStoffV</td><td>jährlich</td><td class="kennung">FKT-GEF</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-013</td><td>Fahrzeuge nach UVV prüfen</td><td class="kennung">TF-FUH</td><td>DGUV Vorschrift 70</td><td>jährlich</td><td class="kennung">FKT-FPV</td><td class="knapp"><span class="marker ok">STD-FUH-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-014</td><td>Führerscheinkontrolle durchführen</td><td class="kennung">TF-FUH</td><td>Halterhaftung StVG, StVO</td><td>halbjährlich</td><td class="kennung">BB-MV</td><td class="knapp"><span class="marker ok">STD-FUH-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-015</td><td>Behördliche Auflagen und Genehmigungsfristen überwachen</td><td class="kennung">TF-LIZ</td><td>Genehmigungsbescheide, EnWG</td><td>laufend, Fristenprüfung quartalsweise</td><td class="kennung">PS-TFV</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-016</td><td>Software nur im Rahmen erworbener Lizenzen einsetzen</td><td class="kennung">TF-SWL</td><td>UrhG, Herstellerverträge</td><td>jährlich</td><td class="kennung">SST-IT</td><td class="knapp"><span class="marker ok">STD-SWL-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-017</td><td>Nachweis der IT-Sicherheit für kritische Anlagen erbringen</td><td class="kennung">TF-KRI</td><td>BSIG, IT-Sicherheitskatalog</td><td>alle 2 Jahre</td><td class="kennung">FKT-ISB</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-018</td><td>Anlagendokumentation nach Änderungen nachführen</td><td class="kennung">TF-DOK</td><td>DIN VDE 0105-100, interne Vorgabe</td><td>anlassbezogen, Kontrolle quartalsweise</td><td class="kennung">BB-MV</td><td class="knapp"><span class="marker ok">STD-ERN-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-019</td><td>Instandhaltungsmaßnahmen planen und nachweisen</td><td class="kennung">TF-IHS</td><td>EnWG, DIN 31051</td><td>laufend, Planung jährlich</td><td class="kennung">PS-TFV</td><td class="knapp"><span class="marker krit">kein Standard</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-020</td><td>Störungsbereitschaft sicherstellen</td><td class="kennung">TF-ENT</td><td>EnWG Versorgungssicherheit</td><td>dauerhaft</td><td class="kennung">PS-DIS</td><td class="knapp"><span class="marker ok">STD-ENT-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-021</td><td>Befähigungen und Qualifikationsnachweise vorhalten</td><td class="kennung">TF-QUA</td><td>DGUV Vorschrift 1, BetrSichV</td><td>jährlich</td><td class="kennung">BB-L</td><td class="knapp"><span class="marker ok">STD-ARB-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr><tr><td class="kennung">PFL-022</td><td>Zustandsbewertung als Grundlage für Erneuerung liefern</td><td class="kennung">TF-ERN</td><td>interne Asset-Vorgabe, EnWG</td><td>jährlich</td><td class="kennung">PS-TFV</td><td class="knapp"><span class="marker ok">STD-ERN-001</span></td><td class="knapp"><span class="marker warn">offen</span></td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+
+<footer class="fussnote">
+  <div>Erzeugt am 17.08.2026 um 19:27 aus dem Regelwerk im
+     Verzeichnis <code>standards/</code> und den Stammdaten in <code>daten/</code>.</div>
+  <div>Neu bauen mit <code>python3 werkzeuge/ps.py cockpit</code>,
+     prüfen mit <code>python3 werkzeuge/ps.py pruefen</code>.</div>
+  <div>Die Rollenangaben sind Rollen, keine Personen. Die Zuordnung Rolle zu Person
+     wird im Organigramm und in den schriftlichen Bestellungen geführt.</div>
+</footer>
+
+</div>

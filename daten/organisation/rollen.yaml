@@ -1,0 +1,227 @@
+# Rollenmodell der Produktionssteuerung und ihres Umfelds
+#
+# GRUNDREGEL: Standards benennen NIEMALS Personen, immer nur Rollen-IDs.
+# Personen wechseln, Rollen bleiben. Die Zuordnung Rolle -> Person wird
+# außerhalb dieses Repos gepflegt (Organigramm / Bestellungen).
+#
+# ebene:
+#   ps          = innerhalb der Abteilung Produktionssteuerung
+#   betrieb     = in den 7 Betriebsbereichen
+#   funktion    = bestellte Funktion / Beauftragte:r (schriftliche Bestellung)
+#   schnittstelle = außerhalb der Abteilung, aber im Unternehmen / Vertrag
+
+meta:
+  stand: 2026-08-17
+  pflege: PS-RWM
+  freigabe: PS-AL
+
+rollen:
+  # --- Produktionssteuerung -------------------------------------------
+  - id: PS-AL
+    name: Abteilungsleitung Produktionssteuerung
+    ebene: ps
+    anzahl: 1
+    entscheidet:
+      - Freigabe von Standards (Status gueltig)
+      - Eskalationsstufe 3
+      - Ressourcen- und Budgetanforderung
+    darf_a_sein: true
+
+  - id: PS-TFV
+    name: Themenfeldverantwortung
+    ebene: ps
+    anzahl: 14
+    beschreibung: >
+      Fachliche Verantwortung für genau ein Themenfeld. Hält den Standard
+      aktuell, kennt den Rechtsstand, ist erste Anlaufstelle für die
+      Betriebsbereiche und die Schnittstellenpartner.
+    darf_a_sein: true
+
+  - id: PS-BBK
+    name: Betriebsbereichskoordination (Produktionssteuerung)
+    ebene: ps
+    anzahl: 7
+    beschreibung: >
+      Bindeglied zwischen Produktionssteuerung und je einem Betriebsbereich.
+      Übersetzt Standards in die Bereichsrealität und meldet Abweichungen zurück.
+    darf_a_sein: true
+
+  - id: PS-RWM
+    name: Regelwerksmanagement / Standardredaktion
+    ebene: ps
+    anzahl: 1
+    beschreibung: >
+      Hält Format, Struktur und Aktualität des Regelwerks. Betreibt das
+      Cockpit und den Review-Radar. Prüft formal, nicht fachlich.
+    darf_a_sein: true
+
+  - id: PS-DIS
+    name: Disposition und Entstörungssteuerung
+    ebene: ps
+    anzahl: 4
+    darf_a_sein: true
+
+  - id: PS-CON
+    name: Controlling und Kennzahlen
+    ebene: ps
+    anzahl: 1
+    darf_a_sein: true
+
+  # --- Betriebsbereiche -----------------------------------------------
+  - id: BB-L
+    name: Betriebsbereichsleitung
+    ebene: betrieb
+    anzahl: 7
+    beschreibung: >
+      Umsetzungsverantwortung im Bereich. Trägt die übertragenen
+      Unternehmerpflichten für den eigenen Bereich.
+    darf_a_sein: true
+
+  - id: BB-MV
+    name: Meisterei- / Bezirksleitung
+    ebene: betrieb
+    anzahl: 31
+    darf_a_sein: true
+
+  - id: BB-MA
+    name: Mitarbeitende im Betrieb (Monteur:innen, Technik)
+    ebene: betrieb
+    anzahl: 480
+    beschreibung: Ausführende Ebene. Kann R sein, nie A.
+    darf_a_sein: false
+
+  - id: BB-KOO
+    name: Bereichsassistenz / Koordination vor Ort
+    ebene: betrieb
+    anzahl: 7
+    darf_a_sein: false
+
+  # --- Bestellte Funktionen -------------------------------------------
+  - id: FKT-VEFK
+    name: Verantwortliche Elektrofachkraft
+    ebene: funktion
+    anzahl: 8
+    bestellung: schriftlich
+    darf_a_sein: true
+
+  - id: FKT-SIFA
+    name: Fachkraft für Arbeitssicherheit
+    ebene: funktion
+    anzahl: 3
+    bestellung: schriftlich
+    darf_a_sein: false
+    beschreibung: Beratende Funktion. Wird konsultiert (C), trägt keine Umsetzungsverantwortung.
+
+  - id: FKT-BSB
+    name: Brandschutzbeauftragte:r
+    ebene: funktion
+    anzahl: 2
+    bestellung: schriftlich
+    darf_a_sein: false
+
+  - id: FKT-SIBE
+    name: Sicherheitsbeauftragte:r
+    ebene: funktion
+    anzahl: 22
+    bestellung: schriftlich
+    darf_a_sein: false
+
+  - id: FKT-GEF
+    name: Gefahrstoffverantwortung
+    ebene: funktion
+    anzahl: 1
+    bestellung: schriftlich
+    darf_a_sein: true
+
+  - id: FKT-OSV
+    name: Objektschutz- und Sicherungsverantwortung
+    ebene: funktion
+    anzahl: 1
+    bestellung: schriftlich
+    darf_a_sein: true
+
+  - id: FKT-FPV
+    name: Fuhrparkverantwortung (Halterpflichten)
+    ebene: funktion
+    anzahl: 1
+    bestellung: schriftlich
+    darf_a_sein: true
+
+  - id: FKT-ISB
+    name: Informationssicherheitsbeauftragte:r
+    ebene: funktion
+    anzahl: 1
+    bestellung: schriftlich
+    darf_a_sein: true
+
+  - id: FKT-DSB
+    name: Datenschutzbeauftragte:r
+    ebene: funktion
+    anzahl: 1
+    bestellung: schriftlich
+    darf_a_sein: false
+
+  - id: FKT-BAD
+    name: Betriebsärztlicher Dienst
+    ebene: funktion
+    anzahl: 1
+    darf_a_sein: false
+
+  # --- Schnittstellen --------------------------------------------------
+  - id: SST-AM
+    name: Anlagenmanagement
+    ebene: schnittstelle
+    beschreibung: >
+      Asset-Owner. Gibt Instandhaltungsstrategie, Budget und Erneuerungsplanung vor.
+      Wir liefern Zustandsdaten und Erneuerungsanstöße.
+    darf_a_sein: true
+
+  - id: SST-SDL
+    name: Servicedienstleister (intern und extern)
+    ebene: schnittstelle
+    beschreibung: >
+      Ausführende Einheit für Instandhaltung, Instandsetzung, Entstörung.
+      Erhält Vorgaben über Vertrag und Standards, nie über Zuruf.
+    darf_a_sein: false
+
+  - id: SST-PM
+    name: Projektmanagement
+    ebene: schnittstelle
+    beschreibung: Setzt Erneuerungs- und Investitionsprojekte um. Übergibt Anlagen zurück in den Betrieb.
+    darf_a_sein: true
+
+  - id: SST-NF
+    name: Netzführung / Leitstelle
+    ebene: schnittstelle
+    darf_a_sein: true
+
+  - id: SST-IT
+    name: IT und Software Asset Management
+    ebene: schnittstelle
+    darf_a_sein: true
+
+  - id: SST-EK
+    name: Einkauf und Beschaffung
+    ebene: schnittstelle
+    darf_a_sein: true
+
+  - id: SST-HR
+    name: Personal und Qualifizierung
+    ebene: schnittstelle
+    darf_a_sein: true
+
+  - id: SST-REW
+    name: Recht und Compliance
+    ebene: schnittstelle
+    beschreibung: Bestätigt den Rechtsstand. Ohne diese Bestätigung bleibt eine Rechtsgrundlage ungeprüft.
+    darf_a_sein: false
+
+  - id: SST-QM
+    name: Qualitätsmanagement
+    ebene: schnittstelle
+    darf_a_sein: false
+
+  - id: SST-GF
+    name: Geschäftsführung
+    ebene: schnittstelle
+    darf_a_sein: true

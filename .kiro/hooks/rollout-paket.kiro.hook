@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Rollout-Paket erzeugen",
+  "description": "Macht aus einem gültigen Standard die vier Fassungen, die in der Einheit ankommen: Einseiter für die ausführende Ebene, Führungsfassung, Schnittstellenfassung, Unterweisungsentwurf.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": []
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Arbeite als A6 Rollout-Redakteur.\n\nFrage mich nach der Standard-ID, falls nicht genannt. Prüfe den Status: Bei entwurf oder in_abstimmung erzeugst du nur einen Entwurf mit deutlichem Hinweiskasten am Anfang, dass noch keine Freigabe vorliegt.\n\nErzeuge unter rollout/<STD-ID>/ vier Dateien nach den Vorlagen in rollout/_vorlagen/:\n\n1. `einseiter-<rolle>.md` — je operativer Zielrolle des Geltungsbereichs eine Fassung. Nur die Aufgaben, an denen diese Rolle R ist. Zielrolle direkt ansprechen, aktive Sätze, Frist und Nachweis je Punkt, keine Paragraphenzitate, maximal eine Seite.\n2. `fuehrungsfassung.md` — für BB-L und BB-MV: was sie verantworten (alle Aufgaben mit ihrem A), woran sie Erfüllung erkennen (Kennzahlen), wann sie eskalieren müssen (Eskalationsstufen).\n3. `schnittstellenfassung.md` — je Partner aus dem Feld schnittstellen: nur was ihn betrifft, was wir liefern, was wir erwarten, mit Termin. Gleiche die Zusagen gegen daten/organisation/schnittstellen.yaml ab und weise auf Zusagen hin, die dort noch nicht stehen.\n4. `unterweisung.md` — fünf bis zehn Punkte für die Jahresunterweisung nach STD-ARB-001, in der Sprache der ausführenden Ebene.\n\nHilfsmittel: `python3 werkzeuge/ps.py rollenblatt <ROLLE>` liefert dir alle Aufgaben einer Rolle über alle Standards hinweg.\n\nHarte Regel: Jede Aussage in jeder Fassung muss auf eine Aufgaben-ID des Standards zurückführbar sein. Erfinde nichts hinzu, auch nichts fachlich Naheliegendes. Nenne am Ende, was du bewusst weggelassen hast."
+  }
+}

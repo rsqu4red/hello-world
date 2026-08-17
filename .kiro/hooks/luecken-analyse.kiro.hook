@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Lückenanalyse — was ist noch nicht geregelt",
+  "description": "Geht die ungedeckten Betreiberpflichten und die Themenfelder ohne Standard durch und priorisiert sie nach Risiko. Grundlage für die Jahresplanung der Abteilung.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": []
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Arbeite als A3 Pflichten-Prüfer.\n\n1. `python3 werkzeuge/ps.py luecken` und `python3 werkzeuge/ps.py status`.\n2. Bewerte jede ungedeckte Pflicht und jedes Themenfeld ohne Standard nach drei Kriterien: Personenrisiko, Versorgungs- oder Anlagenrisiko, Nachweisrisiko gegenüber Behörde oder Prüfer. Nutze die Kritikalität des Themenfelds als Ausgangspunkt, aber übernimm sie nicht ungeprüft.\n3. Bilde daraus eine Rangfolge und schlage vor, welche Lücken in den nächsten sechs Monaten geschlossen werden sollten. Schätze je Lücke den Aufwand grob: klein (Aufgabe in bestehendem Standard ergänzen), mittel (neuer Standard), groß (neues Themenfeld mit Abstimmung über Abteilungsgrenzen).\n4. Benenne die Lücken, die bewusst offen bleiben können, und warum.\n5. Prüfe zusätzlich die gültigen Standards ohne bestätigten Rechtsstand und schlage vor, in welcher Reihenfolge sie SST-REW vorgelegt werden.\n\nAusgabe: priorisierte Tabelle mit Lücke, Risikoeinschätzung, Vorschlag, Aufwand, verantwortlicher Rolle. Kein Standard wird in diesem Durchgang angelegt."
+  }
+}

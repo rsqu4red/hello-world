@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Stammdaten geändert — Auswirkungen prüfen",
+  "description": "Läuft nach jeder Änderung an Rollen, Themenfeldern, Betriebsbereichen, Schnittstellen oder Pflichtenregister. Stammdaten wirken auf das gesamte Regelwerk, deshalb wird sofort geprüft, welche Standards betroffen sind.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["daten/**/*.yaml"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Die Stammdaten wurden geändert. Arbeite als A3 Pflichten-Prüfer:\n\n1. `python3 werkzeuge/ps.py pruefen` — behebe alle FEHLER, die durch die Änderung entstanden sind.\n2. Wurde eine ID entfernt oder umbenannt, suche mit grep alle Verweise in standards/ und daten/ und stelle die Konsistenz wieder her. Erinnerung: IDs werden grundsätzlich nicht umbenannt — wenn es doch geschehen ist, weise darauf hin.\n3. `python3 werkzeuge/ps.py luecken` — benenne neu entstandene Lücken: Themenfelder ohne Standard, Pflichten ohne Standard.\n4. Prüfe bei neuen Rollen, ob `darf_a_sein` korrekt gesetzt ist: ausführende Ebenen und beratende Funktionen bekommen `false`.\n5. `python3 werkzeuge/ps.py cockpit`.\n\nBerichte kurz, was sich für das Regelwerk ändert und welche Standards nachgezogen werden müssen. Setze rechtsstand_geprueft niemals selbst auf true."
+  }
+}

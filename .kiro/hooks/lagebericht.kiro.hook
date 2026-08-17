@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Lagebericht für die Abteilungsrunde",
+  "description": "Baut das Cockpit neu und fasst die Lage in wenigen Sätzen zusammen: was hat sich verändert, was ist offen, was ist zu entscheiden.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": []
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Arbeite als A8 Cockpit-Kurator.\n\n1. `python3 werkzeuge/ps.py pruefen` — bestehen Fehler, behebe sie oder benenne sie.\n2. `python3 werkzeuge/ps.py status` und `python3 werkzeuge/ps.py cockpit`.\n3. Schau in die Git-Historie der letzten Wochen (`git log --oneline -20`), um zu erkennen, was sich seit der letzten Runde verändert hat.\n4. Schreibe einen Lagebericht für die Abteilungsrunde, höchstens eine halbe Seite:\n   - Stand in Zahlen: Standards, Aufgaben, Pflichtenabdeckung, überfällige Reviews.\n   - Was seit der letzten Runde fertig geworden ist.\n   - Was offen ist und wen es blockiert.\n   - Höchstens drei Punkte, die PS-AL entscheiden muss, jeweils mit Empfehlung.\n\nSchöne nichts. Offene Lücken sind der Arbeitsvorrat der Abteilung und gehören sichtbar in den Bericht."
+  }
+}
