@@ -20,7 +20,7 @@ import struct
 
 # ---------------------------------------------------------------- Parameter --
 
-LAENGE = 32.0           # Laenge der Manschette entlang des Drueckers
+LAENGE = 28.0           # Laenge der Manschette entlang des Drueckers
 
 # Innendurchmesser, durchgehend zylindrisch.
 # DIN 18255 normt Tuerdruecker auf 20 mm, daneben gibt es 23 mm; die
@@ -37,33 +37,25 @@ D_INNEN = 18.0
 WAND = 2.0
 BAHN = 0.4              # angenommene Extrusionsbreite, nur zur Kontrolle
 
-# Gesamthoehe ueber alles, also Rohr plus Rippe. Daraus ergibt sich, wie
-# viel Platz unter der Bohrung fuer den Knoten bleibt.
-HOEHE = 25.0
-
-RIPPE_WAND = 1.6        # Material unter der Kammer, vier Bahnen
-D_KAMMER = 10.0         # Knotenkammer
-KAMMER_LAENGE = 14.0    # gerader Teil der Kammer
+# Rippe an der Unterseite: nimmt die Knotenkammer auf und laeuft ueber die
+# volle Laenge durch. Das ist nicht nur Optik - ein durchlaufendes Profil
+# hat beim Drucken keine nach unten weisende Flaeche und braucht dadurch
+# keine Stuetzen.
+KAMMER_ACHSE = 11.0     # Abstand der Kammerachse von der Rohrachse
+D_KAMMER = 11.0         # Knotenkammer
+KAMMER_LAENGE = 10.0    # gerader Teil; mit den 45-Grad-Kegeln 21 mm gesamt,
+                        # bleiben bei 28 mm Laenge 3,5 mm Wand an beiden Enden
+RIPPE_WAND = 2.0        # Material um die Kammer herum
 
 D_SCHNUR = 5.0          # Schnurbohrung nach aussen
 VERRUNDUNG = 4.0        # weicher Uebergang Rohr zu Rippe
 
-# Abgeleitet – ueber setze_hoehe() neu berechenbar
-R_INNEN = R_AUSSEN = RIPPE_UNTEN = KAMMER_ACHSE = R_RIPPE = 0.0
-
-
-def setze_hoehe(hoehe):
-    """Gesamthoehe festlegen und alle abhaengigen Masse nachziehen."""
-    global HOEHE, R_INNEN, R_AUSSEN, RIPPE_UNTEN, KAMMER_ACHSE, R_RIPPE
-    HOEHE = hoehe
-    R_INNEN = D_INNEN / 2.0
-    R_AUSSEN = R_INNEN + WAND
-    RIPPE_UNTEN = HOEHE - R_AUSSEN             # tiefster Punkt der Rippe
-    KAMMER_ACHSE = RIPPE_UNTEN - RIPPE_WAND - D_KAMMER / 2.0
-    R_RIPPE = D_KAMMER / 2.0 + RIPPE_WAND
-
-
-setze_hoehe(HOEHE)
+# Abgeleitet
+R_INNEN = D_INNEN / 2.0
+R_AUSSEN = R_INNEN + WAND
+R_RIPPE = D_KAMMER / 2.0 + RIPPE_WAND
+RIPPE_UNTEN = KAMMER_ACHSE + R_RIPPE           # tiefster Punkt der Rippe
+HOEHE = R_AUSSEN + RIPPE_UNTEN                 # Gesamthoehe ueber alles
 
 RASTER = 0.42           # Kantenlaenge der Gitterzelle
 DATEI = "tuerzwerg-manschette.stl"
@@ -300,56 +292,41 @@ def knotenfreiraum(d_druecker):
     auf halbem Drueckerdurchmesser. Alles darunter bis zur Kammerunterseite
     steht dem Knoten zur Verfuegung.
     """
-    return RIPPE_UNTEN - RIPPE_WAND - d_druecker / 2.0
+    return KAMMER_ACHSE + D_KAMMER / 2.0 - d_druecker / 2.0
 
 
-def knotenfreiraum(d_druecker):
-    """Radialer Platz, der dem Knoten unter einem Druecker bleibt.
-
-    Die Bohrung wird vom Druecker aufgeweitet, seine Oberflaeche liegt also
-    auf halbem Drueckerdurchmesser. Alles darunter bis zur Kammerunterseite
-    steht dem Knoten zur Verfuegung. Ein Knoten in 4-mm-Schnur braucht rund
-    9 mm, in 3-mm-Schnur rund 7.
-    """
-    return RIPPE_UNTEN - RIPPE_WAND - d_druecker / 2.0
-
-
-AUSFUEHRUNGEN = [
-    (25.0, "tuerzwerg-manschette.stl", "so bestellt"),
-    (30.0, "tuerzwerg-manschette-30.stl", "Knoten liegt frei"),
-]
-
-
-def bauen(hoehe, datei):
-    setze_hoehe(hoehe)
+if __name__ == "__main__":
     grenzen = ((-R_AUSSEN - 2, R_AUSSEN + 2),
                (-RIPPE_UNTEN - 2, R_AUSSEN + 2),
                (-1.5, LAENGE + 1.5))
+
+    print("Vernetze ...")
     tri = vernetzen(grenzen, RASTER)
+
     vol = volumen(tri)
     if vol < 0:                       # Wicklung global umdrehen
         tri = [(a, c, b) for a, b, c in tri]
         vol = -vol
-    schreibe_stl(tri, datei, "Tuerzwerg Manschette - Masse in mm")
-    return tri, vol
 
+    schreibe_stl(tri, DATEI, "Tuerzwerg Manschette - Masse in mm")
+    anteil, grad, flaeche = ueberhang(tri)
 
-if __name__ == "__main__":
-    for hoehe, datei, notiz in AUSFUEHRUNGEN:
-        print(f"\n=== {hoehe:.0f} mm hoch – {notiz} ===")
-        tri, vol = bauen(hoehe, datei)
-        anteil, grad, flaeche = ueberhang(tri)
-        print(f"  Datei          {datei}")
-        print(f"  Dreiecke       {len(tri)}")
-        print(f"  Offene Kanten  {offene_kanten(tri)}")
-        print(f"  Volumen        {vol/1000:.2f} cm^3  ({vol/1000*1.15:.1f} g Silikon)")
-        print(f"  Abmessungen    {2*R_AUSSEN:.1f} breit x {HOEHE:.1f} hoch x "
-              f"{LAENGE:.0f} lang")
-        print(f"  Ueberhang      {anteil:.2f} % ueber 45 Grad")
-        frei = [knotenfreiraum(d) for d in (18.0, 20.0, 23.0)]
-        print(f"  Knotenfreiraum {frei[0]:.1f} / {frei[1]:.1f} / {frei[2]:.1f} mm "
-              f"bei Druecker 18 / 20 / 23 mm")
-
-    print("\nWand %.1f mm = %d Bahnen zu %.1f mm, Rippenwand %.1f mm = %d Bahnen"
-          % (WAND, round(WAND / BAHN), BAHN, RIPPE_WAND, round(RIPPE_WAND / BAHN)))
-    print("Bohrung %.1f mm durchgehend zylindrisch" % D_INNEN)
+    print(f"\nDatei          {DATEI}")
+    print(f"Dreiecke       {len(tri)}")
+    print(f"Offene Kanten  {offene_kanten(tri)}  (0 = geschlossenes Volumen)")
+    print(f"Volumen        {vol/1000:.2f} cm^3   ({vol/1000*1.15:.1f} g Silikon)")
+    print(f"Abmessungen    {2*R_AUSSEN:.1f} breit x {HOEHE:.1f} hoch x "
+          f"{LAENGE:.0f} lang")
+    print(f"Innen          {D_INNEN:.1f} mm durchgehend zylindrisch")
+    print(f"Wand           {WAND:.1f} mm = {WAND/BAHN:.0f} Bahnen zu {BAHN} mm")
+    print(f"Rippenwand     {RIPPE_WAND:.1f} mm = {RIPPE_WAND/BAHN:.0f} Bahnen")
+    print(f"Kammer         {D_KAMMER:.1f} x {KAMMER_LAENGE:.0f} mm, "
+          f"Schnurbohrung {D_SCHNUR:.1f} mm")
+    print(f"Oberflaeche    {flaeche/100:.1f} cm^2")
+    print(f"Ueberhang      {anteil:.2f} % der Flaeche ueber 45 Grad")
+    print()
+    print("Platz fuer den Knoten unter dem Druecker:")
+    for d in (18.0, 20.0, 23.0):
+        f = knotenfreiraum(d)
+        print(f"  Druecker {d:4.1f} mm  ->  {f:4.1f} mm")
+    print("  Ein Knoten in 3-mm-Schnur braucht rund 7 mm, in 4-mm-Schnur rund 9.")
