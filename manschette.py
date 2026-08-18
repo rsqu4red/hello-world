@@ -22,38 +22,54 @@ import struct
 
 LAENGE = 32.0           # Laenge der Manschette entlang des Drueckers
 
-# Innendurchmesser. Konisch, damit sich die Manschette beim Ziehen selbst
-# verkeilt und einen Bereich von Drueckerstaerken abdeckt.
-# DIN 18255 normt Tuerdruecker auf 20 mm, es gibt Ausfuehrungen mit 23 mm,
-# und viele Druecker verjuengen sich zum Ende hin. Beide Werte liegen
-# bewusst unter dem Drueckermass: Silikon soll sich aufspannen.
-D_INNEN_VORN = 18.0     # am Drueckerende, hier wird aufgeschoben
-D_INNEN_HINTEN = 20.5   # zur Rosette hin
+# Innendurchmesser, durchgehend zylindrisch.
+# DIN 18255 normt Tuerdruecker auf 20 mm, daneben gibt es 23 mm; die
+# Barrierefreiheitsnormen fordern mindestens 19 mm. 18 mm sind also kein
+# Passmass, sondern rund 11 Prozent Untermass - genau das soll eine
+# Silikonmanschette haben, damit sie sich aufspannt.
+D_INNEN = 18.0
 
-WAND = 2.0              # Wandstaerke des Rohrs
+# Wandstaerke. 2,0 mm sind beim Drucken genau fuenf Bahnen einer 0,4-mm-Duese.
+# Krumme Vielfache sind bei TPU der haeufigste Grund fuer poroese Waende:
+# der Slicer laesst dann zwischen den Bahnen eine Luecke, die er mit
+# Lueckenfuellung zu schliessen versucht, was bei weichem Filament schlecht
+# haelt.
+WAND = 2.0
+BAHN = 0.4              # angenommene Extrusionsbreite, nur zur Kontrolle
 
-# Rippe an der Unterseite: nimmt die Knotenkammer auf und laeuft ueber die
-# volle Laenge durch. Das ist nicht nur Optik – ein durchlaufendes Profil
-# hat beim Drucken keine nach unten weisende Flaeche und braucht dadurch
-# keine Stuetzen.
-KAMMER_ACHSE = 11.0     # Abstand der Kammerachse von der Rohrachse
-D_KAMMER = 11.0         # Knotenkammer
+# Gesamthoehe ueber alles, also Rohr plus Rippe. Daraus ergibt sich, wie
+# viel Platz unter der Bohrung fuer den Knoten bleibt.
+HOEHE = 25.0
+
+RIPPE_WAND = 1.6        # Material unter der Kammer, vier Bahnen
+D_KAMMER = 10.0         # Knotenkammer
 KAMMER_LAENGE = 14.0    # gerader Teil der Kammer
-RIPPE_WAND = 2.0        # Material um die Kammer herum
 
 D_SCHNUR = 5.0          # Schnurbohrung nach aussen
 VERRUNDUNG = 4.0        # weicher Uebergang Rohr zu Rippe
+
+# Abgeleitet – ueber setze_hoehe() neu berechenbar
+R_INNEN = R_AUSSEN = RIPPE_UNTEN = KAMMER_ACHSE = R_RIPPE = 0.0
+
+
+def setze_hoehe(hoehe):
+    """Gesamthoehe festlegen und alle abhaengigen Masse nachziehen."""
+    global HOEHE, R_INNEN, R_AUSSEN, RIPPE_UNTEN, KAMMER_ACHSE, R_RIPPE
+    HOEHE = hoehe
+    R_INNEN = D_INNEN / 2.0
+    R_AUSSEN = R_INNEN + WAND
+    RIPPE_UNTEN = HOEHE - R_AUSSEN             # tiefster Punkt der Rippe
+    KAMMER_ACHSE = RIPPE_UNTEN - RIPPE_WAND - D_KAMMER / 2.0
+    R_RIPPE = D_KAMMER / 2.0 + RIPPE_WAND
+
+
+setze_hoehe(HOEHE)
 
 RASTER = 0.42           # Kantenlaenge der Gitterzelle
 DATEI = "tuerzwerg-manschette.stl"
 
 
 # ------------------------------------------------------------- Distanzfeld ---
-
-def _innen_radius(z):
-    t = min(max(z / LAENGE, 0.0), 1.0)
-    return (D_INNEN_VORN + (D_INNEN_HINTEN - D_INNEN_VORN) * t) / 2.0
-
 
 def _weich_vereinen(a, b, k):
     """Vereinigung mit weichem Uebergang statt scharfer Kante."""
@@ -65,20 +81,15 @@ def feld(x, y, z):
     """Signierter Abstand. Negativ bedeutet Material."""
     r = math.hypot(x, y)
 
-    # Rohr, aussen
-    rohr = r - (_innen_radius(z) + WAND)
-
-    # Rippe: liegender Zylinder entlang der Achse, unter dem Rohr
-    rippe = math.hypot(x, y + KAMMER_ACHSE) - (D_KAMMER / 2.0 + RIPPE_WAND)
-
+    rohr = r - R_AUSSEN
+    rippe = math.hypot(x, y + KAMMER_ACHSE) - R_RIPPE
     koerper = _weich_vereinen(rohr, rippe, VERRUNDUNG)
     koerper = max(koerper, z - LAENGE, -z)          # Stirnflaechen
 
-    # Durchgangsbohrung fuer den Druecker
-    bohrung = r - _innen_radius(z)
+    bohrung = r - R_INNEN
 
     # Knotenkammer: Zylinder entlang der Achse, oben zur Bohrung hin offen.
-    # Die Enden laufen als 45-Grad-Kegel aus statt als Kugelkappen – eine
+    # Die Enden laufen als 45-Grad-Kegel aus statt als Kugelkappen - eine
     # Kappe waere beim Drucken eine nach unten weisende Decke, ein Kegel
     # traegt sich selbst.
     rk = math.hypot(x, y + KAMMER_ACHSE)
@@ -86,8 +97,15 @@ def feld(x, y, z):
     z_b = LAENGE / 2.0 + KAMMER_LAENGE / 2.0 + D_KAMMER / 2.0
     kammer = max(rk - D_KAMMER / 2.0, rk - (z - z_a), rk - (z_b - z))
 
-    # Schnurbohrung: von aussen unten in die Kammer
-    schnur = math.hypot(x, z - LAENGE / 2.0) - D_SCHNUR / 2.0
+    # Schnurbohrung als Traenenform: unten ein Kreis, nach oben ein Dach mit
+    # 45 Grad. Gedruckt wird stehend, das Loch liegt also waagerecht - ein
+    # runder Querschnitt braeuchte oben eine Bruecke, die Traenenform traegt
+    # sich selbst. Fuer das spaetere Silikonteil ist das ohne Belang.
+    rs = D_SCHNUR / 2.0
+    zc = LAENGE / 2.0
+    kreis = math.hypot(x, z - zc) - rs
+    dach = max(abs(x) - (zc + rs * 1.4142 - z), zc - z)
+    schnur = min(kreis, dach)
     schnur = max(schnur, y + KAMMER_ACHSE)          # endet in der Kammer
 
     return max(koerper, -bohrung, -kammer, -schnur)
@@ -275,34 +293,63 @@ def schreibe_stl(tri, pfad, titel):
             f.write(struct.pack("<H", 0))
 
 
-if __name__ == "__main__":
-    r_aussen = D_INNEN_HINTEN / 2.0 + WAND
-    r_rippe = D_KAMMER / 2.0 + RIPPE_WAND
-    grenzen = ((-r_aussen - 2, r_aussen + 2),
-               (-KAMMER_ACHSE - r_rippe - 2, r_aussen + 2),
+def knotenfreiraum(d_druecker):
+    """Radialer Platz, der dem Knoten unter einem Druecker bleibt.
+
+    Die Bohrung wird vom Druecker aufgeweitet, seine Oberflaeche liegt also
+    auf halbem Drueckerdurchmesser. Alles darunter bis zur Kammerunterseite
+    steht dem Knoten zur Verfuegung.
+    """
+    return RIPPE_UNTEN - RIPPE_WAND - d_druecker / 2.0
+
+
+def knotenfreiraum(d_druecker):
+    """Radialer Platz, der dem Knoten unter einem Druecker bleibt.
+
+    Die Bohrung wird vom Druecker aufgeweitet, seine Oberflaeche liegt also
+    auf halbem Drueckerdurchmesser. Alles darunter bis zur Kammerunterseite
+    steht dem Knoten zur Verfuegung. Ein Knoten in 4-mm-Schnur braucht rund
+    9 mm, in 3-mm-Schnur rund 7.
+    """
+    return RIPPE_UNTEN - RIPPE_WAND - d_druecker / 2.0
+
+
+AUSFUEHRUNGEN = [
+    (25.0, "tuerzwerg-manschette.stl", "so bestellt"),
+    (30.0, "tuerzwerg-manschette-30.stl", "Knoten liegt frei"),
+]
+
+
+def bauen(hoehe, datei):
+    setze_hoehe(hoehe)
+    grenzen = ((-R_AUSSEN - 2, R_AUSSEN + 2),
+               (-RIPPE_UNTEN - 2, R_AUSSEN + 2),
                (-1.5, LAENGE + 1.5))
-
-    print("Vernetze ...")
     tri = vernetzen(grenzen, RASTER)
-
     vol = volumen(tri)
     if vol < 0:                       # Wicklung global umdrehen
         tri = [(a, c, b) for a, b, c in tri]
         vol = -vol
+    schreibe_stl(tri, datei, "Tuerzwerg Manschette - Masse in mm")
+    return tri, vol
 
-    schreibe_stl(tri, DATEI, "Tuerzwerg Manschette - Masse in mm")
 
-    hoehe = KAMMER_ACHSE + r_rippe + r_aussen
-    print(f"\nDatei          {DATEI}")
-    print(f"Dreiecke       {len(tri)}")
-    print(f"Offene Kanten  {offene_kanten(tri)}  (0 = geschlossenes Volumen)")
-    print(f"Volumen        {vol/1000:.2f} cm^3   ({vol/1000*1.15:.1f} g Silikon)")
-    print(f"Abmessungen    {2*r_aussen:.1f} x {hoehe:.1f} x {LAENGE:.0f} mm")
-    print(f"Innen          {D_INNEN_VORN:.1f} mm vorn, {D_INNEN_HINTEN:.1f} mm hinten")
-    print(f"Wand           {WAND:.1f} mm")
-    print(f"Kammer         {D_KAMMER:.1f} x {KAMMER_LAENGE:.0f} mm, "
-          f"Schnurbohrung {D_SCHNUR:.1f} mm")
-    anteil, grad, flaeche = ueberhang(tri)
-    print(f"Oberflaeche    {flaeche/100:.1f} cm^2")
-    print(f"Ueberhang      {anteil:.2f} % der Flaeche ueber 45 Grad "
-          f"(steilste Stelle {grad:.0f} Grad)")
+if __name__ == "__main__":
+    for hoehe, datei, notiz in AUSFUEHRUNGEN:
+        print(f"\n=== {hoehe:.0f} mm hoch – {notiz} ===")
+        tri, vol = bauen(hoehe, datei)
+        anteil, grad, flaeche = ueberhang(tri)
+        print(f"  Datei          {datei}")
+        print(f"  Dreiecke       {len(tri)}")
+        print(f"  Offene Kanten  {offene_kanten(tri)}")
+        print(f"  Volumen        {vol/1000:.2f} cm^3  ({vol/1000*1.15:.1f} g Silikon)")
+        print(f"  Abmessungen    {2*R_AUSSEN:.1f} breit x {HOEHE:.1f} hoch x "
+              f"{LAENGE:.0f} lang")
+        print(f"  Ueberhang      {anteil:.2f} % ueber 45 Grad")
+        frei = [knotenfreiraum(d) for d in (18.0, 20.0, 23.0)]
+        print(f"  Knotenfreiraum {frei[0]:.1f} / {frei[1]:.1f} / {frei[2]:.1f} mm "
+              f"bei Druecker 18 / 20 / 23 mm")
+
+    print("\nWand %.1f mm = %d Bahnen zu %.1f mm, Rippenwand %.1f mm = %d Bahnen"
+          % (WAND, round(WAND / BAHN), BAHN, RIPPE_WAND, round(RIPPE_WAND / BAHN)))
+    print("Bohrung %.1f mm durchgehend zylindrisch" % D_INNEN)
