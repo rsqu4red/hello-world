@@ -47,8 +47,19 @@ KAMMER_LAENGE = 10.0    # gerader Teil; mit den 45-Grad-Kegeln 21 mm gesamt,
                         # bleiben bei 28 mm Laenge 3,5 mm Wand an beiden Enden
 RIPPE_WAND = 2.0        # Material um die Kammer herum
 
-D_SCHNUR = 5.0          # Schnurbohrung nach aussen
+D_SCHNUR = 5.0          # Schnurbohrung nach aussen, rund
 VERRUNDUNG = 4.0        # weicher Uebergang Rohr zu Rippe
+
+# Verrundung der Stirnkanten. Eine scharfe Kante laesst sich mit einem
+# Gittervernetzer nicht sauber abbilden - sie faellt zwangslaeufig treppig
+# aus, weil die Flaeche die Zellen schraeg durchlaeuft. Ein Radius von gut
+# einer Zellbreite loest das, und an einer Silikonmanschette ist eine
+# verrundete Kante ohnehin besser als eine scharfe Lippe.
+KANTE = 1.2
+
+# Anfasung der Bohrung an beiden Enden, damit sich die Manschette leichter
+# auf den Druecker schieben laesst.
+EINLAUF = 1.0
 
 # Abgeleitet
 R_INNEN = D_INNEN / 2.0
@@ -57,7 +68,7 @@ R_RIPPE = D_KAMMER / 2.0 + RIPPE_WAND
 RIPPE_UNTEN = KAMMER_ACHSE + R_RIPPE           # tiefster Punkt der Rippe
 HOEHE = R_AUSSEN + RIPPE_UNTEN                 # Gesamthoehe ueber alles
 
-RASTER = 0.42           # Kantenlaenge der Gitterzelle
+RASTER = 0.36           # Kantenlaenge der Gitterzelle
 DATEI = "tuerzwerg-manschette.stl"
 
 
@@ -69,16 +80,32 @@ def _weich_vereinen(a, b, k):
     return b + (a - b) * h - k * h * (1.0 - h)
 
 
+def _weich_abziehen(a, b, k):
+    """a minus b, mit verrundeter Innenkante statt scharfer Kerbe."""
+    return -_weich_vereinen(-a, b, k)
+
+
 def feld(x, y, z):
     """Signierter Abstand. Negativ bedeutet Material."""
     r = math.hypot(x, y)
 
-    rohr = r - R_AUSSEN
-    rippe = math.hypot(x, y + KAMMER_ACHSE) - R_RIPPE
-    koerper = _weich_vereinen(rohr, rippe, VERRUNDUNG)
-    koerper = max(koerper, z - LAENGE, -z)          # Stirnflaechen
+    # Querschnitt: Rohr und Rippe, weich vereinigt. Haengt nicht von z ab.
+    profil = _weich_vereinen(r - R_AUSSEN,
+                             math.hypot(x, y + KAMMER_ACHSE) - R_RIPPE,
+                             VERRUNDUNG)
 
-    bohrung = r - R_INNEN
+    # Gerundete Extrusion: das Profil wird um KANTE geschrumpft, in z um
+    # KANTE gekuerzt und der Koerper anschliessend wieder um KANTE
+    # aufgedickt. Das ergibt an beiden Stirnkanten exakt einen Viertelkreis
+    # statt einer scharfen Ecke.
+    wq = profil + KANTE
+    wz = abs(z - LAENGE / 2.0) - (LAENGE / 2.0 - KANTE)
+    koerper = (min(max(wq, wz), 0.0)
+               + math.hypot(max(wq, 0.0), max(wz, 0.0)) - KANTE)
+
+    # Durchgangsbohrung, an beiden Enden mit 45-Grad-Einlauf aufgeweitet
+    rand = min(z, LAENGE - z)
+    bohrung = r - (R_INNEN + max(0.0, EINLAUF - rand))
 
     # Knotenkammer: Zylinder entlang der Achse, oben zur Bohrung hin offen.
     # Die Enden laufen als 45-Grad-Kegel aus statt als Kugelkappen - eine
@@ -89,18 +116,19 @@ def feld(x, y, z):
     z_b = LAENGE / 2.0 + KAMMER_LAENGE / 2.0 + D_KAMMER / 2.0
     kammer = max(rk - D_KAMMER / 2.0, rk - (z - z_a), rk - (z_b - z))
 
-    # Schnurbohrung als Traenenform: unten ein Kreis, nach oben ein Dach mit
-    # 45 Grad. Gedruckt wird stehend, das Loch liegt also waagerecht - ein
-    # runder Querschnitt braeuchte oben eine Bruecke, die Traenenform traegt
-    # sich selbst. Fuer das spaetere Silikonteil ist das ohne Belang.
-    rs = D_SCHNUR / 2.0
-    zc = LAENGE / 2.0
-    kreis = math.hypot(x, z - zc) - rs
-    dach = max(abs(x) - (zc + rs * 1.4142 - z), zc - z)
-    schnur = min(kreis, dach)
+    # Schnurbohrung, rund
+    schnur = math.hypot(x, z - LAENGE / 2.0) - D_SCHNUR / 2.0
     schnur = max(schnur, y + KAMMER_ACHSE)          # endet in der Kammer
 
-    return max(koerper, -bohrung, -kammer, -schnur)
+    # Bohrung scharf abziehen - sie ist eine Funktionsflaeche. Kammer und
+    # Schnurkanal dagegen weich: Dort, wo die Kammer in die Bohrung
+    # durchbricht, entstuende sonst eine scharfe Innenkante. Die ist am
+    # Silikonteil eine Kerbe genau an der Stelle, an der der Knoten zieht -
+    # und ein Gittervernetzer bildet sie ohnehin nur ungenau ab.
+    d = max(koerper, -bohrung)
+    d = _weich_abziehen(d, kammer, 0.8)
+    d = _weich_abziehen(d, schnur, 0.6)
+    return d
 
 
 # ----------------------------------------------------- Marching Tetrahedra ---
@@ -264,6 +292,22 @@ def ueberhang(tri):
     return schlimm / gesamt * 100.0, grad_max, gesamt
 
 
+def abweichung(tri, stichprobe=6000):
+    """Wie weit liegen die Dreiecke von der wirklichen Flaeche entfernt?
+
+    Gemessen wird der Feldwert im Schwerpunkt jedes Dreiecks; auf der
+    Flaeche muesste er null sein. Das trennt die beiden Ursachen von
+    Kantigkeit: sichtbare Facetten bei kleiner Abweichung sind eine reine
+    Darstellungssache, grosse Abweichungen waeren ein echter Formfehler.
+    """
+    schritt = max(1, len(tri) // stichprobe)
+    werte = []
+    for t in tri[::schritt]:
+        c = tuple(sum(p[n] for p in t) / 3.0 for n in range(3))
+        werte.append(abs(feld(*c)))
+    return max(werte), sum(werte) / len(werte)
+
+
 def _normale(p, q, r):
     u = [q[n] - p[n] for n in range(3)]
     v = [r[n] - p[n] for n in range(3)]
@@ -324,6 +368,10 @@ if __name__ == "__main__":
           f"Schnurbohrung {D_SCHNUR:.1f} mm")
     print(f"Oberflaeche    {flaeche/100:.1f} cm^2")
     print(f"Ueberhang      {anteil:.2f} % der Flaeche ueber 45 Grad")
+    ab_max, ab_mit = abweichung(tri)
+    print(f"Formtreue      hoechstens {ab_max*1000:.0f} um von der Sollflaeche "
+          f"entfernt, im Mittel {ab_mit*1000:.0f} um")
+    print(f"Facettengroesse ca. {RASTER:.2f} mm")
     print()
     print("Platz fuer den Knoten unter dem Druecker:")
     for d in (18.0, 20.0, 23.0):
