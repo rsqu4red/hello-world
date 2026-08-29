@@ -469,19 +469,22 @@ ohne_woelbung(
     "Gerade Verjuengung, rein geometrisch.")
 
 
-# T4 - Die Kehle: gerader Schaft, knapp eingezogene Hohlkehle, dann der Bauch.
-# Der Schaft laeuft mit 17 mm durch bis h = 44 und wird bis h = 48 auf 15 mm
-# eingezogen. Beide Segmente an der Kehle laufen waagerecht aus, das Minimum
-# ist also gerundet und nicht geknickt. Von dort eine einzige Smoothstep-Kurve
-# bis in den Bauch - ohne Zwischenstuetzpunkt, damit die Flanke nirgends
-# aufflacht und wieder anzieht.
+# T4 - Die Kehle, Rev. B: gerader Schaft, langer Zug in die Kehle, dann Bauch.
+# Der Schaft steht 7 mm lang mit 17 mm unter der Kuppe und zieht sich von dort
+# ueber 30 mm auf 13,5 mm ein. Der Einzug betraegt nur 3,5 mm Durchmesser auf
+# 30 mm Hoehe - die steilste Stelle liegt bei 5 Grad aus der Senkrechten, in
+# Rev. A waren es 14 Grad auf 4 mm Hoehe.
+#
+# Die Kehle sitzt damit nicht mehr symmetrisch: 30 mm Zug von oben gegen 20 mm
+# Aufweitung nach unten. Diese Asymmetrie gibt der Taille eine Richtung, statt
+# sie als Kerbe zwischen zwei gleichen Flanken stehen zu lassen.
 ohne_woelbung(
     "kehle", "Die Kehle", "tuerzwerg-griff-kehle.stl",
     [(0.0, KRONE_R, KRONE_R, "lin"),
      (11.0, 8.5, 8.5, "kuppe"),
-     (44.0, 8.5, 8.5, "lin"),
-     (48.0, 7.5, 7.5, "smooth")],
-    "Gerader Schaft, gerundete Hohlkehle, fliessend in den Bauch.")
+     (18.0, 8.5, 8.5, "lin"),
+     (48.0, 6.75, 6.75, "smooth")],
+    "Gerader Schaft, langer Zug in die Kehle, fliessend in den Bauch.")
 
 
 # 3 - Der Taler: flache Scheibe
