@@ -469,6 +469,21 @@ ohne_woelbung(
     "Gerade Verjuengung, rein geometrisch.")
 
 
+# T4 - Die Kehle: gerader Schaft, knapp eingezogene Hohlkehle, dann der Bauch.
+# Der Schaft laeuft mit 17 mm durch bis h = 44 und wird bis h = 48 auf 15 mm
+# eingezogen. Beide Segmente an der Kehle laufen waagerecht aus, das Minimum
+# ist also gerundet und nicht geknickt. Von dort eine einzige Smoothstep-Kurve
+# bis in den Bauch - ohne Zwischenstuetzpunkt, damit die Flanke nirgends
+# aufflacht und wieder anzieht.
+ohne_woelbung(
+    "kehle", "Die Kehle", "tuerzwerg-griff-kehle.stl",
+    [(0.0, KRONE_R, KRONE_R, "lin"),
+     (11.0, 8.5, 8.5, "kuppe"),
+     (44.0, 8.5, 8.5, "lin"),
+     (48.0, 7.5, 7.5, "smooth")],
+    "Gerader Schaft, gerundete Hohlkehle, fliessend in den Bauch.")
+
+
 # 3 - Der Taler: flache Scheibe
 variante(
     "taler", "Der Taler", "tuerzwerg-griff-taler.stl",
