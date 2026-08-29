@@ -428,7 +428,48 @@ variante(
     notiz="Kleiner Kopf, Hals als Griff, plumper Rumpf – kompakteste Tierform.")
 
 
-# 3 – Der Taler: flache Scheibe
+# ---- Ohne Mittelwoelbung ----------------------------------------------------
+# Rueckmeldung zum gedruckten Drechsel: Gegriffen wird der grosse runde
+# Unterteil, nicht der Schaft. Die Schulter bei Hoehe 38 und der Hals
+# darunter - die klassische Drechsel-Gliederung - haben damit keine Aufgabe
+# und wirken altbacken. Alle drei folgenden Entwuerfe lassen den Bauch und
+# die Standflaeche unveraendert und ersetzen nur alles darueber durch eine
+# ruhige, ungegliederte Form.
+
+def ohne_woelbung(name, titel, datei, oben, notiz):
+    variante(
+        name, titel, datei,
+        Profil(oben + [(68.0, 18.0, 18.0, "smooth"),
+                       (90.0, 11.0, 11.0, "cap")]),
+        Bohrung(d_kammer=12.0, h_kammer=72.0, hoehe=90.0, kopf="kuppe"),
+        n_quer=2.0, griff=(36.0, 36.0), notiz=notiz)
+
+
+# T1 - Der Tropfen: eine einzige Kurve vom schlanken Kopf bis in den Bauch.
+ohne_woelbung(
+    "tropfen", "Der Tropfen", "tuerzwerg-griff-tropfen.stl",
+    [(0.0, KRONE_R, KRONE_R, "lin"),
+     (10.0, 6.5, 6.5, "kuppe")],
+    "Eine durchgehende Kurve, keine Absaetze.")
+
+# T2 - Stiel und Kugel: gerader Stiel, dann zuegig in die Kugel.
+ohne_woelbung(
+    "stiel", "Stiel und Kugel", "tuerzwerg-griff-stiel.stl",
+    [(0.0, KRONE_R, KRONE_R, "lin"),
+     (9.0, 6.0, 6.0, "kuppe"),
+     (44.0, 6.0, 6.0, "lin")],
+    "Schlanker Stiel, klar abgesetzt von der Kugel.")
+
+# T3 - Der Kegel: gerade Linie vom Kopf bis kurz vor den Bauch.
+ohne_woelbung(
+    "kegel", "Der Kegel", "tuerzwerg-griff-kegel.stl",
+    [(0.0, KRONE_R, KRONE_R, "lin"),
+     (9.0, 6.0, 6.0, "kuppe"),
+     (58.0, 15.5, 15.5, "lin")],
+    "Gerade Verjuengung, rein geometrisch.")
+
+
+# 3 - Der Taler: flache Scheibe
 variante(
     "taler", "Der Taler", "tuerzwerg-griff-taler.stl",
     Profil([
