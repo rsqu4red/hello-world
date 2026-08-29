@@ -59,8 +59,23 @@ def _schnitt(pa, da, pb, db, ia, ib):
             pa[2] + (pb[2] - pa[2]) * t)
 
 
+# Versatz des Gitters gegen die Bauteilmasse, als Bruchteil der Zellbreite.
+#
+# Glatte Masse fallen sonst genau auf Gitterebenen: eine Kammerdecke bei
+# 4,5 mm liegt bei 0,45 mm Raster exakt auf der zehnten Ebene. Die Flaeche
+# laeuft dann durch die Stuetzpunkte statt zwischen ihnen, die Tetraeder
+# liefern flaechenlose Dreiecke, und Kanten bekommen vier, sechs oder mehr
+# Dreiecke statt zwei - das Netz ist nicht mehr mannigfaltig. Ein unrunder
+# Bruchteil schliesst das fuer alle vernuenftigen Masse aus. Die Form aendert
+# sich dadurch nicht, nur die Lage der Facetten.
+VERSATZ = 0.137
+
+
 def vernetzen(feld, grenzen, raster):
     (x0, x1), (y0, y1), (z0, z1) = grenzen
+    x0 += VERSATZ * raster
+    y0 += VERSATZ * raster
+    z0 += VERSATZ * raster
     nx = int((x1 - x0) / raster) + 2
     ny = int((y1 - y0) / raster) + 2
     nz = int((z1 - z0) / raster) + 2
