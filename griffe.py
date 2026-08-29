@@ -469,11 +469,11 @@ ohne_woelbung(
     "Gerade Verjuengung, rein geometrisch.")
 
 
-# T4 - Die Kehle, Rev. D: gerader Schaft, 12 mm Zug in die Kehle, dann Bauch.
-# Der Schaft steht 25 mm lang mit 16 mm unter der Kuppe und zieht sich ab
-# h = 36 auf 13,5 mm ein. Der Einzug betraegt damit nur noch 2,5 statt 3,5 mm
-# Durchmesser, die steilste Flanke faellt von 12,3 auf 8,9 Grad - der Zug wird
-# also weicher, ohne dass er laenger werden muss.
+# T4 - Die Kehle, Rev. E: gerader Schaft, 12 mm Zug in die Kehle, dann Bauch.
+# Der Schaft steht 25 mm lang mit 15 mm unter der Kuppe und zieht sich ab
+# h = 36 auf 13 mm ein. Der Einzug betraegt damit nur noch 2 mm Durchmesser,
+# die steilste Flanke faellt auf 7,1 Grad - Rev. C hatte bei gleicher Zuglaenge
+# noch 12,3 Grad.
 #
 # Die Kehle sitzt asymmetrisch: 12 mm Zug von oben gegen 20 mm Aufweitung nach
 # unten. Der Zug ist der kuerzere der beiden Aeste, die Taille zieht also
@@ -481,9 +481,9 @@ ohne_woelbung(
 ohne_woelbung(
     "kehle", "Die Kehle", "tuerzwerg-griff-kehle.stl",
     [(0.0, KRONE_R, KRONE_R, "lin"),
-     (11.0, 8.0, 8.0, "kuppe"),
-     (36.0, 8.0, 8.0, "lin"),
-     (48.0, 6.75, 6.75, "smooth")],
+     (11.0, 7.5, 7.5, "kuppe"),
+     (36.0, 7.5, 7.5, "lin"),
+     (48.0, 6.5, 6.5, "smooth")],
     "Gerader Schaft, 12 mm Zug in die Kehle, fliessend in den Bauch.")
 
 
