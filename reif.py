@@ -46,7 +46,8 @@ class Reif:
 
     def __init__(self, name, titel, datei, r_aussen, dicke,
                  b_oben, b_seite, b_unten, bohr_tiefe, b_kammer, notiz,
-                 fase_z=3.0, a_kammer=5.5, mulde_r=0.0, mulde_t=0.0):
+                 fase_z=3.0, a_kammer=5.5, mulde_r=0.0, mulde_t=0.0,
+                 kante=None):
         self.name, self.titel, self.datei = name, titel, datei
         self.r_aussen, self.dicke = r_aussen, dicke
         self.b_oben, self.b_seite, self.b_unten = b_oben, b_seite, b_unten
@@ -60,6 +61,7 @@ class Reif:
         # auf der vollen Breite. Bleibt stehen, damit Rev. C reproduzierbar
         # ist; fuer neue Varianten nicht verwenden.
         self.mulde_r, self.mulde_t = mulde_r, mulde_t
+        self.kante = KANTE if kante is None else kante
 
         # Bandbreite ueber dem Umfangswinkel als Kosinusreihe. Sie trifft die
         # drei Vorgaben exakt und ist ueberall knickfrei - es gibt keine
@@ -141,8 +143,9 @@ class Reif:
 
         # Geschrumpftes Achteck, danach wieder aufgedickt: das verrundet alle
         # Ecken mit genau KANTE, ohne dass die Fasen ihren Winkel aendern.
-        koerper = _achteck(u, zz, a - KANTE, self.halb - KANTE,
-                           self._g(a) - KANTE) - KANTE
+        K = self.kante
+        koerper = _achteck(u, zz, a - K, self.halb - K,
+                           self._g(a) - K) - K
 
         # Hohlkehle an der Innenkante: eine Scheibe, die von innen in den
         # Querschnitt hineinragt. Ihr Mittelpunkt liegt so weit aussen, dass
@@ -264,7 +267,28 @@ REV_D = Reif("d", "Der Reif · Rev. D", "tuerzwerg-griff-reif.stl",
              bohr_tiefe=7.0, b_kammer=3.6, fase_z=2.5, a_kammer=6.0,
              notiz="Wie Rev. C, ohne die Hohlkehle.")
 
-VARIANTEN = [REV_A, REV_B, REV_C, REV_D]
+# Rev. E - dieselbe Geometrie wie Rev. D, aber fuer Silikon Shore A 80
+# statt fuer den Druck ausgelegt.
+#
+# Zwei Aenderungen, beide werkstoffbedingt. Die 40-Grad-Fasen gab es nur,
+# weil flach gedruckt wird; im Werkzeug bringen sie nichts. Und der
+# Kantenradius steigt von 1,0 auf 2,5 mm - Silikon reisst an kleinen Radien
+# weiter, und der Querschnitt wird dadurch fast zum Oval, was zugleich die
+# angenehmere Auflage fuer die Finger ist.
+#
+# Aufweitung bei 17 N Betaetigungskraft: 3,9 mm. Bei 80 N sind es 18 mm,
+# die vollstaendig zurueckfedern. Das laesst sich nicht sinnvoll
+# verbessern - die Oeffnung soll 62 mm bleiben, mit dem Band waechst also
+# der Aussendurchmesser, und die Aufweitung geht mit dessen dritter Potenz.
+REV_E = Reif("e", "Der Reif · Rev. E · Silikon A 80",
+             "tuerzwerg-griff-reif-silikon.stl",
+             r_aussen=43.0, dicke=11.0,
+             b_oben=23.0, b_seite=11.0, b_unten=15.0,
+             bohr_tiefe=7.0, b_kammer=3.6, fase_z=2.5, a_kammer=6.0,
+             kante=2.5,
+             notiz="Fuer Silikonguss: keine Druckfasen, grosser Kantenradius.")
+
+VARIANTEN = [REV_A, REV_B, REV_C, REV_D, REV_E]
 
 
 # ------------------------------------------------------------------ Lauf -----
