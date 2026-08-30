@@ -52,11 +52,13 @@ class Reif:
         self.b_oben, self.b_seite, self.b_unten = b_oben, b_seite, b_unten
         self.notiz = notiz
 
-        # Mulde: eine flache Hohlkehle rund um die Innenkante, quer ueber die
-        # Tiefe. Sie ist der einzige Zierschnitt am Teil und zugleich der
-        # einzige, der etwas tut - der Finger, der sich einhaengt, findet von
-        # selbst ihre Mitte. Beim flachen Drucken liegt sie senkrecht und
-        # kostet keinen einzigen Ueberhang.
+        # Mulde: eine flache Hohlkehle rund um die Innenkante. Nur noch fuer
+        # Rev. C, und die ist ueberholt - die Begruendung hielt nicht stand.
+        # Sie sollte dem eingehaengten Finger eine Mitte geben; der Reif wird
+        # aber umgriffen. Dann ist die Innenflaeche des unteren Bandes die
+        # tragende Flaeche, und eine Kehle dort traegt auf zwei Kanten statt
+        # auf der vollen Breite. Bleibt stehen, damit Rev. C reproduzierbar
+        # ist; fuer neue Varianten nicht verwenden.
         self.mulde_r, self.mulde_t = mulde_r, mulde_t
 
         # Bandbreite ueber dem Umfangswinkel als Kosinusreihe. Sie trifft die
@@ -238,14 +240,31 @@ REV_B = Reif("b", "Der Reif · Rev. B", "tuerzwerg-griff-reif-b.stl",
 # die ist, desto kleiner die Auflage und desto hoeher der Druck. Ein
 # annaehernd quadratischer Querschnitt - unten 15 x 11 - traegt angenehmer
 # als 11 x 15.
-REV_C = Reif("c", "Der Reif · Rev. C", "tuerzwerg-griff-reif.stl",
+REV_C = Reif("c", "Der Reif · Rev. C", "tuerzwerg-griff-reif-c.stl",
              r_aussen=43.0, dicke=11.0,
              b_oben=23.0, b_seite=11.0, b_unten=15.0,
              bohr_tiefe=7.0, b_kammer=3.6, fase_z=2.5, a_kammer=6.0,
              mulde_r=6.0, mulde_t=1.2,
              notiz="Breites Band, Ei-Oeffnung, Hohlkehle an der Innenkante.")
 
-VARIANTEN = [REV_A, REV_B, REV_C]
+# Rev. D - Rev. C ohne die Hohlkehle.
+#
+# Die Kehle sass an der Innenkante und sollte dem eingehaengten Finger eine
+# Mitte geben. Der Reif wird aber umgriffen, nicht eingehaengt - und dann ist
+# die Innenflaeche des unteren Bandes die tragende Flaeche: dort drueckt der
+# Reif nach oben in die Finger. Eine Hohlkehle traegt die Last dort auf ihren
+# beiden Kanten statt auf der vollen Breite. Sie war also nicht nur
+# unbegruendet, sondern an der ungeeignetsten Stelle des Teils.
+#
+# Uebrig bleibt die Form ohne Zutat: ein Kreis, eine Ei-Oeffnung, eine
+# umlaufende 40-Grad-Fase.
+REV_D = Reif("d", "Der Reif · Rev. D", "tuerzwerg-griff-reif.stl",
+             r_aussen=43.0, dicke=11.0,
+             b_oben=23.0, b_seite=11.0, b_unten=15.0,
+             bohr_tiefe=7.0, b_kammer=3.6, fase_z=2.5, a_kammer=6.0,
+             notiz="Wie Rev. C, ohne die Hohlkehle.")
+
+VARIANTEN = [REV_A, REV_B, REV_C, REV_D]
 
 
 # ------------------------------------------------------------------ Lauf -----
