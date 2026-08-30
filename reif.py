@@ -45,11 +45,19 @@ class Reif:
     """Ein Reif. Alles andere folgt aus diesen sieben Massen."""
 
     def __init__(self, name, titel, datei, r_aussen, dicke,
-                 b_oben, b_seite, b_unten, bohr_tiefe, b_kammer, notiz):
+                 b_oben, b_seite, b_unten, bohr_tiefe, b_kammer, notiz,
+                 fase_z=3.0, a_kammer=5.5, mulde_r=0.0, mulde_t=0.0):
         self.name, self.titel, self.datei = name, titel, datei
         self.r_aussen, self.dicke = r_aussen, dicke
         self.b_oben, self.b_seite, self.b_unten = b_oben, b_seite, b_unten
         self.notiz = notiz
+
+        # Mulde: eine flache Hohlkehle rund um die Innenkante, quer ueber die
+        # Tiefe. Sie ist der einzige Zierschnitt am Teil und zugleich der
+        # einzige, der etwas tut - der Finger, der sich einhaengt, findet von
+        # selbst ihre Mitte. Beim flachen Drucken liegt sie senkrecht und
+        # kostet keinen einzigen Ueberhang.
+        self.mulde_r, self.mulde_t = mulde_r, mulde_t
 
         # Bandbreite ueber dem Umfangswinkel als Kosinusreihe. Sie trifft die
         # drei Vorgaben exakt und ist ueberall knickfrei - es gibt keine
@@ -59,11 +67,11 @@ class Reif:
         self.a2 = (b_oben - 2.0 * b_seite + b_unten) / 4.0
 
         self.halb = dicke / 2.0
-        self.fase_z = 3.0
+        self.fase_z = fase_z
         self.kammer_oben = r_aussen - bohr_tiefe
         self.kammer_unten = r_aussen - b_oben - 1.0   # bricht innen durch
         self.b_kammer = b_kammer
-        self.a_kammer = 5.5
+        self.a_kammer = a_kammer
         self.fase_z_kammer = b_kammer - 1.0
 
     # ------------------------------------------------------------ Kontur ----
@@ -134,6 +142,15 @@ class Reif:
         koerper = _achteck(u, zz, a - KANTE, self.halb - KANTE,
                            self._g(a) - KANTE) - KANTE
 
+        # Hohlkehle an der Innenkante: eine Scheibe, die von innen in den
+        # Querschnitt hineinragt. Ihr Mittelpunkt liegt so weit aussen, dass
+        # sie in der Mitte der Tiefe genau mulde_t tief schneidet und vor den
+        # Stirnflaechen wieder auslaeuft.
+        if self.mulde_t > 0.0:
+            uc = -a - self.mulde_r + self.mulde_t
+            scheibe = math.hypot(u - uc, zz) - self.mulde_r
+            koerper = weich_abziehen(koerper, scheibe, 0.3)
+
         bohrung = max(math.hypot(x, zz) - D_SCHNUR / 2.0, self.kammer_oben - y)
 
         # Knotenkammer: liegender Kanal entlang y mit demselben angefasten
@@ -200,13 +217,35 @@ REV_A = Reif("a", "Der Reif · Rev. A", "tuerzwerg-griff-reif-a.stl",
 # dem Band herauszunehmen und der Hand zu geben. Dass das Band dabei tiefer
 # als breit wird, passt zum Griff: der Finger hakt ueber die schmale Kante
 # und liegt dabei auf der ganzen Tiefe auf.
-REV_B = Reif("b", "Der Reif · Rev. B", "tuerzwerg-griff-reif.stl",
+REV_B = Reif("b", "Der Reif · Rev. B", "tuerzwerg-griff-reif-b.stl",
              r_aussen=39.0, dicke=15.0,
              b_oben=16.0, b_seite=8.0, b_unten=11.0,
              bohr_tiefe=6.0, b_kammer=4.5,
              notiz="Oeffnung 61 mm, schlankeres Band, leichter als Rev. A.")
 
-VARIANTEN = [REV_A, REV_B]
+# Rev. C - die Oeffnung von Rev. B mit der Masse von Rev. A.
+#
+# Rev. B war als Silhouette ein Reifen: ein duennes Band um ein grosses Loch.
+# Die Masse kommt zurueck, ohne die Oeffnung anzutasten - der Aussenkreis
+# waechst auf 86 mm und das Band von 8 auf 11 mm seitlich. Oben faellt der
+# Zuwachs am groessten aus, weil dort zusaetzlich die Innenkante nach unten
+# rueckt: 23 mm Band gegen 16 in Rev. B. Die Oeffnung wird dadurch nicht
+# kleiner, sondern nur deutlicher zum Ei - ihre breiteste Sehne bleibt.
+#
+# Zur Korrektur einer Aussage aus Rev. B: dort stand, ein tiefes schmales
+# Band passe zum Haken, weil der Finger auf der ganzen Tiefe aufliegt. Das
+# war zu einseitig. Der Finger krümmt sich um die Bandbreite, und je duenner
+# die ist, desto kleiner die Auflage und desto hoeher der Druck. Ein
+# annaehernd quadratischer Querschnitt - unten 15 x 11 - traegt angenehmer
+# als 11 x 15.
+REV_C = Reif("c", "Der Reif · Rev. C", "tuerzwerg-griff-reif.stl",
+             r_aussen=43.0, dicke=11.0,
+             b_oben=23.0, b_seite=11.0, b_unten=15.0,
+             bohr_tiefe=7.0, b_kammer=3.6, fase_z=2.5, a_kammer=6.0,
+             mulde_r=6.0, mulde_t=1.2,
+             notiz="Breites Band, Ei-Oeffnung, Hohlkehle an der Innenkante.")
+
+VARIANTEN = [REV_A, REV_B, REV_C]
 
 
 # ------------------------------------------------------------------ Lauf -----
