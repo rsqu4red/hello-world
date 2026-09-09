@@ -26,6 +26,39 @@ def weich_abziehen(a, b, k):
     return -weich_vereinen(-a, b, k)
 
 
+# ------------------------------------------------------- Bausteine fuer Formen -
+
+_SCHRAEG = 1.0 / math.sqrt(2.0)
+
+
+def quader(x, y, z, x0, x1, y0, y1, z0, z1):
+    """Achsparalleler Quader, exakter Abstand innen wie aussen."""
+    dx = max(x0 - x, x - x1)
+    dy = max(y0 - y, y - y1)
+    dz = max(z0 - z, z - z1)
+    aus = math.hypot(math.hypot(max(dx, 0.0), max(dy, 0.0)), max(dz, 0.0))
+    return aus + min(max(dx, max(dy, dz)), 0.0)
+
+
+def zapfen(rad, z, r, z_unten, z_oben):
+    """Zylinder vom Radius r, an beiden Enden unter 45 Grad ausgelaufen.
+
+    rad ist der Abstand von der Zapfenachse. z_unten und z_oben sind die
+    Spitzen der Kegel; den vollen Radius hat der Zapfen zwischen
+    z_unten + r und z_oben - r. None laesst das Ende offen.
+
+    Der 45-Grad-Auslauf ist kein Zierat: ohne ihn haette ein liegender
+    Zapfen eine frei schwebende Stirnflaeche, und eine Nut haette eine
+    waagerechte Decke.
+    """
+    d = rad - r
+    if z_unten is not None:
+        d = max(d, (rad - (z - z_unten)) * _SCHRAEG)
+    if z_oben is not None:
+        d = max(d, (rad - (z_oben - z)) * _SCHRAEG)
+    return d
+
+
 
 # ----------------------------------------------------- Marching Tetrahedra ---
 

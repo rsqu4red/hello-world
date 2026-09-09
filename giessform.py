@@ -46,7 +46,7 @@ import math
 
 import griffe as G
 from netz import (vernetzen, volumen, offene_kanten, ueberhang,
-                  abweichung, schreibe_stl)
+                  abweichung, schreibe_stl, quader, zapfen)
 
 # ---------------------------------------------------------------- Bauteil ---
 
@@ -79,14 +79,6 @@ RASTER = 0.65
 DATEI = "tuerzwerg-giessform-griff.stl"
 
 
-def _box(x, y, z, x0, x1, y0, y1, z0, z1):
-    dx = max(x0 - x, x - x1)
-    dy = max(y0 - y, y - y1)
-    dz = max(z0 - z, z - z1)
-    aus = math.hypot(math.hypot(max(dx, 0.0), max(dy, 0.0)), max(dz, 0.0))
-    return aus + min(max(dx, max(dy, dz)), 0.0)
-
-
 def teil(x, y, z):
     """Signierter Abstand zum Griff selbst, Bohrung bereits abgezogen."""
     r = math.hypot(x, y)
@@ -97,38 +89,20 @@ def teil(x, y, z):
     return max(aussen, innen, z - HOEHE, -z)
 
 
-_SCHRAEG = 1.0 / math.sqrt(2.0)
-
-
-def _zapfen(rad, z, r, z_unten, z_oben):
-    """Zylinder vom Radius r, an beiden Enden unter 45 Grad ausgelaufen.
-
-    z_unten und z_oben sind die Spitzen der Kegel; den vollen Radius hat
-    der Zapfen zwischen z_unten + r und z_oben - r. None laesst das Ende
-    offen, der Zapfen wird dort nicht begrenzt.
-    """
-    d = rad - r
-    if z_unten is not None:
-        d = max(d, (rad - (z - z_unten)) * _SCHRAEG)
-    if z_oben is not None:
-        d = max(d, (rad - (z_oben - z)) * _SCHRAEG)
-    return d
-
-
 def feld(x, y, z):
     """Signierter Abstand der Formhaelfte. Negativ ist Material."""
-    d = _box(x, y, z, -X_HALB, X_HALB, -Y_TIEF, 0.0, 0.0, H_FORM)
+    d = quader(x, y, z, -X_HALB, X_HALB, -Y_TIEF, 0.0, 0.0, H_FORM)
 
     # Kavitaet: die Haelfte des Griffs, die auf dieser Seite liegt
     d = max(d, -max(teil(x, y, z), y))
 
     # Zentrierrippe, steht in die Gegenhaelfte hinein
-    rippe = max(_zapfen(math.hypot(x - RIPPE_X, y), z, RIPPE_R,
+    rippe = max(zapfen(math.hypot(x - RIPPE_X, y), z, RIPPE_R,
                         RIPPE_Z[0], RIPPE_Z[1]), -y)
     d = min(d, rippe)
 
     # Zentriernut, in die eigene Haelfte geschnitten
-    nut = max(_zapfen(math.hypot(x + RIPPE_X, y), z, NUT_R, None, NUT_Z), y)
+    nut = max(zapfen(math.hypot(x + RIPPE_X, y), z, NUT_R, None, NUT_Z), y)
     d = max(d, -nut)
     return d
 
