@@ -53,7 +53,8 @@ import math
 
 import reif as R
 from netz import (vernetzen, volumen, offene_kanten, ueberhang,
-                  abweichung, schreibe_stl, quader, zapfen)
+                  abweichung, schreibe_stl, schreibe_3mf,
+                  quader, zapfen)
 
 # ---------------------------------------------------------------- Bauteil ---
 
@@ -100,6 +101,7 @@ RASTER = 0.6
 DATEI_A = "tuerzwerg-giessform-reif-a.stl"      # mit Kanalsystem
 DATEI_B = "tuerzwerg-giessform-reif-b.stl"      # glatt
 DATEI_K = "tuerzwerg-giessform-reif-kern.stl"   # loser Kern
+DATEI_3MF = "tuerzwerg-giessform-reif.3mf"      # alles in einer Datei
 
 _S20 = math.sin(math.radians(LAUF_AB_GRAD))
 _C20 = math.cos(math.radians(LAUF_AB_GRAD))
@@ -466,6 +468,18 @@ if __name__ == "__main__":
                  "Tuerzwerg Giessform Reif A mit Kanaelen - mm")
     schreibe_stl(b_druck, DATEI_B, "Tuerzwerg Giessform Reif B glatt - mm")
     schreibe_stl(kern_druck, DATEI_K, "Tuerzwerg Giessform Reif Kern - mm")
+    # Alles in einer Datei, schon auf dem Bett verteilt. 3MF statt STL:
+    # als STL waeren dieselben Daten 55 MB.
+    schreibe_3mf(
+        [("Haelfte A mit Kanalsystem", a_druck, (50.0, 50.0, 0.0)),
+         ("Haelfte B glatt", b_druck, (150.0, 50.0, 0.0)),
+         ("Loser Kern", kern_druck, (100.0, 105.0, 0.0))],
+        DATEI_3MF, "Tuerzwerg Giessform Reif Rev. A",
+        "Alle drei Teile flach drucken, wie sie liegen. PLA, 0,2 mm "
+        "Schicht, mindestens 4 Perimeter, 30 Prozent Infill, keine "
+        "Stuetzen. Die nach oben zeigende Flaeche der beiden Haelften "
+        "ist die Trennflaeche - Bauteilkuehler an, damit sie plan wird.")
+
     tri = a_druck + b_druck + kern_druck
     kanten = (offene_kanten(a_druck), offene_kanten(b_druck),
               offene_kanten(kern_druck))
@@ -481,6 +495,7 @@ if __name__ == "__main__":
     print(f"\nDateien         {DATEI_A}")
     print(f"                {DATEI_B}")
     print(f"                {DATEI_K}")
+    print(f"                {DATEI_3MF}  <- alles in einer Datei")
     print(f"Eine Haelfte    {2*XY_HALB:.0f} x {2*XY_HALB:.0f} x "
           f"{Z_TRENN-Z_UNTEN:.0f} mm, Zapfen {ZAPFEN_SPITZE-Z_TRENN:.0f} mm hoch")
     print(f"Zusammengesetzt {2*XY_HALB:.0f} x {2*XY_HALB:.0f} x "

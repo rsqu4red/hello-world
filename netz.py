@@ -273,3 +273,78 @@ def schreibe_stl(tri, pfad, titel):
             f.write(struct.pack("<H", 0))
 
 
+
+
+# ------------------------------------------------------------------- 3MF ----
+
+def schreibe_3mf(objekte, pfad, titel, beschreibung=""):
+    """Mehrere Koerper als ein 3MF - gepackt und mit Bauraumlage.
+
+    STL wiederholt jede Ecke dreimal und speichert Text als Rohbytes; bei
+    ueber einer Million Dreiecken sind das 55 MB. 3MF fasst die Ecken
+    zusammen und komprimiert, und es traegt Einheit, Namen und Aufstell-
+    ort der einzelnen Teile mit - fuer eine Form aus mehreren Stuecken
+    also nicht nur kleiner, sondern das passendere Format.
+
+    objekte: Liste aus (name, dreiecke, (dx, dy, dz)).
+    """
+    import zipfile
+
+    teile = []
+    for nr, (name, tri, ver) in enumerate(objekte, start=1):
+        ecken, index = [], {}
+        flaechen = []
+        for t in tri:
+            i = []
+            for p in t:
+                k = (round(p[0], 3), round(p[1], 3), round(p[2], 3))
+                j = index.get(k)
+                if j is None:
+                    j = len(ecken)
+                    index[k] = j
+                    ecken.append(k)
+                i.append(j)
+            if i[0] != i[1] and i[1] != i[2] and i[0] != i[2]:
+                flaechen.append(i)
+        teile.append((nr, name, ecken, flaechen, ver))
+
+    aus = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<model unit="millimeter" xml:lang="de-DE" '
+           'xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02">',
+           f'<metadata name="Title">{titel}</metadata>',
+           '<metadata name="Designer">Tuerzwerg</metadata>']
+    if beschreibung:
+        aus.append(f'<metadata name="Description">{beschreibung}</metadata>')
+    aus.append('<resources>')
+    for nr, name, ecken, flaechen, _ in teile:
+        aus.append(f'<object id="{nr}" name="{name}" type="model"><mesh>')
+        aus.append('<vertices>')
+        aus.extend('<vertex x="%g" y="%g" z="%g"/>' % e for e in ecken)
+        aus.append('</vertices><triangles>')
+        aus.extend('<triangle v1="%d" v2="%d" v3="%d"/>' % tuple(f)
+                   for f in flaechen)
+        aus.append('</triangles></mesh></object>')
+    aus.append('</resources><build>')
+    for nr, _, _, _, v in teile:
+        aus.append(f'<item objectid="{nr}" transform="1 0 0 0 1 0 0 0 1 '
+                   f'{v[0]:g} {v[1]:g} {v[2]:g}"/>')
+    aus.append('</build></model>')
+
+    ct = ('<?xml version="1.0" encoding="UTF-8"?>'
+          '<Types xmlns="http://schemas.openxmlformats.org/package/2006/'
+          'content-types">'
+          '<Default Extension="rels" ContentType="application/vnd.'
+          'openxmlformats-package.relationships+xml"/>'
+          '<Default Extension="model" ContentType="application/vnd.'
+          'ms-package.3dmanufacturing-3dmodel+xml"/></Types>')
+    rels = ('<?xml version="1.0" encoding="UTF-8"?>'
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/'
+            '2006/relationships"><Relationship Target="/3D/3dmodel.model" '
+            'Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/'
+            '2013/01/3dmodel"/></Relationships>')
+
+    with zipfile.ZipFile(pfad, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+        z.writestr("[Content_Types].xml", ct)
+        z.writestr("_rels/.rels", rels)
+        z.writestr("3D/3dmodel.model", "\n".join(aus))
+    return sum(len(f) for _, _, _, f, _ in teile)
