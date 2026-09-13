@@ -97,7 +97,9 @@ ENTL_X0 = 34.0
 
 SPALT = 8.0
 RASTER = 0.6
-DATEI = "tuerzwerg-giessform-reif.stl"
+DATEI_A = "tuerzwerg-giessform-reif-a.stl"      # mit Kanalsystem
+DATEI_B = "tuerzwerg-giessform-reif-b.stl"      # glatt
+DATEI_K = "tuerzwerg-giessform-reif-kern.stl"   # loser Kern
 
 _S20 = math.sin(math.radians(LAUF_AB_GRAD))
 _C20 = math.cos(math.radians(LAUF_AB_GRAD))
@@ -456,10 +458,17 @@ if __name__ == "__main__":
                   for t in tri_k]
     kern_druck = [(a, c, b) for a, b, c in kern_druck]      # Spiegelung heilen
 
-    tri = (schiebe(tri_a, 0.0, 0.0, -Z_UNTEN)
-           + schiebe(tri_b, 2 * XY_HALB + SPALT, 0.0, -Z_UNTEN)
-           + schiebe(kern_druck, XY_HALB + SPALT / 2, XY_HALB + 12.0))
-    schreibe_stl(tri, DATEI, "Tuerzwerg Giessform Reif Rev. A - Masse in mm")
+    # Drei getrennte Dateien: zusammen waeren es 55 MB, mehr als sich
+    # bequem verschicken laesst. Jedes Teil wird einzeln gedruckt.
+    a_druck = schiebe(tri_a, 0.0, 0.0, -Z_UNTEN)
+    b_druck = schiebe(tri_b, 0.0, 0.0, -Z_UNTEN)
+    schreibe_stl(a_druck, DATEI_A,
+                 "Tuerzwerg Giessform Reif A mit Kanaelen - mm")
+    schreibe_stl(b_druck, DATEI_B, "Tuerzwerg Giessform Reif B glatt - mm")
+    schreibe_stl(kern_druck, DATEI_K, "Tuerzwerg Giessform Reif Kern - mm")
+    tri = a_druck + b_druck + kern_druck
+    kanten = (offene_kanten(a_druck), offene_kanten(b_druck),
+              offene_kanten(kern_druck))
 
     anteil, grad, flaeche = ueberhang(tri)
     vt, vkav = kavitaet_volumen()
@@ -469,14 +478,17 @@ if __name__ == "__main__":
     wand, wo = engste_wand()
     kollision = kanal_gegen_sitz()
 
-    print(f"\nDatei           {DATEI} (zwei Haelften und der Kern)")
+    print(f"\nDateien         {DATEI_A}")
+    print(f"                {DATEI_B}")
+    print(f"                {DATEI_K}")
     print(f"Eine Haelfte    {2*XY_HALB:.0f} x {2*XY_HALB:.0f} x "
           f"{Z_TRENN-Z_UNTEN:.0f} mm, Zapfen {ZAPFEN_SPITZE-Z_TRENN:.0f} mm hoch")
     print(f"Zusammengesetzt {2*XY_HALB:.0f} x {2*XY_HALB:.0f} x "
           f"{2*(Z_TRENN-Z_UNTEN):.0f} mm")
     print(f"Kern            {PIN_Y1-TAB_Y0:.0f} mm lang, {vol_k/1000:.2f} cm^3")
     print(f"Dreiecke        {len(tri)}")
-    print(f"Offene Kanten   {offene_kanten(tri)}  (0 = drei geschlossene Koerper)")
+    print(f"Offene Kanten   A {kanten[0]}, B {kanten[1]}, Kern {kanten[2]}  "
+          f"(je 0 = geschlossenes Volumen)")
     print(f"Formvolumen     {vol_a/1000:.0f} + {vol_b/1000:.0f} cm^3 brutto")
     print(f"Bauteil         {vt/1000:.2f} cm^3 ({vt/1000*1.15:.0f} g Silikon)")
     print(f"Hinterschnitt   {schlimm} von {gepr} Saeulen"
