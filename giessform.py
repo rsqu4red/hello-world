@@ -118,6 +118,16 @@ STIFT_Y = 16.0
 STIFT_R = 1.5
 STIFT_TIEF = 3.0
 
+# Zapfen und Buchse in der Fuge der beiden Kerne. Ohne sie waere der
+# lange Schaft ein einseitig eingespannter Freitraeger: 2,14 mm
+# Durchbiegung je Newton Querkraft und 1,11 mm Kippspiel an der Spitze,
+# weil die 8 mm lange Fuehrung 0,05 mm Luft hat. Mit dem Zapfen liegt er
+# an beiden Enden auf - 16-mal steifer, und das Kippspiel entfaellt.
+FUGE_ZAPFEN_R = 1.3
+FUGE_BUCHSE_R = 1.4                     # 0,1 mm Luft
+FUGE_L = 4.0
+FUGE_TIEFE = FUGE_L + 0.6               # Buchse tiefer, damit er nicht aufsetzt
+
 # Fuesse, damit der Knauf des oberen Kerns beim Giessen frei liegt.
 FUSS_X = (20.0, 28.0)
 FUSS_Y = (-23.0, -15.0)
@@ -165,7 +175,9 @@ def kern_unten(x, y, z):
         stift = max(math.hypot(x, y - vz * STIFT_Y) - STIFT_R,
                     Z_KOPF - z, z - (Z_KOPF + STIFT_TIEF))
         aus = min(aus, stift)
-    return aus
+    # Buchse in der Stirnflaeche, nimmt den Zapfen des oberen Kerns auf
+    buchse = max(r - FUGE_BUCHSE_R, Z_FUGE - FUGE_TIEFE - z, z - Z_FUGE)
+    return max(aus, -buchse)
 
 
 def kern_oben(x, y, z):
@@ -174,7 +186,9 @@ def kern_oben(x, y, z):
     trichter = max(r - innen(z), Z_FUGE - z, z - HOEHE)
     schaft = max(r - innen(HOEHE), HOEHE - z, z - Z_OBEN)
     knauf = max(r - KNAUF_R, Z_OBEN - z, z - KNAUF_O_Z)
-    return min(trichter, schaft, knauf)
+    # Zapfen, steht aus der Stirnflaeche in den unteren Kern hinein
+    zapfen_f = max(r - FUGE_ZAPFEN_R, Z_FUGE - FUGE_L - z, z - Z_FUGE)
+    return min(trichter, schaft, knauf, zapfen_f)
 
 
 def kanal(x, y, z):
@@ -252,9 +266,10 @@ def grenzen_kern_u():
 
 
 def grenzen_kern_o():
+    # Der Zapfen ragt unter die Fuge - die Grenzen muessen ihn fassen.
     return ((-KNAUF_R - 1.5, KNAUF_R + 1.5),
             (-KNAUF_R - 1.5, KNAUF_R + 1.5),
-            (Z_FUGE - 1.5, KNAUF_O_Z + 1.5))
+            (Z_FUGE - FUGE_L - 1.5, KNAUF_O_Z + 1.5))
 
 
 # -------------------------------------------------------------- Kennzahlen --
@@ -430,6 +445,9 @@ if __name__ == "__main__":
     print(f"Kerne monoton   unten {fu} Verstoesse, oben {fo} "
           f"(je 0 = laesst sich ziehen)")
     print(f"Duennste Wand   {wand:.1f} mm {wo[0]}, bei z = {wo[1]:.0f}")
+    print(f"Kernfuge        Zapfen Ø{2*FUGE_ZAPFEN_R:.1f} in Buchse "
+          f"Ø{2*FUGE_BUCHSE_R:.1f}, {FUGE_L:.0f} mm tief, "
+          f"{FUGE_BUCHSE_R-FUGE_ZAPFEN_R:.1f} mm Luft")
     print(f"Zentrierung     Rippe {2*RIPPE_R:.0f} gegen Nut {2*NUT_R:.1f} mm, "
           f"{NUT_R-RIPPE_R:.1f} mm Luft")
     weit = 0.0
