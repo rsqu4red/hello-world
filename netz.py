@@ -343,8 +343,15 @@ def schreibe_3mf(objekte, pfad, titel, beschreibung=""):
             'Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/'
             '2013/01/3dmodel"/></Relationships>')
 
+    # Feste Zeitstempel: ein ZIP schreibt sonst bei jedem Lauf die
+    # aktuelle Uhrzeit mit, und die Datei aendert sich auch dann, wenn
+    # sich an der Geometrie nichts getan hat.
+    def eintrag(name):
+        return zipfile.ZipInfo(name, date_time=(2024, 1, 1, 0, 0, 0))
+
     with zipfile.ZipFile(pfad, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-        z.writestr("[Content_Types].xml", ct)
-        z.writestr("_rels/.rels", rels)
-        z.writestr("3D/3dmodel.model", "\n".join(aus))
+        z.writestr(eintrag("[Content_Types].xml"), ct, zipfile.ZIP_DEFLATED)
+        z.writestr(eintrag("_rels/.rels"), rels, zipfile.ZIP_DEFLATED)
+        z.writestr(eintrag("3D/3dmodel.model"), "\n".join(aus),
+                   zipfile.ZIP_DEFLATED)
     return sum(len(f) for _, _, _, f, _ in teile)
