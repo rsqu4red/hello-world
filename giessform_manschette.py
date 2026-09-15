@@ -101,9 +101,41 @@ FUEHR_B_R = SCHAFT_R + 0.05
 KNAUF_B_R = 12.0                        # bleibt unter dem Turmfuss
 KNAUF_B = 4.0
 
+# Steckverbindung der beiden Bohrungskerne. Jeder ist nur 6 mm in seiner
+# Stirnwand gefuehrt, bei 24 mm Laenge - ihre Spitzen koennten an der
+# Fuge um bis zu 0,5 mm gegeneinander stehen. Ineinandergesteckt halten
+# sie sich gegenseitig.
+#
+# Entscheidend ist, wo die Passluft liegt. Eine Ueberblattung quer durch
+# die Bohrung braucht Luft in der Fuge selbst - und die Fuge ist hier
+# Formflaeche. Bei 0,15 mm Luft stand am Gussteil eine Silikonhaut von
+# 0,15 x 18 x 8 mm quer durch die ganze Bohrung, dazu zwei 0,1 mm dicke
+# Halbmonde ueber je einen halben Bohrungsquerschnitt. Das ist kein Grat
+# mehr, das ist eine Membran.
+#
+# Deshalb stossen die Kerne jetzt auf ganzer Flaeche stumpf bei Z_FUGE
+# aneinander, und die Zentrierung sitzt in zwei Zapfen, die im Kern
+# selbst stecken. Die Passluft liegt damit vollstaendig im Kernmaterial;
+# die Kavitaet sieht nur noch die ebene Stossfuge.
+#
+# Die Anordnung passt zu sich selbst: ein Zapfen bei x = +FUGE_X, eine
+# Buchse bei x = -FUGE_X. Der zweite Kern ist derselbe, um 180 Grad um
+# die y-Achse gedreht (x -> -x, z -> LAENGE - z) - dabei tauschen die
+# beiden Seiten, und Zapfen trifft Buchse.
+FUGE_X = 5.0                            # Achsabstand, bleibt in der Bohrung
+FUGE_ZAPFEN_R = 1.5
+FUGE_BUCHSE_R = 1.6                     # 0,1 mm Luft, im Kern verborgen
+FUGE_L = 4.0
+
 # Kammerkern, getragen vom Schnurstift.
 STIFT_R = M.D_SCHNUR / 2.0              # 2,5
 FUEHR_S_R = STIFT_R + 0.05
+# Unterhalb des Teils wird der Stift flach. Rund gefuehrt koennte sich
+# der Kammerkern um die Stiftachse drehen, und mit 2 mm Luft ringsum und
+# 10,5 mm Hebel waeren das rund 11 Grad Schraeglage der Kammer.
+FLACH_X, FLACH_Z = 3.5, 2.0             # halbe Breite, halbe Tiefe
+FLACH_AB = -19.5                        # ab hier, sicher unter der Rippe
+FLACH_LUFT = 0.05
 KNAUF_S_R = 6.0
 KNAUF_S = 4.0
 
@@ -187,9 +219,15 @@ def kern_bohrung(x, y, z):
     """
     r = math.hypot(x, y)
     rr = SCHAFT_R if z <= 0.0 else R_INNEN + max(0.0, EINLAUF - z)
-    kern = max(r - rr, Z_UNTEN - z, z - Z_FUGE)
+    schaft = max(r - rr, Z_UNTEN - z, z - Z_FUGE)
     knauf = max(r - KNAUF_B_R, Z_UNTEN - KNAUF_B - z, z - Z_UNTEN)
-    return min(kern, knauf)
+
+    # Zapfen ueber die Stossfuge hinaus, Buchse darunter hinein.
+    zapfen = max(math.hypot(x - FUGE_X, y) - FUGE_ZAPFEN_R,
+                 Z_FUGE - z, z - (Z_FUGE + FUGE_L))
+    buchse = max(math.hypot(x + FUGE_X, y) - FUGE_BUCHSE_R,
+                 Z_FUGE - FUGE_L - z, z - Z_FUGE)
+    return max(min(schaft, knauf, zapfen), -buchse)
 
 
 def kern_kammer(x, y, z):
@@ -201,9 +239,11 @@ def kern_kammer(x, y, z):
     """
     kammer = max(koerper(x, y, z), -M.feld(x, y, z), -bohrung(x, y, z))
     rs = math.hypot(x, z - Z_FUGE)
-    stift = max(rs - STIFT_R, y + M.KAMMER_ACHSE, Y_UNTEN - y)
+    stift = max(rs - STIFT_R, y + M.KAMMER_ACHSE, FLACH_AB - y)
+    flach = quader(x, y, z, -FLACH_X, FLACH_X, Y_UNTEN, FLACH_AB,
+                   Z_FUGE - FLACH_Z, Z_FUGE + FLACH_Z)
     knauf = max(rs - KNAUF_S_R, Y_UNTEN - KNAUF_S - y, y - Y_UNTEN)
-    return min(kammer, stift, knauf)
+    return min(kammer, stift, flach, knauf)
 
 
 def fuehrung(x, y, z):
@@ -212,8 +252,11 @@ def fuehrung(x, y, z):
     unten = max(r - FUEHR_B_R, Z_UNTEN - z, z - 0.0)
     oben = max(r - FUEHR_B_R, LAENGE - z, z - Z_OBEN)
     stift = max(math.hypot(x, z - Z_FUGE) - FUEHR_S_R,
-                Y_UNTEN - y, y + RIPPE_UNTEN - 0.5)
-    return min(unten, oben, stift)
+                FLACH_AB - y, y + RIPPE_UNTEN - 0.5)
+    schlitz = quader(x, y, z, -FLACH_X - FLACH_LUFT, FLACH_X + FLACH_LUFT,
+                     Y_UNTEN - 1.0, FLACH_AB,
+                     Z_FUGE - FLACH_Z - FLACH_LUFT, Z_FUGE + FLACH_Z + FLACH_LUFT)
+    return min(unten, oben, stift, schlitz)
 
 
 def kanal(x, y, z):
@@ -301,9 +344,11 @@ def grenzen_halb(gespiegelt):
 
 
 def grenzen_kern_b():
+    # Bis ueber den Zapfen hinaus, nicht bis Z_FUGE - sonst schneidet das
+    # Gitter den Zapfen ab und das Netz endet dort offen.
     return ((-KNAUF_B_R - 1.5, KNAUF_B_R + 1.5),
             (-KNAUF_B_R - 1.5, KNAUF_B_R + 1.5),
-            (Z_UNTEN - KNAUF_B - 1.5, Z_FUGE + 1.5))
+            (Z_UNTEN - KNAUF_B - 1.5, Z_FUGE + FUGE_L + 1.5))
 
 
 def grenzen_kern_k():
