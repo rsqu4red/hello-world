@@ -80,13 +80,20 @@ Z_FUGE = LAENGE / 2.0                   # 14, Stoss der beiden Bohrungskerne
 # ------------------------------------------------------------------ Form ----
 
 X_HALB = 16.0
-Y_UNTEN, Y_OBEN = -26.0, 21.0
+Y_UNTEN, Y_OBEN = -26.0, 25.0
 Z_UNTEN, Z_OBEN = -6.0, 34.0
+
+# Ueber dem Block steht nur ueber dem Lauf ein Turm, der die Giesssaeule
+# traegt. Den ganzen Block hochzuziehen waere bequemer gewesen, haette
+# aber die obere Stirnwand auf 16 mm gebracht - und damit die beiden
+# Bohrungskerne verschieden lang gemacht. So bleiben beide Stirnwaende
+# 6 mm und beide Kerne dasselbe Druckteil.
+Z_TURM = 44.0
 
 # Bohrungskern: Schaft Ø20 in der Stirnwand, dann der Einlauf auf Ø18.
 SCHAFT_R = R_INNEN + EINLAUF            # 10
 FUEHR_B_R = SCHAFT_R + 0.05
-KNAUF_B_R = 13.0
+KNAUF_B_R = 12.0                        # bleibt unter dem Turmfuss
 KNAUF_B = 4.0
 
 # Kammerkern, getragen vom Schnurstift.
@@ -109,17 +116,27 @@ RIPPE_SPITZE = 0.5                      # Rippe endet 0,5 mm vor dem Teil
 NUT_SPITZE = 0.1                        # Nut 0,4 mm laenger, setzt nicht auf
 
 # Kanalsystem, vollstaendig in Haelfte A.
-LAUF_Y = 17.0
-LAUF_R = 2.5
-TRICHTER_AB, TRICHTER_BIS = 30.0, 32.0
+#
+# Die Masse sind nachgerechnet, nicht geschaetzt. Mit Ø5-Lauf und
+# Ø4-Anschnitt lag die Fuellzeit bei 20 Pa*s Silikon bei 44 Minuten -
+# mehr als die Topfzeit. Zwei Ursachen: die Kanaele machten zusammen 82
+# Prozent des Stroemungswiderstands, und der Trichter endete 4 mm ueber
+# der Teiloberkante, sodass am Schluss fast keine Druckhoehe mehr
+# uebrig war. Jetzt Ø8 und Ø6, und der Block reicht bis z = 44, was am
+# Ende 16 mm Saeule stehen laesst. Nebenbei wird die Stirnwand dadurch
+# 16 statt 6 mm dick und fuehrt den oberen Bohrungskern deutlich besser.
+LAUF_Y = 18.5
+LAUF_R = 4.0
+TRICHTER_AB, TRICHTER_BIS = 40.0, 42.0
+TURM_Y = 13.5                           # 1,5 mm Luft zum Kernknauf
 LAUF_UNTEN = -1.0
-ANSCHNITT_R = 2.0
-ANSCHNITT_Z = 1.8
+ANSCHNITT_R = 3.0
+ANSCHNITT_Z = 3.5
 ANSCHNITT_BIS = 9.5                     # bis hierhin greift er ins Teil
 ENTL_R, ENTL_Y = 1.0, -15.5
 
 FUSS_X = (-15.0, -9.0)
-FUSS_Y = ((-26.0, -20.0), (15.0, 21.0))
+FUSS_Y = ((-26.0, -20.0), (19.0, 25.0))
 FUSS_Z = 6.0
 
 SPALT = 8.0
@@ -230,6 +247,9 @@ def haelfte(x, y, z, mit_kanaelen):
     """Signierter Abstand einer Formhaelfte. Negativ ist Material."""
     d = quader(x, y, z, -X_HALB, 0.0, Y_UNTEN, Y_OBEN, Z_UNTEN, Z_OBEN)
 
+    turm = quader(x, y, z, -X_HALB, 0.0, TURM_Y, Y_OBEN, Z_OBEN, Z_TURM)
+    d = min(d, turm)
+
     for y0, y1 in FUSS_Y:
         fuss = quader(x, y, z, FUSS_X[0], FUSS_X[1], y0, y1,
                       Z_UNTEN - FUSS_Z, Z_UNTEN)
@@ -268,7 +288,7 @@ def grenzen_halb(gespiegelt):
     x = (-ZENTRIER_R - 1.5, X_HALB + 1.5) if gespiegelt else \
         (-X_HALB - 1.5, ZENTRIER_R + 1.5)
     return (x, (Y_UNTEN - 1.5, Y_OBEN + 1.5),
-            (Z_UNTEN - FUSS_Z - 1.5, Z_OBEN + 1.5))
+            (Z_UNTEN - FUSS_Z - 1.5, Z_TURM + 1.5))
 
 
 def grenzen_kern_b():
@@ -389,7 +409,7 @@ def fuellweg(schritt=0.5):
     def idx(p):
         return tuple(round(c / schritt - 0.5) for c in p)
 
-    start = tuple(auf(c) for c in (-0.5 * schritt, LAUF_Y, Z_OBEN - 0.8))
+    start = tuple(auf(c) for c in (-0.5 * schritt, LAUF_Y, Z_TURM - 0.8))
     gesehen, stapel = {idx(start)}, [start]
     while stapel:
         p = stapel.pop()
@@ -397,7 +417,7 @@ def fuellweg(schritt=0.5):
                   (0, -schritt, 0), (0, 0, schritt), (0, 0, -schritt)):
             q = (p[0] + d[0], p[1] + d[1], p[2] + d[2])
             if not (-X_HALB < q[0] < X_HALB and Y_UNTEN < q[1] < Y_OBEN
-                    and Z_UNTEN < q[2] < Z_OBEN):
+                    and Z_UNTEN < q[2] < Z_TURM):
                 continue
             k = idx(q)
             if k in gesehen or not frei(*q):
@@ -483,7 +503,7 @@ if __name__ == "__main__":
     # Haelfte A wird dazu um -90 Grad um die y-Achse gedreht, Haelfte B um
     # +90 Grad; beides sind echte Drehungen, die Wicklung bleibt richtig.
     def flach_a(tri):
-        return [tuple((Z_OBEN - p[2], p[1] - Y_UNTEN, p[0] + X_HALB)
+        return [tuple((Z_TURM - p[2], p[1] - Y_UNTEN, p[0] + X_HALB)
                       for p in t) for t in tri]
 
     def flach_b(tri):
@@ -495,10 +515,11 @@ if __name__ == "__main__":
     # Bohrungskern steht auf dem Knauf
     bk_druck = [tuple((p[0], p[1], p[2] - (Z_UNTEN - KNAUF_B)) for p in t)
                 for t in tri_bk]
-    # Kammerkern steht auf dem Knauf: (x, y, z) -> (x, z, -y)
-    kk_druck = [tuple((p[0], p[2] - Z_FUGE, -p[1] - (KNAUF_S - Y_UNTEN))
+    # Kammerkern steht auf dem Knauf. Drehung um 90 Grad um die x-Achse:
+    # (x, y, z) -> (x, -z, y). Das ist eine echte Drehung, die Wicklung
+    # bleibt richtig - eine zusaetzliche Korrektur wuerde sie umkehren.
+    kk_druck = [tuple((p[0], Z_FUGE - p[2], p[1] - (Y_UNTEN - KNAUF_S))
                       for p in t) for t in tri_kk]
-    kk_druck = [(q, p, r) for p, q, r in kk_druck]
 
     schreibe_stl(a_druck, DATEI_H, "Tuerzwerg Manschette Haelfte A - mm")
     schreibe_stl(b_druck, DATEI_H2, "Tuerzwerg Manschette Haelfte B - mm")
