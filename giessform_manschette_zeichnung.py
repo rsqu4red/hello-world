@@ -51,11 +51,14 @@ out.append(pfad(kontur(g,F.Y_UNTEN-1,F.Y_OBEN+1,F.Z_UNTEN-1,F.Z_OBEN+1,300),tr1,
 def marke(y,z,s,dy=0,anchor="start"):
     px,py=tr1(y,z); txt(px+8,py+4+dy,s,12,SOFT,500,anchor)
     out.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="2.4" fill="{AKZ}"/>')
-marke(F.LAUF_Y,20,"Lauf Ø6")
-marke(F.LAUF_Y,F.Z_OBEN-1.5,"Trichter Ø9")
-marke(-20,F.ANSCHNITT_Z,"Anschnitt Ø4 – hier tritt das Silikon ein")
-marke(F.STEIGER_Y,30,"Steiger Ø3")
-marke(F.ENTL_Y,30,"Entlüftung Ø1,5")
+def d(r):
+    """Durchmesser aus dem Radius, damit die Beschriftung nicht veraltet."""
+    return f"Ø{2*r:.10g}".replace(".", ",")
+
+marke(F.LAUF_Y,20,f"Lauf {d(F.LAUF_R)}")
+marke(F.LAUF_Y,F.Z_OBEN-1.5,f"Trichter {d(F.LAUF_R+1.0)}, Turm bis z = {F.Z_TURM:.0f}")
+marke(-20,F.ANSCHNITT_Z,f"Anschnitt {d(F.ANSCHNITT_R)} – hier tritt das Silikon ein")
+marke(F.ENTL_Y,30,f"Entlüftung {d(F.ENTL_R)}")
 marke(F.Y_ZENTRIER,-3,"Zentrierzapfen")
 marke(-F.Y_ZENTRIER,-3,"Zentriernut",14)
 
@@ -79,11 +82,27 @@ out.append(f'<path d="M{tr2(0,F.Y_OBEN+2)[0]:.1f} {tr2(0,F.Y_OBEN+2)[1]:.1f}'
 ox3,oy3=760,600
 tr3=lambda x,z:(ox3+(x+34)*S, oy3+(F.Z_OBEN-z)*S)
 txt(ox3-40,oy3-58,"3  Längsschnitt y = 0 mm",19,INK,700)
-txt(ox3-40,oy3-36,"Der Bohrungskern steht in beiden Stirnwänden.",13,SOFT,400)
+txt(ox3-40,oy3-36,"Die beiden Bohrungskerne stehen in je einer Stirnwand und "
+                  "stecken in der Mitte ineinander.",13,SOFT,400)
 for ff in (lambda x,z: F.feld_a(x,0.0,z), lambda x,z: F.feld_b(x,0.0,z)):
     out.append(pfad(kontur(ff,-18,18,F.Z_UNTEN-1,F.Z_OBEN+1,300),tr3,INK,1.2))
+
+# Die beiden Bohrungskerne. Dieser Schnitt liegt genau in der Ebene der
+# Zapfen (y = 0), zeigt die Steckverbindung also in voller Laenge.
+for kk in (lambda x,z: F.kern_bohrung(x,0.0,z),
+           lambda x,z: F.kern_bohrung(-x,0.0,F.LAENGE-z)):
+    out.append(pfad(kontur(kk,-18,18,F.Z_UNTEN-F.KNAUF_B-1,F.Z_OBEN+1,300),
+                    tr3,LIN,1.4))
+
 out.append(pfad(kontur(lambda x,z: M.feld(x,0.0,z),-18,18,F.Z_UNTEN-1,F.Z_OBEN+1,300),
                 tr3,AKZ,1.6))
+
+px,py=tr3(F.FUGE_X,F.Z_FUGE+F.FUGE_L/2)
+txt(px+10,py+4,f"Zapfen {d(F.FUGE_ZAPFEN_R)} in Buchse {d(F.FUGE_BUCHSE_R)}",12,SOFT,500)
+out.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="2.4" fill="{AKZ}"/>')
+px,py=tr3(-14.0,F.Z_FUGE)
+txt(px-10,py+4,"Stoßfuge z = 14, ganzflächig",12,SOFT,500,"end")
+out.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="2.4" fill="{AKZ}"/>')
 
 txt(70,H-40,"Türzwerg · Gießform Klinkenmanschette · Maße in mm · "
             "rot = Silikonteil, schwarz = Formkörper",12,SOFT,400)
