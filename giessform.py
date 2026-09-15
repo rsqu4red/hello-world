@@ -96,7 +96,6 @@ NUT_Z = 95.2
 KANAL_X = 11.0
 KANAL_R = 2.5
 TRICHTER_AB = -5.0                      # ab hier oeffnet sich der Kanal
-TRICHTER_R = 4.5
 
 # Fuehrungen fuer die Kerne
 FUEHR_U_R = 6.05                        # 12,1 fuer den 12er Schaft
@@ -104,9 +103,20 @@ FUEHR_O_R = 4.15                        # 8,3 fuer den 8,2er Schaft
 
 # Knaeufe: sie sitzen aussen auf dem Block auf und legen damit zugleich
 # die Eintauchtiefe der Kerne fest.
-KNAUF_R = 9.0
+KNAUF_R = 9.0                           # runder Knauf des oberen Kerns
 KNAUF_U_Z = (Z_KOPF - 6.0, Z_KOPF)      # -14 .. -8, oben auf dem Kopfstueck
 KNAUF_O_Z = Z_OBEN + 4.0                # 100, unter dem Deckel
+
+# Der untere Kern bekommt keinen runden Knauf, sondern einen schmalen
+# Steg quer zu den beiden Kanaelen. Ein Ø18-Knauf haette ein Drittel
+# jeder Eingussoeffnung verdeckt - die Trichter reichen bis x = 5,6
+# heran. Zwei Stifte legen die Lage des Stegs fest, sonst koennte man
+# ihn quer aufsetzen und beide Oeffnungen zudecken.
+STEG_X = 6.5                            # halbe Breite, laesst die Trichter frei
+STEG_Y = 19.0                           # halbe Laenge, greift ausserhalb
+STIFT_Y = 16.0
+STIFT_R = 1.5
+STIFT_TIEF = 3.0
 
 # Fuesse, damit der Knauf des oberen Kerns beim Giessen frei liegt.
 FUSS_X = (20.0, 28.0)
@@ -148,8 +158,14 @@ def kern_unten(x, y, z):
     r = math.hypot(x, y)
     rr = innen(0.0) if z <= 0.0 else innen(z)   # 6,0 in der Fuehrung
     schaft = max(r - rr, Z_KOPF - z, z - Z_FUGE)
-    knauf = max(r - KNAUF_R, KNAUF_U_Z[0] - z, z - Z_KOPF)
-    return min(schaft, knauf)
+    steg = quader(x, y, z, -STEG_X, STEG_X, -STEG_Y, STEG_Y,
+                  KNAUF_U_Z[0], Z_KOPF)
+    aus = min(schaft, steg)
+    for vz in (1.0, -1.0):
+        stift = max(math.hypot(x, y - vz * STIFT_Y) - STIFT_R,
+                    Z_KOPF - z, z - (Z_KOPF + STIFT_TIEF))
+        aus = min(aus, stift)
+    return aus
 
 
 def kern_oben(x, y, z):
@@ -204,6 +220,12 @@ def haelfte(x, y, z):
     d = max(d, -max(fuehrung(x, y, z), y))
     d = max(d, -kanal(x, y, z))
 
+    # Loch fuer den Lagestift des unteren Kerns. Nur eines je Haelfte;
+    # die gedrehte Gegenhaelfte liefert das zweite.
+    loch = max(math.hypot(x, y + STIFT_Y) - (STIFT_R + 0.2),
+               Z_KOPF - z, z - (Z_KOPF + STIFT_TIEF + 0.5))
+    d = max(d, -loch)
+
     # Zentriernut, in die eigene Haelfte geschnitten
     nut = max(zapfen(math.hypot(x + RIPPE_X, y), z, NUT_R, None, NUT_Z), y)
     d = max(d, -nut)
@@ -221,8 +243,11 @@ def grenzen_haelfte():
 
 
 def grenzen_kern_u():
-    return ((-KNAUF_R - 1.5, KNAUF_R + 1.5),
-            (-KNAUF_R - 1.5, KNAUF_R + 1.5),
+    # Steg und Lagestifte reichen weiter als der Schaft - die Grenzen
+    # muessen sie einschliessen, sonst endet das Netz an der Gitterkante
+    # offen.
+    return ((-STEG_X - 1.5, STEG_X + 1.5),
+            (-STEG_Y - 1.5, STEG_Y + 1.5),
             (KNAUF_U_Z[0] - 1.5, Z_FUGE + 1.5))
 
 
@@ -407,8 +432,13 @@ if __name__ == "__main__":
     print(f"Duennste Wand   {wand:.1f} mm {wo[0]}, bei z = {wo[1]:.0f}")
     print(f"Zentrierung     Rippe {2*RIPPE_R:.0f} gegen Nut {2*NUT_R:.1f} mm, "
           f"{NUT_R-RIPPE_R:.1f} mm Luft")
+    weit = 0.0
+    while kanal(KANAL_X + weit, -0.01, Z_KOPF + 0.1) < 0.0:
+        weit += 0.01
     print(f"Kanaele         2 x {2*KANAL_R:.0f} mm am Rand der Bodenflaeche, "
-          f"Trichter {2*TRICHTER_R:.0f} mm")
+          f"Muendung {2*weit:.1f} mm")
+    print(f"Einguss frei    von x = {KANAL_X - weit:.1f} bis "
+          f"{KANAL_X + weit:.1f}, Steg reicht bis {STEG_X:.1f}")
     print(f"Ueberhang       {anteil:.2f} % der Flaeche ueber 45 Grad, "
           f"hoechstens {grad:.0f} Grad")
     print(f"Formtreue       hoechstens {ab_max*1000:.0f} um, "
