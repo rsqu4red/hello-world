@@ -100,11 +100,33 @@ def feld(x, y, z):
     rand = min(z, LAENGE - z)
     bohrung = r - (R_INNEN + max(0.0, EINLAUF - rand))
 
-    # Knotenkammer: Zylinder entlang der Achse, oben zur Bohrung hin offen.
-    # Die Enden laufen als 45-Grad-Kegel aus statt als Kugelkappen - eine
-    # Kappe waere beim Drucken eine nach unten weisende Decke, ein Kegel
-    # traegt sich selbst.
-    rk = math.hypot(x, y + KAMMER_ACHSE)
+    # Knotenkammer: nach oben offener Trog, kein geschlossenes Fass.
+    #
+    # Ein runder Querschnitt ist an seiner breitesten Stelle breiter als
+    # dort, wo er in die Bohrung durchbricht. Zum Drucken ist das egal,
+    # zum Giessen nicht: der Kern sitzt dann in der Kammer fest wie ein
+    # Teller in der Flasche. An den Kegelenden, wo der Kammerradius unter
+    # 2 mm faellt, reicht die Kammer ueberhaupt nicht mehr bis zur
+    # Bohrung - dort stuende ueber dem Kern bis zu 2,05 mm massives
+    # Silikon.
+    #
+    # Deshalb ist nur die untere Haelfte rund; darueber laufen die Waende
+    # senkrecht bis in die Bohrung. min(0, ...) macht aus dem Kreis ein
+    # U: unterhalb der Kammerachse der volle Radius, oberhalb nur noch
+    # der Abstand zur Mittelebene. Damit ist die Kammer an keiner Stelle
+    # breiter als ihre Oeffnung, und der Kern laesst sich gerade nach
+    # oben in die Bohrung heben und dort herausfaedeln - in einem Stueck,
+    # ohne jede Dehnung.
+    #
+    # Der Knoten verliert dabei nichts: der Boden bleibt, wo er war, und
+    # ueber der Achse wird die Kammer sogar weiter. Getragen wird der
+    # Knoten ohnehin vom Boden rings um die Schnurbohrung, nicht von der
+    # Oeffnung - die Schnur zieht nach unten. Geschlossen wird die Kammer
+    # vom Tuerdruecker selbst, der in der Bohrung darueber steckt.
+    #
+    # Die Enden laufen weiter als 45-Grad-Kegel aus; jeder Querschnitt
+    # bleibt dabei ein U mit senkrechten Waenden.
+    rk = math.hypot(x, min(0.0, y + KAMMER_ACHSE))
     z_a = LAENGE / 2.0 - KAMMER_LAENGE / 2.0 - D_KAMMER / 2.0
     z_b = LAENGE / 2.0 + KAMMER_LAENGE / 2.0 + D_KAMMER / 2.0
     kammer = max(rk - D_KAMMER / 2.0, rk - (z - z_a), rk - (z_b - z))

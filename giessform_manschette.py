@@ -30,14 +30,26 @@ durch die ganze Bohrung schieben lassen. Zwei Kerne, in der Mitte
 gestossen, kommen dagegen ohne jede Verformung heraus, und weil das Teil
 zu z = 14 symmetrisch ist, sind beide dasselbe Druckteil.
 
-Die Knotenkammer ist der schwierige Teil. Sie liegt vollstaendig in der
-Rippe: 3,5 mm Material an beiden Stirnseiten, 2 mm ringsum, und nach oben
-ein Durchbruch zur Bohrung von nur 8,96 mm bei 11,02 mm Kammerbreite. Ein
-Kern darin ist gefangen - axial sperrt die Rippe, nach unten die
-Rippenwand, durch den Schnurkanal passt er ohnehin nicht. Er kann also
-nur eines: nach dem Oeffnen von Hand nach oben in die Bohrung gekippt und
-dort herausgezogen werden. Das Silikon dehnt sich dabei am Durchbruch um
-23 Prozent - viel fuer eine starre Form, harmlos fuer Silikon.
+Die Knotenkammer war lange der schwierige Teil, und zwar nicht wegen der
+Form, sondern wegen des Bauteils. Solange sie ein runder Zylinder mit
+Kegelenden war, war sie an ihrer breitesten Stelle breiter als dort, wo
+sie in die Bohrung durchbricht: 11,02 mm Kammer gegen 8,96 mm Durchbruch.
+Der Kern sass darin fest wie ein Teller in der Flasche. An den
+Kegelenden, wo der Kammerradius unter 2 mm faellt, reichte die Kammer
+ueberhaupt nicht mehr bis zur Bohrung - dort stand ueber dem Kern bis zu
+2,05 mm massives Silikon. Scheibenweise gemessen waren zwoelf Scheiben
+schlicht gesperrt.
+
+Dagegen half kein Formentrick. Geholfen hat, die Kammer zu aendern: sie
+ist jetzt ein nach oben offener Trog - untere Haelfte rund wie bisher,
+darueber senkrechte Waende bis in die Bohrung. Damit ist sie an keiner
+Stelle breiter als ihre Oeffnung, und der Kern geht in einem Stueck
+gerade nach oben in die Bohrung und dort heraus. Ohne jede Dehnung.
+
+Der Knoten verliert dabei nichts: der Boden bleibt, wo er war, ueber der
+Achse wird die Kammer sogar weiter, und getragen wird der Knoten ohnehin
+vom Boden rings um die Schnurbohrung - die Schnur zieht nach unten.
+Geschlossen wird die Kammer vom Tuerdruecker selbst.
 
 Gehalten wird er waehrend des Giessens vom Schnurstift, der ihn von unten
 traegt und zugleich den Schnurkanal formt.
@@ -127,34 +139,19 @@ FUGE_ZAPFEN_R = 1.5
 FUGE_BUCHSE_R = 1.6                     # 0,1 mm Luft, im Kern verborgen
 FUGE_L = 4.0
 
-# Teilung des Kammerkerns.
-#
-# Die Knotenkammer laeuft an beiden Enden als 45-Grad-Kegel aus. Wo der
-# Kegelradius unter 2 mm faellt, reicht die Kammer nicht mehr bis in die
-# Bohrung - dort steht ueber dem Kern bis zu 2,05 mm massives Silikon.
-# Ein einteiliger Kammerkern ist an seinen beiden Spitzen also nicht
-# "stramm", sondern schlicht eingeschlossen; scheibenweise gemessen:
-#
-#   z        Kern halb   Schlitz halb   noetig
-#   4 - 5    0,5 - 1,5   0,00           gesperrt
-#   6 - 8    2,6 - 4,6   1,8 - 3,9      18 - 42 %
-#   9 - 19   5,55        4,70           18 %
-#
-# Der Kern wird deshalb an den beiden Kegel-Zylinder-Kanten geteilt. Das
-# Mittelstueck hebt sich gerade nach oben heraus, die beiden Kegelenden
-# rutschen anschliessend in den frei gewordenen Raum nach innen und
-# gehen dann ebenfalls nach oben.
-#
-# Die Fuge liegt genau auf der Kante zwischen Kegel und Zylinder - die
-# unauffaelligste Stelle fuer eine Trennlinie.
+# Anfang des Kammerkegels, nur fuer die Pruefung.
 KAMMER_AB = (M.LAENGE - M.KAMMER_LAENGE) / 2.0 - M.D_KAMMER / 2.0   # 3,5
-KK_SCHNITT = KAMMER_AB + M.D_KAMMER / 2.0        # 9,0 - hier ist der Kegel voll
-KK_ZAPFEN_X = 1.5                       # halbe Breite der Zunge
-KK_ZAPFEN_L = 2.5                       # so weit greift sie ins Mittelstueck
-KK_LUFT = 0.05
-KK_SCHIEBEN = 3.0                       # Weg der Kegelenden nach innen
 
 # Kammerkern, getragen vom Schnurstift.
+#
+# Er ist einteilig. Das war er nicht immer: solange die Knotenkammer ein
+# runder Zylinder mit Kegelenden war, sass der Kern darin fest wie ein
+# Teller in der Flasche - an den Kegelspitzen stand ueber ihm bis zu
+# 2,05 mm massives Silikon. Nicht die Form war daran schuld, sondern das
+# Bauteil. Die Kammer ist jetzt ein nach oben offener Trog (siehe
+# manschette.py); damit ist sie an keiner Stelle breiter als ihre
+# Oeffnung, und der Kern geht in einem Stueck gerade nach oben in die
+# Bohrung und dort heraus - ohne jede Dehnung.
 STIFT_R = M.D_SCHNUR / 2.0              # 2,5
 FUEHR_S_R = STIFT_R + 0.05
 # Unterhalb des Teils wird der Stift flach. Rund gefuehrt koennte sich
@@ -208,8 +205,7 @@ RASTER = 0.5
 DATEI_H = "tuerzwerg-giessform-manschette-haelfte-a.stl"
 DATEI_H2 = "tuerzwerg-giessform-manschette-haelfte-b.stl"
 DATEI_B = "tuerzwerg-giessform-manschette-kern-bohrung.stl"
-DATEI_KM = "tuerzwerg-giessform-manschette-kern-kammer-mitte.stl"
-DATEI_KE = "tuerzwerg-giessform-manschette-kern-kammer-ende.stl"
+DATEI_K = "tuerzwerg-giessform-manschette-kern-kammer.stl"
 DATEI_3MF = "tuerzwerg-giessform-manschette.3mf"
 
 _SCHRAEG = 0.7071067811865476
@@ -269,55 +265,13 @@ def _kammer_roh(x, y, z):
 
 
 def kern_kammer(x, y, z):
-    """Der ganze Kammerkern. Nur noch Sollform fuer die Pruefungen -
-    gedruckt wird er in drei Stuecken."""
+    """Knotenkammer samt Verrundungen, Schnurstift, Flach und Knauf."""
     rs = math.hypot(x, z - Z_FUGE)
     stift = max(rs - STIFT_R, y + M.KAMMER_ACHSE, FLACH_AB - y)
     flach = quader(x, y, z, -FLACH_X, FLACH_X, Y_UNTEN, FLACH_AB,
                    Z_FUGE - FLACH_Z, Z_FUGE + FLACH_Z)
     knauf = max(rs - KNAUF_S_R, Y_UNTEN - KNAUF_S - y, y - Y_UNTEN)
     return min(_kammer_roh(x, y, z), stift, flach, knauf)
-
-
-def kern_kammer_ende(x, y, z):
-    """Das untere Kegelende der Kammer, mit seiner Zunge.
-
-    Das obere Ende ist dasselbe Teil, um 180 Grad um die y-Achse gedreht
-    (x -> -x, z -> LAENGE - z) - die Kammer ist zu beiden Ebenen
-    symmetrisch, es wird also nur ein STL gedruckt, zweimal.
-
-    Die Zunge steht senkrecht und laeuft ueber die volle Kammerhoehe.
-    Senkrecht, damit sie freikommt, wenn das Mittelstueck nach oben
-    abgehoben wird - ein Zapfen in z wuerde das Mittelstueck sperren.
-    Ueber die volle Hoehe, damit ueber ihr kein Schlitz offen bleibt, in
-    den Silikon laufen und einen Klotz in der Knotenkammer bilden wuerde.
-    """
-    roh = _kammer_roh(x, y, z)
-    rumpf = max(roh, z - KK_SCHNITT)
-    zunge = max(roh, abs(x) - KK_ZAPFEN_X, z - (KK_SCHNITT + KK_ZAPFEN_L))
-    return min(rumpf, zunge)
-
-
-def kern_kammer_mitte(x, y, z):
-    """Das Mittelstueck: voller Zylinder, Schnurstift, Flach und Knauf.
-
-    An beiden Enden ein senkrechter Schlitz fuer die Zunge des jeweiligen
-    Kegelendes. Die Schlitze sind oben offen - nur so laesst sich das
-    Mittelstueck von den beiden Zungen abheben.
-    """
-    kammer = max(_kammer_roh(x, y, z),
-                 KK_SCHNITT - z, z - (LAENGE - KK_SCHNITT))
-    for z0 in (KK_SCHNITT, LAENGE - KK_SCHNITT - KK_ZAPFEN_L):
-        schlitz = max(abs(x) - (KK_ZAPFEN_X + KK_LUFT),
-                      (z0 - KK_LUFT) - z,
-                      z - (z0 + KK_ZAPFEN_L + KK_LUFT))
-        kammer = max(kammer, -schlitz)
-    rs = math.hypot(x, z - Z_FUGE)
-    stift = max(rs - STIFT_R, y + M.KAMMER_ACHSE, FLACH_AB - y)
-    flach = quader(x, y, z, -FLACH_X, FLACH_X, Y_UNTEN, FLACH_AB,
-                   Z_FUGE - FLACH_Z, Z_FUGE + FLACH_Z)
-    knauf = max(rs - KNAUF_S_R, Y_UNTEN - KNAUF_S - y, y - Y_UNTEN)
-    return min(kammer, stift, flach, knauf)
 
 
 def fuehrung(x, y, z):
@@ -425,16 +379,10 @@ def grenzen_kern_b():
             (Z_UNTEN - KNAUF_B - 1.5, Z_FUGE + FUGE_L + 1.5))
 
 
-def grenzen_kern_km():
+def grenzen_kern_k():
     return ((-KNAUF_S_R - 1.5, KNAUF_S_R + 1.5),
             (Y_UNTEN - KNAUF_S - 1.5, -4.0),
-            (KK_SCHNITT - 1.5, LAENGE - KK_SCHNITT + 1.5))
-
-
-def grenzen_kern_ke():
-    return ((-M.R_RIPPE - 1.5, M.R_RIPPE + 1.5),
-            (-RIPPE_UNTEN - 1.5, -4.0),
-            (KAMMER_AB - 1.5, KK_SCHNITT + KK_ZAPFEN_L + 1.5))
+            (Z_FUGE - 13.0, Z_FUGE + 13.0))
 
 
 # -------------------------------------------------------------- Kennzahlen --
@@ -645,10 +593,8 @@ if __name__ == "__main__":
     tri_b = vernetzen(feld_b, grenzen_halb(True), RASTER)
     print("Vernetze Bohrungskern ...")
     tri_bk = vernetzen(kern_bohrung, grenzen_kern_b(), RASTER * 0.6)
-    print("Vernetze Kammerkern Mitte ...")
-    tri_km = vernetzen(kern_kammer_mitte, grenzen_kern_km(), RASTER * 0.6)
-    print("Vernetze Kammerkern Ende ...")
-    tri_ke = vernetzen(kern_kammer_ende, grenzen_kern_ke(), RASTER * 0.6)
+    print("Vernetze Kammerkern ...")
+    tri_kk = vernetzen(kern_kammer, grenzen_kern_k(), RASTER * 0.6)
 
     def richte(tri):
         v = volumen(tri)
@@ -659,8 +605,7 @@ if __name__ == "__main__":
     tri_a, vol_a = richte(tri_a)
     tri_b, vol_b = richte(tri_b)
     tri_bk, vol_bk = richte(tri_bk)
-    tri_km, vol_km = richte(tri_km)
-    tri_ke, vol_ke = richte(tri_ke)
+    tri_kk, vol_kk = richte(tri_kk)
 
     ab_max, ab_mit = abweichung(feld_a, tri_a)
 
@@ -683,48 +628,33 @@ if __name__ == "__main__":
     # Bohrungskern steht auf dem Knauf
     bk_druck = [tuple((p[0], p[1], p[2] - (Z_UNTEN - KNAUF_B)) for p in t)
                 for t in tri_bk]
-    # Kammermittelstueck steht auf dem Knauf. Drehung um 90 Grad um die
-    # x-Achse: (x, y, z) -> (x, -z, y). Das ist eine echte Drehung, die
-    # Wicklung bleibt richtig - eine Korrektur wuerde sie umkehren.
-    km_druck = [tuple((p[0], Z_FUGE - p[2], p[1] - (Y_UNTEN - KNAUF_S))
-                      for p in t) for t in tri_km]
-    # Kegelende steht auf der Stirnflaeche seiner Zunge, Kegelspitze nach
-    # oben - so ist die Kegelmantelflaeche ein 45-Grad-Ueberhang und
-    # traegt sich selbst. Drehung um 180 Grad um die x-Achse:
-    # (x, y, z) -> (x, -y, -z), ebenfalls eine echte Drehung.
-    ke_druck = [tuple((p[0], -(p[1] + M.KAMMER_ACHSE),
-                       (KK_SCHNITT + KK_ZAPFEN_L) - p[2]) for p in t)
-                for t in tri_ke]
+    # Kammerkern steht auf dem Knauf. Drehung um 90 Grad um die x-Achse:
+    # (x, y, z) -> (x, -z, y). Das ist eine echte Drehung, die Wicklung
+    # bleibt richtig - eine Korrektur wuerde sie umkehren.
+    kk_druck = [tuple((p[0], Z_FUGE - p[2], p[1] - (Y_UNTEN - KNAUF_S))
+                      for p in t) for t in tri_kk]
 
     schreibe_stl(a_druck, DATEI_H, "Tuerzwerg Manschette Haelfte A - mm")
     schreibe_stl(b_druck, DATEI_H2, "Tuerzwerg Manschette Haelfte B - mm")
     schreibe_stl(bk_druck, DATEI_B, "Tuerzwerg Manschette Bohrungskern - mm")
-    schreibe_stl(km_druck, DATEI_KM,
-                 "Tuerzwerg Manschette Kammerkern Mitte - mm")
-    schreibe_stl(ke_druck, DATEI_KE,
-                 "Tuerzwerg Manschette Kammerkern Kegelende - mm")
+    schreibe_stl(kk_druck, DATEI_K, "Tuerzwerg Manschette Kammerkern - mm")
 
     schreibe_3mf(
         [("Haelfte A", a_druck, (35.0, 35.0, 0.0)),
          ("Haelfte B", b_druck, (35.0, 92.0, 0.0)),
          ("Bohrungskern 1", bk_druck, (95.0, 40.0, 0.0)),
          ("Bohrungskern 2", bk_druck, (125.0, 40.0, 0.0)),
-         ("Kammerkern Mitte", km_druck, (110.0, 80.0, 0.0)),
-         ("Kammerkern Ende 1", ke_druck, (150.0, 75.0, 0.0)),
-         ("Kammerkern Ende 2", ke_druck, (150.0, 95.0, 0.0))],
+         ("Kammerkern", kk_druck, (110.0, 80.0, 0.0))],
         DATEI_3MF, "Tuerzwerg Giessform Manschette",
-        "Beide Haelften flach mit der Trennflaeche nach oben, die Kerne "
-        "stehend. PLA, 0,2 mm Schicht, mindestens 4 Perimeter, "
-        "30 Prozent Infill. Nur die beiden Kegelenden brauchen unter "
-        "ihrem Kragen eine Stuetze.")
+        "Beide Haelften flach mit der Trennflaeche nach oben, alle drei "
+        "Kerne stehend auf ihren Knaeufen. PLA, 0,2 mm Schicht, "
+        "mindestens 4 Perimeter, 30 Prozent Infill, keine Stuetzen.")
 
     anteil, grad, flaeche = ueberhang(a_druck)
     kav = kavitaet_volumen()
     s, n, t, sw = entformbar()
     fb = kern_bohr_ziehbar()
-    km_sperr, km_dehn = kammer_frei(kern_kammer_mitte)
-    ke_sperr, ke_dehn = kammer_frei(kern_kammer_ende, KK_SCHIEBEN)
-    ein_sperr, ein_dehn = kammer_frei(kern_kammer)
+    kk_sperr, kk_dehn = kammer_frei(kern_kammer)
     err, ges, entl = fuellweg()
     wand, wo = engste_wand()
 
@@ -733,25 +663,19 @@ if __name__ == "__main__":
           f" x {X_HALB:.0f} mm")
     print(f"Bohrungskern    2 x gleich, {Z_FUGE-Z_UNTEN+KNAUF_B:.0f} mm lang, "
           f"{vol_bk/1000:.1f} cm^3")
-    print(f"Kammerkern      Mitte 1 x {vol_km/1000:.1f} cm^3, "
-          f"Kegelende 2 x gleich {vol_ke/1000:.1f} cm^3")
+    print(f"Kammerkern      1 x, {vol_kk/1000:.1f} cm^3")
     print(f"Dreiecke        {len(a_druck)} + {len(b_druck)} + "
-          f"{len(bk_druck)} + {len(km_druck)} + {len(ke_druck)}")
+          f"{len(bk_druck)} + {len(kk_druck)}")
     print(f"Offene Kanten   A {offene_kanten(a_druck)}, B {offene_kanten(b_druck)}, "
-          f"Bohrkern {offene_kanten(bk_druck)}, Kammer Mitte "
-          f"{offene_kanten(km_druck)}, Kammer Ende {offene_kanten(ke_druck)}")
+          f"Bohrkern {offene_kanten(bk_druck)}, Kammerkern {offene_kanten(kk_druck)}")
     print(f"Bauteil         {kav/1000:.2f} cm^3 ({kav/1000*1.15:.1f} g Silikon)")
     print(f"Entformbar      {s} von {n} Saeulen gesperrt"
           + (f", bis {t:.1f} mm bei y={sw[0]:.0f} z={sw[1]:.0f}" if sw
              else "  (0 = Haelfte laesst sich abziehen)"))
     print(f"Bohrungskern    {fb} Verstoesse gegen die Zugrichtung "
           f"(0 = kommt ohne Verformung heraus)")
-    print(f"Kammerkern      einteilig waere {ein_sperr} Scheiben GESPERRT "
-          f"- deshalb dreiteilig:")
-    print(f"  Mitte         {km_sperr} gesperrt, {km_dehn:.0%} Dehnung "
-          f"(hebt gerade nach oben ab)")
-    print(f"  Kegelende     {ke_sperr} gesperrt, {ke_dehn:.0%} Dehnung "
-          f"(erst {KK_SCHIEBEN:.0f} mm nach innen schieben)")
+    print(f"Kammerkern      {kk_sperr} gesperrte Scheiben, {kk_dehn:.0%} "
+          f"Dehnung (0/0 = geht gerade nach oben heraus)")
     print(f"Fuellweg        {100.0*err/ges:.1f} % der Kavitaet erreichbar, "
           f"Entlueftung {'an' if entl else 'AB'}")
     print(f"Duennste Wand   {wand:.1f} mm"
