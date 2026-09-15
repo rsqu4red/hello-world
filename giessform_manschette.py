@@ -59,6 +59,11 @@ unten, der Anschnitt sitzt knapp ueber der unteren Stirnflaeche, die
 Entlueftung an der oberen. Fuellte man von oben, muesste die Luft aus
 einem unten geschlossenen 2-mm-Ringspalt gegen das einlaufende Silikon.
 
+Alle Kanaele liegen je zur Haelfte in beiden Formhaelften und sind
+damit voll rund. Legte man sie nur in eine, waeren sie halbrund - und
+ein halbrunder Kanal fuehrt bei gleichem Radius nur 18,9 Prozent des
+Stroms eines runden.
+
     python3 giessform_manschette.py
 """
 
@@ -115,16 +120,16 @@ ZENTRIER_R, ZENTRIER_NUT_R = 2.0, 2.2
 RIPPE_SPITZE = 0.5                      # Rippe endet 0,5 mm vor dem Teil
 NUT_SPITZE = 0.1                        # Nut 0,4 mm laenger, setzt nicht auf
 
-# Kanalsystem, vollstaendig in Haelfte A.
+# Kanalsystem, je zur Haelfte in beiden Formhaelften.
 #
 # Die Masse sind nachgerechnet, nicht geschaetzt. Mit Ø5-Lauf und
 # Ø4-Anschnitt lag die Fuellzeit bei 20 Pa*s Silikon bei 44 Minuten -
 # mehr als die Topfzeit. Zwei Ursachen: die Kanaele machten zusammen 82
 # Prozent des Stroemungswiderstands, und der Trichter endete 4 mm ueber
 # der Teiloberkante, sodass am Schluss fast keine Druckhoehe mehr
-# uebrig war. Jetzt Ø8 und Ø6, und der Block reicht bis z = 44, was am
-# Ende 16 mm Saeule stehen laesst. Nebenbei wird die Stirnwand dadurch
-# 16 statt 6 mm dick und fuehrt den oberen Bohrungskern deutlich besser.
+# uebrig war. Jetzt Ø8 und Ø6, und ueber dem Lauf steht ein Turm, der
+# den Trichter auf z = 42 hebt - am Ende bleiben damit 14 mm Saeule
+# statt 4. Fuellzeit bei 20 Pa*s: 10 Minuten statt 44.
 LAUF_Y = 18.5
 LAUF_R = 4.0
 TRICHTER_AB, TRICHTER_BIS = 40.0, 42.0
@@ -265,8 +270,12 @@ def haelfte(x, y, z, mit_kanaelen):
     d = max(d, -max(koerper(x, y, z), x))
     d = max(d, -max(fuehrung(x, y, z), x))
 
-    if mit_kanaelen:
-        d = max(d, -kanal(x, y, z))
+    # Das Kanalsystem liegt in BEIDEN Haelften, je zur Haelfte. Nur in
+    # einer waere es halbrund, und ein halbrunder Kanal fuehrt bei
+    # gleichem Radius nur 18,9 Prozent des Stroms eines runden - der
+    # Widerstand ist 5,28-mal so hoch. Die Fuellzeit stiege damit von
+    # zehn auf rund dreissig Minuten.
+    d = max(d, -kanal(x, y, z))
 
     for y0, unten in rippen:
         rippe = max(_zapfen_feld(x, y, z, y0, unten, ZENTRIER_R,
@@ -527,8 +536,8 @@ if __name__ == "__main__":
     schreibe_stl(kk_druck, DATEI_K, "Tuerzwerg Manschette Kammerkern - mm")
 
     schreibe_3mf(
-        [("Haelfte A mit Kanaelen", a_druck, (30.0, 35.0, 0.0)),
-         ("Haelfte B glatt", b_druck, (30.0, 90.0, 0.0)),
+        [("Haelfte A", a_druck, (35.0, 35.0, 0.0)),
+         ("Haelfte B", b_druck, (35.0, 92.0, 0.0)),
          ("Bohrungskern 1", bk_druck, (95.0, 40.0, 0.0)),
          ("Bohrungskern 2", bk_druck, (125.0, 40.0, 0.0)),
          ("Kammerkern", kk_druck, (110.0, 80.0, 0.0))],
