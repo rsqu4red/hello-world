@@ -126,10 +126,15 @@ def feld(x, y, z):
     #
     # Die Enden laufen weiter als 45-Grad-Kegel aus; jeder Querschnitt
     # bleibt dabei ein U mit senkrechten Waenden.
+    # min(0, ...) macht den Querschnitt nach oben hin unbegrenzt - ohne
+    # Deckel saegt die Kammer als 11 mm breiter Schlitz durch die ganze
+    # Manschette, quer durch die Rohrwand oben. Die Kammer braucht nur
+    # bis in die Bohrung zu reichen; y = 0 liegt sicher darin, denn bei
+    # |x| <= 5,5 ist die Bohrungswand schon bei y = -7,1 erreicht.
     rk = math.hypot(x, min(0.0, y + KAMMER_ACHSE))
     z_a = LAENGE / 2.0 - KAMMER_LAENGE / 2.0 - D_KAMMER / 2.0
     z_b = LAENGE / 2.0 + KAMMER_LAENGE / 2.0 + D_KAMMER / 2.0
-    kammer = max(rk - D_KAMMER / 2.0, rk - (z - z_a), rk - (z_b - z))
+    kammer = max(rk - D_KAMMER / 2.0, rk - (z - z_a), rk - (z_b - z), y)
 
     # Schnurbohrung, rund
     schnur = math.hypot(x, z - LAENGE / 2.0) - D_SCHNUR / 2.0

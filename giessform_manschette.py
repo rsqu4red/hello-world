@@ -152,16 +152,39 @@ KAMMER_AB = (M.LAENGE - M.KAMMER_LAENGE) / 2.0 - M.D_KAMMER / 2.0   # 3,5
 # manschette.py); damit ist sie an keiner Stelle breiter als ihre
 # Oeffnung, und der Kern geht in einem Stueck gerade nach oben in die
 # Bohrung und dort heraus - ohne jede Dehnung.
+#
+# Unterhalb des Bauteils darf am Kern nichts dicker sein als die
+# Schnurbohrung. Er hatte dort einen Knauf Ø12 zum Anfassen und ein
+# Flach 7 mm gegen Verdrehen - beide muessten beim Herausheben durch die
+# Ø5-Schnurbohrung, also mit 140 bzw. 40 Prozent Dehnung. Damit war der
+# Kern ein Pilz im Flaschenhals, so sorgfaeltig die Kammer oben auch
+# geoeffnet war.
+#
+# Beides ist ersatzlos weg. Der Stift ist jetzt auf ganzer Laenge Ø5,
+# genau die Schnurbohrung, und gleitet beim Herausheben einfach heraus.
+#
+# Was sie geleistet haben, leisten jetzt andere:
+# - Hoehe: der Stift steht in einer Sackbohrung auf Grund. Silikon ist
+#   mit 1,15 leichter als PLA mit 1,24, der Kern bleibt also sitzen.
+# - Verdrehen: der Trog liegt mit seinen beiden Oberkanten an der
+#   Bohrungswand, und in der Bohrung stecken beim Giessen die beiden
+#   Bohrungskerne. Eine Drehung um die Stiftachse muesste die Trogkanten
+#   in die Bohrungskerne druecken - das sperrt schon im ersten Grad.
+# - Anfassen: eine Ø3-Bohrung durch den Formboden bis in die
+#   Sackbohrung. Von unten ein Stift hinein, und der Kern steigt in die
+#   Bohrung, wo man ihn herausnimmt.
+#
+# Wie lang der Stift sein darf, bestimmt nicht die Fuehrung, sondern die
+# Bohrung. Herausgefaedelt wird der Kern, indem er angehoben wird, bis er
+# ganz im Ø18-Zylinder steht, und dann axial herausgeschoben. Der Trog
+# ist 11 mm breit; steht er mittig, bleiben unter ihm noch 8,65 mm bis
+# zur Bohrungswand, und so weit darf der Stift hoechstens hinunter-
+# reichen. Ein Stift bis y = -24 haette den Kern wieder unentnehmbar
+# gemacht, diesmal nicht durch Dicke, sondern durch Laenge.
 STIFT_R = M.D_SCHNUR / 2.0              # 2,5
+STIFT_UNTEN = -21.0                     # 2,5 mm Fuehrung unter dem Bauteil
 FUEHR_S_R = STIFT_R + 0.05
-# Unterhalb des Teils wird der Stift flach. Rund gefuehrt koennte sich
-# der Kammerkern um die Stiftachse drehen, und mit 2 mm Luft ringsum und
-# 10,5 mm Hebel waeren das rund 11 Grad Schraeglage der Kammer.
-FLACH_X, FLACH_Z = 3.5, 2.0             # halbe Breite, halbe Tiefe
-FLACH_AB = -19.5                        # ab hier, sicher unter der Rippe
-FLACH_LUFT = 0.05
-KNAUF_S_R = 6.0
-KNAUF_S = 4.0
+AUSSTOSS_R = 1.5                        # Ausstossbohrung durch den Boden
 
 # Zentrierung: senkrechte Halbrundzapfen in den Stirnstreifen.
 # Die Stirnstreifen sind nur z < 0 bzw. z > 28 breit. Rippe und Nut
@@ -265,13 +288,16 @@ def _kammer_roh(x, y, z):
 
 
 def kern_kammer(x, y, z):
-    """Knotenkammer samt Verrundungen, Schnurstift, Flach und Knauf."""
+    """Knotenkammer samt Verrundungen und Schnurstift.
+
+    Nichts an diesem Teil ist unterhalb des Bauteils dicker als die
+    Schnurbohrung, die es selbst formt. Es geht deshalb in einem Stueck
+    gerade nach oben heraus: der Trog in die Bohrung, der Stift aus der
+    Schnurbohrung.
+    """
     rs = math.hypot(x, z - Z_FUGE)
-    stift = max(rs - STIFT_R, y + M.KAMMER_ACHSE, FLACH_AB - y)
-    flach = quader(x, y, z, -FLACH_X, FLACH_X, Y_UNTEN, FLACH_AB,
-                   Z_FUGE - FLACH_Z, Z_FUGE + FLACH_Z)
-    knauf = max(rs - KNAUF_S_R, Y_UNTEN - KNAUF_S - y, y - Y_UNTEN)
-    return min(_kammer_roh(x, y, z), stift, flach, knauf)
+    stift = max(rs - STIFT_R, y + M.KAMMER_ACHSE, STIFT_UNTEN - y)
+    return min(_kammer_roh(x, y, z), stift)
 
 
 def fuehrung(x, y, z):
@@ -279,12 +305,13 @@ def fuehrung(x, y, z):
     r = math.hypot(x, y)
     unten = max(r - FUEHR_B_R, Z_UNTEN - z, z - 0.0)
     oben = max(r - FUEHR_B_R, LAENGE - z, z - Z_OBEN)
-    stift = max(math.hypot(x, z - Z_FUGE) - FUEHR_S_R,
-                FLACH_AB - y, y + RIPPE_UNTEN - 0.5)
-    schlitz = quader(x, y, z, -FLACH_X - FLACH_LUFT, FLACH_X + FLACH_LUFT,
-                     Y_UNTEN - 1.0, FLACH_AB,
-                     Z_FUGE - FLACH_Z - FLACH_LUFT, Z_FUGE + FLACH_Z + FLACH_LUFT)
-    return min(unten, oben, stift, schlitz)
+    rs = math.hypot(x, z - Z_FUGE)
+    # Sackbohrung: oben offen zum Bauteil, unten geschlossen - der Stift
+    # steht auf ihrem Grund und hat damit seine Hoehe.
+    stift = max(rs - FUEHR_S_R, STIFT_UNTEN - 0.05 - y, y + RIPPE_UNTEN - 0.5)
+    # Ausstossbohrung durch den Formboden bis in die Sackbohrung.
+    ausstoss = max(rs - AUSSTOSS_R, Y_UNTEN - 1.0 - y, y - STIFT_UNTEN)
+    return min(unten, oben, stift, ausstoss)
 
 
 def kanal(x, y, z):
@@ -380,8 +407,8 @@ def grenzen_kern_b():
 
 
 def grenzen_kern_k():
-    return ((-KNAUF_S_R - 1.5, KNAUF_S_R + 1.5),
-            (Y_UNTEN - KNAUF_S - 1.5, -4.0),
+    return ((-M.R_RIPPE - 1.5, M.R_RIPPE + 1.5),
+            (STIFT_UNTEN - 1.5, -4.0),
             (Z_FUGE - 13.0, Z_FUGE + 13.0))
 
 
@@ -461,6 +488,58 @@ def _schlitz_halb(z, schritt=0.05):
             breit = x
         x += schritt
     return breit
+
+
+def kern_kammer_frei(schritt=0.3, dmax=15.0):
+    """Kommt der Kammerkern als Ganzes heraus?
+
+    Nicht senkrecht - ueber ihm liegt die Rohrwand. Er wird angehoben,
+    bis er ganz im Bohrungszylinder steht, und dann axial
+    herausgefaedelt. Geprueft wird beides: dass er auf dem Weg nach oben
+    kein Silikon durchquert, und dass am Ende jeder seiner Punkte im
+    Zylinder liegt - was darin steht, laesst sich axial herausschieben.
+
+    Die Vorgaengerpruefung hat nur die Kammer abgetastet, von y = -18,5
+    aufwaerts, und damit genau das uebersehen, was den Kern festhielt:
+    Flach und Knauf unter dem Bauteil.
+    """
+    punkte = []
+    x = -R_AUSSEN
+    while x <= R_AUSSEN:
+        y = STIFT_UNTEN - 1.0
+        while y <= R_AUSSEN:
+            z = -1.0
+            while z <= LAENGE + 1.0:
+                if kern_kammer(x, y, z) < 0.0:
+                    punkte.append((x, y, z))
+                z += schritt
+            y += schritt
+        x += schritt
+
+    # kleinster Hub, bei dem der ganze Kern im Bohrungszylinder steht
+    hub = None
+    d = 0.0
+    while d <= dmax:
+        if all(math.hypot(px, py + d) <= R_INNEN for px, py, _ in punkte):
+            hub = d
+            break
+        d += schritt
+    if hub is None:
+        return None, len(punkte), len(punkte), 0.0
+
+    # durchquert er auf dem Weg Silikon?
+    gesperrt, tief = 0, 0.0
+    for px, py, pz in punkte:
+        d, traf = 0.0, False
+        while d <= hub:
+            v = M.feld(px, py + d, pz)
+            if v < 0.0:
+                traf = True
+                tief = max(tief, -v)
+            d += schritt
+        if traf:
+            gesperrt += 1
+    return hub, len(punkte), gesperrt, tief
 
 
 def kammer_frei(feld, versatz=0.0, schritt=0.05):
@@ -631,7 +710,7 @@ if __name__ == "__main__":
     # Kammerkern steht auf dem Knauf. Drehung um 90 Grad um die x-Achse:
     # (x, y, z) -> (x, -z, y). Das ist eine echte Drehung, die Wicklung
     # bleibt richtig - eine Korrektur wuerde sie umkehren.
-    kk_druck = [tuple((p[0], Z_FUGE - p[2], p[1] - (Y_UNTEN - KNAUF_S))
+    kk_druck = [tuple((p[0], Z_FUGE - p[2], p[1] - STIFT_UNTEN)
                       for p in t) for t in tri_kk]
 
     schreibe_stl(a_druck, DATEI_H, "Tuerzwerg Manschette Haelfte A - mm")
@@ -655,6 +734,7 @@ if __name__ == "__main__":
     s, n, t, sw = entformbar()
     fb = kern_bohr_ziehbar()
     kk_sperr, kk_dehn = kammer_frei(kern_kammer)
+    kg_hub, kg_ges, kg_sperr, kg_tief = kern_kammer_frei()
     err, ges, entl = fuellweg()
     wand, wo = engste_wand()
 
@@ -674,8 +754,12 @@ if __name__ == "__main__":
              else "  (0 = Haelfte laesst sich abziehen)"))
     print(f"Bohrungskern    {fb} Verstoesse gegen die Zugrichtung "
           f"(0 = kommt ohne Verformung heraus)")
-    print(f"Kammerkern      {kk_sperr} gesperrte Scheiben, {kk_dehn:.0%} "
-          f"Dehnung (0/0 = geht gerade nach oben heraus)")
+    print(f"Kammerkern      "
+          + (f"Hub {kg_hub:.1f} mm, dann steht er ganz in der Bohrung"
+             if kg_hub is not None else "passt NIE ganz in die Bohrung"))
+    print(f"  dabei         {kg_sperr} von {kg_ges} Punkten mit Silikonkontakt, "
+          f"hoechstens {kg_tief:.2f} mm tief")
+    print(f"  Kammer allein {kk_sperr} gesperrte Scheiben, {kk_dehn:.0%} Dehnung")
     print(f"Fuellweg        {100.0*err/ges:.1f} % der Kavitaet erreichbar, "
           f"Entlueftung {'an' if entl else 'AB'}")
     print(f"Duennste Wand   {wand:.1f} mm"
