@@ -645,6 +645,44 @@ def fuellweg(schritt=0.5):
     return err, ges, entl
 
 
+def fuellzeit(mu=20.0, rho=1150.0, g=9.81, n=4000):
+    """Fuellzeit und Restdruck beim Giessen.
+
+    Gefuellt wird von unten. Der Lauf laeuft dabei mit voll - er ist
+    kein Verlust, sondern der Steiger: Kavitaet und Lauf sind
+    kommunizierende Roehren, und die Kavitaet fuellt sich bis zu dem
+    Spiegel, den man im Trichter haelt. Deshalb steht ueber dem Lauf ein
+    Turm, der den Trichter auf z = 42 hebt - 14 mm ueber die
+    Teiloberkante. Diese 14 mm sind der ganze Druckvorrat am Schluss.
+
+    Gerechnet wird quasistatisch: Hagen-Poiseuille fuer Lauf und
+    Anschnitt, Spaltmodell 12*mu*L/(w*h^3) fuer die Kavitaet, deren
+    Widerstand mit der Fuellhoehe waechst, waehrend die Druckhoehe faellt.
+    """
+    laenge = LAENGE / 1000.0
+    vol = kavitaet_volumen() * 1e-9
+    flaeche = vol / laenge                      # mittlerer Querschnitt
+    spalt = M.WAND / 1000.0                     # engster Querschnitt: 2 mm
+    breite = flaeche / spalt
+    z_an = ANSCHNITT_Z / 1000.0
+    z_spiegel = TRICHTER_BIS / 1000.0
+
+    r_lauf = 8 * mu * 0.040 / (math.pi * (LAUF_R / 1000.0) ** 4)
+    r_an = 8 * mu * 0.009 / (math.pi * (ANSCHNITT_R / 1000.0) ** 4)
+    r_kanal = r_lauf + r_an
+    k = 12 * mu / (breite * spalt ** 3)          # Kavitaet je Meter Front
+
+    t = 0.0
+    for i in range(n):
+        z = z_an + (i + 0.5) * (laenge - z_an) / n
+        strom = rho * g * (z_spiegel - z) / (r_kanal + k * z)
+        t += flaeche * ((laenge - z_an) / n) / strom
+
+    p_ende = rho * g * (z_spiegel - laenge)
+    kapillar = 2 * 0.021 / spalt                 # Silikon benetzt PLA
+    return t, p_ende, kapillar, r_kanal / (r_kanal + k * laenge)
+
+
 def engste_wand(schritt=0.4):
     """Duennste Formwand zwischen Kavitaet und Lauf, Nut oder Aussenflaeche."""
     def wandfeld(x, y, z):
@@ -759,6 +797,7 @@ if __name__ == "__main__":
     hub, hub_max, hg, hs, ht = hub_test(kern_kammer, grenzen_kern_k())
     err, ges, entl = fuellweg()
     wand, wo = engste_wand()
+    ft, p_ende, kap, anteil = fuellzeit()
 
     print(f"\nDateien         {DATEI_3MF}  <- alles in einer Datei")
     print(f"Eine Haelfte    {Z_OBEN-Z_UNTEN+FUSS_Z:.0f} x {Y_OBEN-Y_UNTEN:.0f}"
@@ -792,6 +831,10 @@ if __name__ == "__main__":
               + (f", bis {ht:.2f} mm tief" if hs else ""))
     print(f"Fuellweg        {100.0*err/ges:.1f} % der Kavitaet erreichbar, "
           f"Entlueftung {'an' if entl else 'AB'}")
+    print(f"Fuellen         {ft/60:.1f} min bei 20 Pa*s, Restdruck {p_ende:.0f} Pa "
+          f"aus {TRICHTER_BIS-LAENGE:.0f} mm Saeule")
+    print(f"  davon         {100*anteil:.0f} % des Widerstands in den Kanaelen, "
+          f"Kapillardruck im 2-mm-Spalt nur {kap:.0f} Pa")
     print(f"Duennste Wand   {wand:.1f} mm"
           + (f" bei x={wo[0]:.0f} y={wo[1]:.0f} z={wo[2]:.0f}" if wo else ""))
     print(f"Ueberhang       {anteil:.2f} % der Flaeche ueber 45 Grad, "
