@@ -52,6 +52,7 @@ KAMMER_LAENGE = 10.0    # gerader Teil; mit den 45-Grad-Kegeln 21 mm gesamt,
 RIPPE_WAND = 2.0        # Material um die Kammer herum
 
 D_SCHNUR = 5.0          # Schnurbohrung nach aussen, rund
+SCHNUR_SENK = 0.5       # 45-Grad-Senkung am aeusseren Ende, fuer die Schnur
 VERRUNDUNG = 4.0        # weicher Uebergang Rohr zu Rippe
 
 # Verrundung der Stirnkanten. Eine scharfe Kante laesst sich mit einem
@@ -100,45 +101,49 @@ def feld(x, y, z):
     rand = min(z, LAENGE - z)
     bohrung = r - (R_INNEN + max(0.0, EINLAUF - rand))
 
-    # Knotenkammer: nach oben offener Trog, kein geschlossenes Fass.
+    # Knotenkanal: durchgehende Nut in der Rippe, oben zur Bohrung offen.
     #
-    # Ein runder Querschnitt ist an seiner breitesten Stelle breiter als
-    # dort, wo er in die Bohrung durchbricht. Zum Drucken ist das egal,
-    # zum Giessen nicht: der Kern sitzt dann in der Kammer fest wie ein
-    # Teller in der Flasche. An den Kegelenden, wo der Kammerradius unter
-    # 2 mm faellt, reicht die Kammer ueberhaupt nicht mehr bis zur
-    # Bohrung - dort stuende ueber dem Kern bis zu 2,05 mm massives
-    # Silikon.
+    # Frueher war das eine geschlossene Tasche - runder Zylinder mit
+    # 45-Grad-Kegelenden. Die liess sich drucken, aber nicht giessen: was
+    # den Hohlraum bildet, sitzt danach darin fest. Jede Abhilfe an der
+    # Form allein hat nur den naechsten Klemmpunkt freigelegt.
     #
-    # Deshalb ist nur die untere Haelfte rund; darueber laufen die Waende
-    # senkrecht bis in die Bohrung. min(0, ...) macht aus dem Kreis ein
-    # U: unterhalb der Kammerachse der volle Radius, oberhalb nur noch
-    # der Abstand zur Mittelebene. Damit ist die Kammer an keiner Stelle
-    # breiter als ihre Oeffnung, und der Kern laesst sich gerade nach
-    # oben in die Bohrung heben und dort herausfaedeln - in einem Stueck,
-    # ohne jede Dehnung.
+    # Der Kanal ist deshalb in beide Richtungen offen:
     #
-    # Der Knoten verliert dabei nichts: der Boden bleibt, wo er war, und
-    # ueber der Achse wird die Kammer sogar weiter. Getragen wird der
-    # Knoten ohnehin vom Boden rings um die Schnurbohrung, nicht von der
-    # Oeffnung - die Schnur zieht nach unten. Geschlossen wird die Kammer
-    # vom Tuerdruecker selbst, der in der Bohrung darueber steckt.
+    # - nach oben: min(0, ...) macht aus dem Kreisquerschnitt ein U -
+    #   untere Haelfte rund, darueber senkrechte Waende. Der Kanal ist
+    #   damit an keiner Stelle breiter als seine Oeffnung.
+    # - nach den Stirnseiten: kein Kegelende mehr, der Kanal laeuft durch.
+    #   Der Querschnitt ist ueber die ganze Laenge gleich.
     #
-    # Die Enden laufen weiter als 45-Grad-Kegel aus; jeder Querschnitt
-    # bleibt dabei ein U mit senkrechten Waenden.
-    # min(0, ...) macht den Querschnitt nach oben hin unbegrenzt - ohne
-    # Deckel saegt die Kammer als 11 mm breiter Schlitz durch die ganze
-    # Manschette, quer durch die Rohrwand oben. Die Kammer braucht nur
-    # bis in die Bohrung zu reichen; y = 0 liegt sicher darin, denn bei
-    # |x| <= 5,5 ist die Bohrungswand schon bei y = -7,1 erreicht.
+    # Beides zusammen macht den Kanal zu einer geraden Nut. Gebildet wird
+    # er dadurch nicht mehr von einem Losteil, sondern von einem Kiel an
+    # den beiden Bohrungskernen, die ohnehin axial herausgezogen werden.
+    # Es gibt kein gefangenes Formteil mehr.
+    #
+    # y als vierter Term deckelt den Kanal auf Hoehe der Bohrungsachse.
+    # Ohne Deckel ist der Querschnitt nach oben unbegrenzt und saegt als
+    # 11 mm breiter Schlitz quer durch die Rohrwand. y = 0 liegt sicher
+    # in der Bohrung: bei |x| <= 5,5 ist deren Wand schon bei y = -7,1.
+    #
+    # Der Knoten verliert nichts: der Boden bleibt, wo er war, und
+    # getragen wird der Knoten von diesem Boden rings um die
+    # Schnurbohrung - die Schnur zieht nach unten. Geschlossen wird der
+    # Kanal vom Tuerdruecker, der in der Bohrung darueber steckt.
+    # Einfaedeln wird sogar leichter: der Knoten geht jetzt von der
+    # Stirnseite hinein statt durch die Oeffnung gequetscht zu werden.
     rk = math.hypot(x, min(0.0, y + KAMMER_ACHSE))
-    z_a = LAENGE / 2.0 - KAMMER_LAENGE / 2.0 - D_KAMMER / 2.0
-    z_b = LAENGE / 2.0 + KAMMER_LAENGE / 2.0 + D_KAMMER / 2.0
-    kammer = max(rk - D_KAMMER / 2.0, rk - (z - z_a), rk - (z_b - z), y)
+    kammer = max(rk - D_KAMMER / 2.0, y)
 
-    # Schnurbohrung, rund
-    schnur = math.hypot(x, z - LAENGE / 2.0) - D_SCHNUR / 2.0
-    schnur = max(schnur, y + KAMMER_ACHSE)          # endet in der Kammer
+    # Schnurbohrung. Scharf abgezogen und nach aussen leicht kegelig.
+    #
+    # Eine Verrundung am oberen Ende waere ein Wulst am Kiel, und der
+    # zieht laengs - er wuerde den Kanalboden ueber die ganze Laenge
+    # aufreissen. Nach unten dagegen darf sie sich oeffnen: dort zieht
+    # der Schnurkern, und der geht nach unten vom Bauteil weg.
+    senk = min(SCHNUR_SENK, max(0.0, -y - (RIPPE_UNTEN - SCHNUR_SENK)))
+    schnur = math.hypot(x, z - LAENGE / 2.0) - (D_SCHNUR / 2.0 + senk)
+    schnur = max(schnur, y + KAMMER_ACHSE)          # endet im Kanal
 
     # Bohrung scharf abziehen - sie ist eine Funktionsflaeche. Kammer und
     # Schnurkanal dagegen weich: Dort, wo die Kammer in die Bohrung
@@ -147,7 +152,7 @@ def feld(x, y, z):
     # und ein Gittervernetzer bildet sie ohnehin nur ungenau ab.
     d = max(koerper, -bohrung)
     d = _weich_abziehen(d, kammer, 0.8)
-    d = _weich_abziehen(d, schnur, 0.6)
+    d = max(d, -schnur)
     return d
 
 
@@ -186,7 +191,7 @@ if __name__ == "__main__":
     print(f"Innen          {D_INNEN:.1f} mm durchgehend zylindrisch")
     print(f"Wand           {WAND:.1f} mm = {WAND/BAHN:.0f} Bahnen zu {BAHN} mm")
     print(f"Rippenwand     {RIPPE_WAND:.1f} mm = {RIPPE_WAND/BAHN:.0f} Bahnen")
-    print(f"Kammer         {D_KAMMER:.1f} x {KAMMER_LAENGE:.0f} mm, "
+    print(f"Knotenkanal    {D_KAMMER:.1f} mm breit, durchgehend, "
           f"Schnurbohrung {D_SCHNUR:.1f} mm")
     print(f"Oberflaeche    {flaeche/100:.1f} cm^2")
     print(f"Ueberhang      {anteil:.2f} % der Flaeche ueber 45 Grad")
