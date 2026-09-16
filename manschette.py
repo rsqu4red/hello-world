@@ -101,7 +101,7 @@ def feld(x, y, z):
     rand = min(z, LAENGE - z)
     bohrung = r - (R_INNEN + max(0.0, EINLAUF - rand))
 
-    # Knotenkanal: durchgehende Nut in der Rippe, oben zur Bohrung offen.
+    # Knotenkammer: Tasche in der Rippe, nach oben zur Bohrung offen.
     #
     # Frueher war das eine geschlossene Tasche - runder Zylinder mit
     # 45-Grad-Kegelenden. Die liess sich drucken, aber nicht giessen: was
@@ -113,13 +113,17 @@ def feld(x, y, z):
     # - nach oben: min(0, ...) macht aus dem Kreisquerschnitt ein U -
     #   untere Haelfte rund, darueber senkrechte Waende. Der Kanal ist
     #   damit an keiner Stelle breiter als seine Oeffnung.
-    # - nach den Stirnseiten: kein Kegelende mehr, der Kanal laeuft durch.
-    #   Der Querschnitt ist ueber die ganze Laenge gleich.
+    # - an den Stirnseiten geschlossen: 45-Grad-Kegel, 3,5 mm Wand. Der
+    #   Knoten bleibt damit in der Kammer, statt im Kanal wandern zu
+    #   koennen.
     #
-    # Beides zusammen macht den Kanal zu einer geraden Nut. Gebildet wird
-    # er dadurch nicht mehr von einem Losteil, sondern von einem Kiel an
-    # den beiden Bohrungskernen, die ohnehin axial herausgezogen werden.
-    # Es gibt kein gefangenes Formteil mehr.
+    # Die Kegelenden verbieten es, die Kammer von einem Kiel an den
+    # Bohrungskernen bilden zu lassen: ein axial gezogener Kiel verlangt,
+    # dass die Kammer an der Stirnflaeche am tiefsten ist und nach innen
+    # nur enger wird - eine Tasche ist genau umgekehrt. Die Kammer bekommt
+    # deshalb einen eigenen Kern. Weil der Querschnitt aber ein U mit
+    # senkrechten Waenden ist, haengt der an nichts fest: er geht gerade
+    # nach oben in die Bohrung und dort axial heraus.
     #
     # y als vierter Term deckelt den Kanal auf Hoehe der Bohrungsachse.
     # Ohne Deckel ist der Querschnitt nach oben unbegrenzt und saegt als
@@ -130,10 +134,11 @@ def feld(x, y, z):
     # getragen wird der Knoten von diesem Boden rings um die
     # Schnurbohrung - die Schnur zieht nach unten. Geschlossen wird der
     # Kanal vom Tuerdruecker, der in der Bohrung darueber steckt.
-    # Einfaedeln wird sogar leichter: der Knoten geht jetzt von der
-    # Stirnseite hinein statt durch die Oeffnung gequetscht zu werden.
+    # Eingefaedelt wird von oben, bevor der Druecker eingeschoben wird.
     rk = math.hypot(x, min(0.0, y + KAMMER_ACHSE))
-    kammer = max(rk - D_KAMMER / 2.0, y)
+    z_a = LAENGE / 2.0 - KAMMER_LAENGE / 2.0 - D_KAMMER / 2.0
+    z_b = LAENGE / 2.0 + KAMMER_LAENGE / 2.0 + D_KAMMER / 2.0
+    kammer = max(rk - D_KAMMER / 2.0, rk - (z - z_a), rk - (z_b - z), y)
 
     # Schnurbohrung. Scharf abgezogen und nach aussen leicht kegelig.
     #
@@ -191,7 +196,8 @@ if __name__ == "__main__":
     print(f"Innen          {D_INNEN:.1f} mm durchgehend zylindrisch")
     print(f"Wand           {WAND:.1f} mm = {WAND/BAHN:.0f} Bahnen zu {BAHN} mm")
     print(f"Rippenwand     {RIPPE_WAND:.1f} mm = {RIPPE_WAND/BAHN:.0f} Bahnen")
-    print(f"Knotenkanal    {D_KAMMER:.1f} mm breit, durchgehend, "
+    print(f"Knotenkammer   {D_KAMMER:.1f} x {KAMMER_LAENGE:.0f} mm, "
+          f"Stirnwand {(LAENGE - KAMMER_LAENGE)/2 - D_KAMMER/2:.1f} mm, "
           f"Schnurbohrung {D_SCHNUR:.1f} mm")
     print(f"Oberflaeche    {flaeche/100:.1f} cm^2")
     print(f"Ueberhang      {anteil:.2f} % der Flaeche ueber 45 Grad")

@@ -2,80 +2,79 @@
 """
 Türzwerg – Giessform fuer die Klinkenmanschette
 
-Fuenf Teile: zwei Formhaelften, zwei gleiche Bohrungskerne, ein Schnurkern.
+Sechs Teile: zwei Formhaelften, zwei gleiche Bohrungskerne, ein
+Kammerkern, ein Schnurkern.
 
-Die eine Regel, nach der diese Form gebaut ist
-----------------------------------------------
+Die Regel
+---------
 
-Jedes Formteil verlaesst das Gussteil in einer geraden Linie. Kein
-Kippen, kein Faedeln, kein Dehnen.
+Jedes Formteil verlaesst das Gussteil auf geraden Zuegen. Kein Kippen,
+kein Verformen. Fuenf der sechs Teile brauchen dafuer einen einzigen
+Zug, der Kammerkern zwei - erst hoch in die Bohrung, dann axial heraus.
+Mehr als zwei sind nicht erlaubt, und krumme Wege gar nicht.
 
-Diese Regel ist teuer erkauft. Die Form hatte der Reihe nach fuenf
-Fassungen, und jede scheiterte an einem Teil, das nur auf einem krummen
-Weg herauskam:
+Die Regel ist teuer erkauft. Die Form hatte fuenf Vorfassungen, jede
+scheiterte an einem Teil, das nur auf einem krummen Weg herauskam:
 
-1. Bohrung, Kammer und Schnurkanal als Halbkerne in den Haelften. Wer
-   die Haelfte abzieht, zieht den Kern quer durch die Bohrungswand.
+1. Bohrung, Kammer und Schnurkanal als Halbkerne in den Haelften.
    806 von 1042 Saeulen gesperrt.
 2. Loser Kammerkern, "von Hand nach oben kippen". 23 Prozent Dehnung -
    und die Kennzahl mass nur die Mittelscheibe.
-3. Dreiteiliger Kammerkern mit Zunge, weil die Kegelenden der Kammer
-   eingeschlossen waren. Zwoelf Scheiben gesperrt, scheibenweise
-   gemessen.
-4. Kammer als nach oben offener Trog. Jetzt kam der Kern nach oben -
-   aber unter dem Bauteil sassen Knauf Ø12 und ein Flach 7 mm, die durch
-   die Ø5-Schnurbohrung gemusst haetten.
-5. Knauf und Flach weg, Stift gekuerzt. Ging - aber nur mit 12,3 mm Hub
-   und anschliessendem axialem Herausfaedeln.
+3. Dreiteiliger Kammerkern mit Zunge. Zwoelf Scheiben gesperrt.
+4. Kammer als nach oben offener Trog. Der Kern kam hoch, aber unter dem
+   Bauteil sassen Knauf Ø12 und ein Flach 7 mm, die durch die Ø5-
+   Schnurbohrung gemusst haetten.
+5. Knotenkanal durchgehend, gebildet von einem Kiel an den
+   Bohrungskernen. Alles gerade - aber die Knotenkammer war weg.
 
-Jeder krumme Weg hat sich als Irrtum erwiesen, meist erst eine Runde
-spaeter. Deshalb jetzt die Regel, und deshalb prueft zieh_test() nur
-noch sie: fuer jeden Punkt jedes Formteils den geraden Weg abtasten und
-fragen, ob Silikon darauf liegt.
+Was daraus geworden ist
+-----------------------
 
-Was die Regel am Bauteil gekostet hat
--------------------------------------
+Zwei Aenderungen halten alles frei:
 
-Die Knotenkammer war eine geschlossene Tasche mit 45-Grad-Kegelenden.
-Was so einen Hohlraum bildet, sitzt danach darin fest - da hilft keine
-Formteilung. Die Kammer ist deshalb ein durchgehender Kanal geworden:
+Der Kammerquerschnitt ist ein U - untere Haelfte rund, darueber
+senkrechte Waende bis in die Bohrung. Ein runder Querschnitt ist an
+seiner breitesten Stelle breiter als sein Durchbruch; der Kern sitzt
+dann darin fest wie ein Teller in der Flasche. Das U ist an keiner
+Stelle breiter als seine Oeffnung.
 
-- nach oben offen, mit senkrechten Waenden statt rundem Querschnitt,
-- an beiden Stirnseiten offen, ohne Kegelenden.
+Der Schnurstift ist ein eigenes Teil. Frueher hing er am Kammerkern und
+machte ihn zum Pilz im Flaschenhals. Jetzt zieht er nach unten, vom
+Bauteil weg - dort darf er beliebig dick sein. Er ragt 2 mm ueber den
+Kammerboden hinaus in ein Steckloch im Kammerkern, traegt ihn damit und
+haelt ihn in x und z fest.
 
-Der Querschnitt ist damit ueber die ganze Laenge derselbe. Der Kanal
-wird deshalb gar nicht mehr von einem Losteil gebildet, sondern von
-einem Kiel an den beiden Bohrungskernen - und die werden ohnehin axial
-gezogen. Das gefangene Formteil gibt es nicht mehr, weil es das Teil
-nicht mehr gibt.
+Uebrig bleibt ein nackter Trog, 11 mm breit, 21 mm lang. Gegen Verdrehen
+legt er sich mit seinen Oberkanten an die Bohrungskerne - nachgerechnet
+sperrt das ab dem ersten Viertelgrad.
 
-Der Knoten verliert nichts: der Boden bleibt, wo er war, getragen wird
-der Knoten von diesem Boden rings um die Schnurbohrung, und geschlossen
-wird der Kanal vom Tuerdruecker in der Bohrung darueber. Einfaedeln
-wird leichter - der Knoten geht jetzt von der Stirnseite hinein.
-
-Die fuenf Teile und ihre Zugrichtung
-------------------------------------
+Die sechs Teile und ihre Zuege
+------------------------------
 
 Haelften      -> +/- x   Sie formen nur die Aussenflaeche. Deren
-                         Querschnitt ist die Vereinigung zweier Kreise,
-                         die beide auf x = 0 liegen - zu dieser Ebene
-                         hin also ueberall monoton.
-Bohrungskerne -> +/- z   Schaft Ø20/Ø18/Ø20 plus Kiel. Die Bohrung ist
-                         nicht monoton, ein einteiliger Kern braeuchte
-                         11 Prozent Dehnung; zwei in der Mitte gestossene
-                         kommen ohne Verformung heraus. Weil das Teil zu
-                         z = 14 symmetrisch ist, sind beide dasselbe
-                         Druckteil.
-Schnurkern    -> -y      Bildet nur noch die Schnurbohrung und zieht vom
-                         Bauteil weg. Deshalb darf er unten beliebig
-                         dick sein - der Knauf stoert nicht mehr.
+                         Querschnitt ist die Vereinigung zweier Kreise
+                         auf x = 0, zu dieser Ebene hin also monoton.
+Bohrungskerne -> +/- z   Die Bohrung ist nicht monoton - Ø20/Ø18/Ø20.
+                         Ein einteiliger Kern braeuchte 11 Prozent
+                         Dehnung; zwei in der Mitte gestossene kommen
+                         ohne Verformung heraus. Weil das Teil zu z = 14
+                         symmetrisch ist, sind beide dasselbe Druckteil.
+Kammerkern    -> +y, +z  7,5 mm hoch, dann axial heraus. Der Hub darf
+                         zwischen 7,5 und 13,2 mm liegen.
+Schnurkern    -> -y      Bildet nur die Schnurbohrung.
 
 Die beiden Bohrungskerne stossen bei z = 14 stumpf aneinander und
 zentrieren sich ueber zwei Zapfen im Kernmaterial. Eine Ueberblattung
 quer durch die Bohrung haette ihre Passluft in der Formflaeche gehabt:
 bei 0,15 mm stand am Gussteil eine Silikonmembran von 0,15 x 18 x 8 mm
 quer durch die ganze Bohrung.
+
+Reihenfolge beim Entformen
+--------------------------
+
+Haelften seitlich abziehen, beide Bohrungskerne axial herausziehen,
+Schnurkern nach unten herausziehen, Kammerkern hochheben und axial
+herausnehmen.
 
 Giessen
 -------
@@ -161,8 +160,12 @@ FUEHR_S_R = STIFT_R + 0.05
 KNAUF_S_R = 7.0
 KNAUF_S = 4.0
 
-# Luft zwischen Kiel und seiner Nut in den Stirnwaenden.
-FUEHR_K_LUFT = 0.05
+# Der Schnurstift ragt 2 mm ueber den Kammerboden hinaus in ein
+# Steckloch im Kammerkern. Damit traegt er ihn und haelt ihn in x und z
+# fest; gegen Verdrehen legt sich der Kammerkern mit seinen beiden
+# Oberkanten an die Bohrungskerne.
+SOCKEL_OBEN = -14.5
+SOCKEL_LUFT = 0.05
 
 # Zentrierung: senkrechte Halbrundzapfen in den Stirnstreifen.
 # Die Stirnstreifen sind nur z < 0 bzw. z > 28 breit. Rippe und Nut
@@ -209,6 +212,7 @@ RASTER = 0.5
 DATEI_H = "tuerzwerg-giessform-manschette-haelfte-a.stl"
 DATEI_H2 = "tuerzwerg-giessform-manschette-haelfte-b.stl"
 DATEI_B = "tuerzwerg-giessform-manschette-kern-bohrung.stl"
+DATEI_KM = "tuerzwerg-giessform-manschette-kern-kammer.stl"
 DATEI_K = "tuerzwerg-giessform-manschette-kern-schnur.stl"
 DATEI_3MF = "tuerzwerg-giessform-manschette.3mf"
 
@@ -239,50 +243,10 @@ def bohrung(x, y, z):
     return math.hypot(x, y) - (R_INNEN + max(0.0, EINLAUF - rand))
 
 
-def kern_bohrung(x, y, z):
-    """Der untere Bohrungskern. Der obere ist dasselbe Teil, gewendet.
-
-    Schaft, Einlauf, bis zur Fuge in der Mitte - und ein Knauf ausserhalb
-    der Stirnwand zum Herausziehen.
-    """
-    r = math.hypot(x, y)
-    rr = SCHAFT_R if z <= 0.0 else R_INNEN + max(0.0, EINLAUF - z)
-    schaft = max(r - rr, Z_UNTEN - z, z - Z_FUGE)
-    knauf = max(r - KNAUF_B_R, Z_UNTEN - KNAUF_B - z, z - Z_UNTEN)
-
-    # Der Kiel fuellt den Knotenkanal. Im Bauteil wird er nicht aus dem
-    # Sollprofil gebaut, sondern aus dem, was dem Aussenkoerper zum
-    # Bauteil fehlt - so traegt er die weiche Verrundung mit, mit der der
-    # Kanal in die Bohrung und in die Stirnflaechen laeuft. Ohne sie
-    # stuenden dort 4200 Punkte Grat.
-    #
-    # Die Verrundung an der Stirnflaeche macht ihn dort etwas breiter.
-    # Das stoert nicht: sie weitet sich in die Zugrichtung, und die
-    # Haelften sind beim Kernziehen laengst ab.
-    #
-    # Durch die Stirnwand laeuft er mit dem schlanken Sollprofil weiter,
-    # bis unter den Knauf - so hat er beim Drucken keine nach unten
-    # weisende Flaeche.
-    kiel = min(max(kiel_roh(x, y, z), z - Z_FUGE),
-               max(trog_profil(x, y), (Z_UNTEN - KNAUF_B) - z, z))
-
-    # Zapfen ueber die Stossfuge hinaus, Buchse darunter hinein.
-    zapfen = max(math.hypot(x - FUGE_X, y) - FUGE_ZAPFEN_R,
-                 Z_FUGE - z, z - (Z_FUGE + FUGE_L))
-    buchse = max(math.hypot(x + FUGE_X, y) - FUGE_BUCHSE_R,
-                 Z_FUGE - FUGE_L - z, z - Z_FUGE)
-    return max(min(schaft, knauf, zapfen, kiel), -buchse)
 
 
-def trog_profil(x, y):
-    """Querschnitt des Knotenkanals - ueber die ganze Laenge derselbe.
 
-    Weil er sich nicht mit z aendert, laesst sich der Kiel, der ihn
-    ausfuellt, gerade axial herausziehen. Genau das war bei der
-    geschlossenen Kammer nicht moeglich.
-    """
-    rk = math.hypot(x, min(0.0, y + M.KAMMER_ACHSE))
-    return max(rk - M.D_KAMMER / 2.0, y)
+
 
 
 def kern_bohrung(x, y, z):
@@ -296,109 +260,12 @@ def kern_bohrung(x, y, z):
     schaft = max(r - rr, Z_UNTEN - z, z - Z_FUGE)
     knauf = max(r - KNAUF_B_R, Z_UNTEN - KNAUF_B - z, z - Z_UNTEN)
 
-    # Der Kiel fuellt den Knotenkanal. Im Bauteil wird er nicht aus dem
-    # Sollprofil gebaut, sondern aus dem, was dem Aussenkoerper zum
-    # Bauteil fehlt - so traegt er die weiche Verrundung mit, mit der der
-    # Kanal in die Bohrung und in die Stirnflaechen laeuft. Ohne sie
-    # stuenden dort 4200 Punkte Grat.
-    #
-    # Die Verrundung an der Stirnflaeche macht ihn dort etwas breiter.
-    # Das stoert nicht: sie weitet sich in die Zugrichtung, und die
-    # Haelften sind beim Kernziehen laengst ab.
-    #
-    # Durch die Stirnwand laeuft er mit dem schlanken Sollprofil weiter,
-    # bis unter den Knauf - so hat er beim Drucken keine nach unten
-    # weisende Flaeche.
-    kiel = min(max(kiel_roh(x, y, z), z - Z_FUGE),
-               max(trog_profil(x, y), (Z_UNTEN - KNAUF_B) - z, z))
-
     # Zapfen ueber die Stossfuge hinaus, Buchse darunter hinein.
     zapfen = max(math.hypot(x - FUGE_X, y) - FUGE_ZAPFEN_R,
                  Z_FUGE - z, z - (Z_FUGE + FUGE_L))
     buchse = max(math.hypot(x + FUGE_X, y) - FUGE_BUCHSE_R,
                  Z_FUGE - FUGE_L - z, z - Z_FUGE)
-    return max(min(schaft, knauf, zapfen, kiel), -buchse)
-
-
-def kern_bohrung(x, y, z):
-    """Der untere Bohrungskern. Der obere ist dasselbe Teil, gewendet.
-
-    Schaft, Einlauf, bis zur Fuge in der Mitte - und ein Knauf ausserhalb
-    der Stirnwand zum Herausziehen.
-    """
-    r = math.hypot(x, y)
-    rr = SCHAFT_R if z <= 0.0 else R_INNEN + max(0.0, EINLAUF - z)
-    schaft = max(r - rr, Z_UNTEN - z, z - Z_FUGE)
-    knauf = max(r - KNAUF_B_R, Z_UNTEN - KNAUF_B - z, z - Z_UNTEN)
-
-    # Der Kiel fuellt den Knotenkanal. Im Bauteil wird er nicht aus dem
-    # Sollprofil gebaut, sondern aus dem, was dem Aussenkoerper zum
-    # Bauteil fehlt - so traegt er die weiche Verrundung mit, mit der der
-    # Kanal in die Bohrung und in die Stirnflaechen laeuft. Ohne sie
-    # stuenden dort 4200 Punkte Grat.
-    #
-    # Die Verrundung an der Stirnflaeche macht ihn dort etwas breiter.
-    # Das stoert nicht: sie weitet sich in die Zugrichtung, und die
-    # Haelften sind beim Kernziehen laengst ab.
-    #
-    # Durch die Stirnwand laeuft er mit dem schlanken Sollprofil weiter,
-    # bis unter den Knauf - so hat er beim Drucken keine nach unten
-    # weisende Flaeche.
-    kiel = min(max(kiel_roh(x, y, z), z - Z_FUGE),
-               max(trog_profil(x, y), (Z_UNTEN - KNAUF_B) - z, z))
-
-    # Zapfen ueber die Stossfuge hinaus, Buchse darunter hinein.
-    zapfen = max(math.hypot(x - FUGE_X, y) - FUGE_ZAPFEN_R,
-                 Z_FUGE - z, z - (Z_FUGE + FUGE_L))
-    buchse = max(math.hypot(x + FUGE_X, y) - FUGE_BUCHSE_R,
-                 Z_FUGE - FUGE_L - z, z - Z_FUGE)
-    return max(min(schaft, knauf, zapfen, kiel), -buchse)
-
-
-def trog_profil(x, y):
-    """Querschnitt des Knotenkanals - ueber die ganze Laenge derselbe.
-
-    Weil er sich nicht mit z aendert, laesst sich der Kiel, der ihn
-    ausfuellt, gerade axial herausziehen. Genau das war bei der
-    geschlossenen Kammer nicht moeglich.
-    """
-    rk = math.hypot(x, min(0.0, y + M.KAMMER_ACHSE))
-    return max(rk - M.D_KAMMER / 2.0, y)
-
-
-def kern_bohrung(x, y, z):
-    """Der untere Bohrungskern. Der obere ist dasselbe Teil, gewendet.
-
-    Schaft, Einlauf, bis zur Fuge in der Mitte - und ein Knauf ausserhalb
-    der Stirnwand zum Herausziehen.
-    """
-    r = math.hypot(x, y)
-    rr = SCHAFT_R if z <= 0.0 else R_INNEN + max(0.0, EINLAUF - z)
-    schaft = max(r - rr, Z_UNTEN - z, z - Z_FUGE)
-    knauf = max(r - KNAUF_B_R, Z_UNTEN - KNAUF_B - z, z - Z_UNTEN)
-
-    # Der Kiel fuellt den Knotenkanal. Im Bauteil wird er nicht aus dem
-    # Sollprofil gebaut, sondern aus dem, was dem Aussenkoerper zum
-    # Bauteil fehlt - so traegt er die weiche Verrundung mit, mit der der
-    # Kanal in die Bohrung und in die Stirnflaechen laeuft. Ohne sie
-    # stuenden dort 4200 Punkte Grat.
-    #
-    # Die Verrundung an der Stirnflaeche macht ihn dort etwas breiter.
-    # Das stoert nicht: sie weitet sich in die Zugrichtung, und die
-    # Haelften sind beim Kernziehen laengst ab.
-    #
-    # Durch die Stirnwand laeuft er mit dem schlanken Sollprofil weiter,
-    # bis unter den Knauf - so hat er beim Drucken keine nach unten
-    # weisende Flaeche.
-    kiel = min(max(kiel_roh(x, y, z), z - Z_FUGE),
-               max(trog_profil(x, y), (Z_UNTEN - KNAUF_B) - z, z))
-
-    # Zapfen ueber die Stossfuge hinaus, Buchse darunter hinein.
-    zapfen = max(math.hypot(x - FUGE_X, y) - FUGE_ZAPFEN_R,
-                 Z_FUGE - z, z - (Z_FUGE + FUGE_L))
-    buchse = max(math.hypot(x + FUGE_X, y) - FUGE_BUCHSE_R,
-                 Z_FUGE - FUGE_L - z, z - Z_FUGE)
-    return max(min(schaft, knauf, zapfen, kiel), -buchse)
+    return max(min(schaft, knauf, zapfen), -buchse)
 
 
 def _kammer_roh(x, y, z):
@@ -411,38 +278,55 @@ def _kammer_roh(x, y, z):
     return max(koerper(x, y, z), -M.feld(x, y, z), -bohrung(x, y, z))
 
 
-def kiel_roh(x, y, z):
-    """Der Kiel im Bauteilbereich: Aussenkoerper minus Bauteil, ohne
-    Bohrung und ohne den Schnurkern."""
-    return max(koerper(x, y, z), -M.feld(x, y, z), -bohrung(x, y, z),
-               -kern_schnur(x, y, z))
+def kern_kammer(x, y, z):
+    """Der Kammerkern: fuellt die Knotenkammer, sonst nichts.
+
+    Kein Stift, kein Knauf, kein Flach - alles, was frueher unter dem
+    Bauteil an ihm hing und ihn dort festhielt, ist jetzt der eigene
+    Schnurkern. Uebrig bleibt ein nackter Trog, 11 mm breit, 21 mm lang.
+
+    Er wird nicht aus dem Sollprofil gebaut, sondern aus Aussenkoerper
+    minus Bauteil. So traegt er die weiche Verrundung mit, mit der die
+    Kammer in die Bohrung durchbricht - und genau dort zieht der Knoten.
+
+    Entnommen wird er in zwei geraden Zuegen: gerade nach oben in die
+    Bohrung, dann axial heraus. Moeglich ist das nur, weil sein
+    Querschnitt ein U mit senkrechten Waenden ist - die Kammer ist an
+    keiner Stelle breiter als ihre Oeffnung.
+    """
+    kammer = max(koerper(x, y, z), -M.feld(x, y, z), -bohrung(x, y, z))
+    # Schnurbohrung und Steckloch in einem: der Stift selbst, mit
+    # Passluft. Seine Senkung muss mit abgezogen werden - sonst bleibt
+    # von ihr ein Kragen am Kammerkern stehen, unten an der
+    # Rippenaussenflaeche, und der haelt ihn beim Ausheben fest.
+    senk = min(M.SCHNUR_SENK, max(0.0, -y - (RIPPE_UNTEN - M.SCHNUR_SENK)))
+    loch = max(math.hypot(x, z - Z_FUGE) - (STIFT_R + senk + SOCKEL_LUFT),
+               y - SOCKEL_OBEN)
+    return max(kammer, -loch)
 
 
 def kern_schnur(x, y, z):
     """Der Schnurkern: ein kegeliger Stift mit Knauf, zieht nach unten.
 
-    Sein oberes Ende endet am Kanalboden - dort stoesst er gegen den
-    Kiel. Nach unten wird er weiter, nicht enger; er kommt deshalb in
-    gerader Linie heraus, und der Knauf stoert dabei nicht, weil er sich
-    vom Bauteil weg bewegt.
+    Er reicht 2 mm ueber den Kammerboden hinaus in ein Steckloch im
+    Kammerkern und traegt ihn damit. Nach unten wird er weiter, nicht
+    enger; er kommt deshalb in gerader Linie heraus, und der Knauf stoert
+    dabei nicht, weil er sich vom Bauteil weg bewegt.
     """
     rs = math.hypot(x, z - Z_FUGE)
     # Die Senkung ist 0,5 mm lang, nicht unbegrenzt: ohne Deckel waechst
     # der Kegel nach unten weiter und der Stift waere am Knauf Ø21.
     senk = min(M.SCHNUR_SENK, max(0.0, -y - (RIPPE_UNTEN - M.SCHNUR_SENK)))
-    stift = max(rs - (STIFT_R + senk), -trog_profil(x, y), Y_UNTEN - y, y)
+    stift = max(rs - (STIFT_R + senk), Y_UNTEN - y, y - SOCKEL_OBEN)
     knauf = max(rs - KNAUF_S_R, Y_UNTEN - KNAUF_S - y, y - Y_UNTEN)
     return min(stift, knauf)
 
 
 def fuehrung(x, y, z):
     """Fuehrungen fuer die drei Kerne in den Stirnwaenden und der Rippe."""
-    # Die Stirnwaende fuehren nicht nur den Schaft, sondern auch den
-    # Kiel - sonst liesse sich der Kern gar nicht erst einschieben.
-    schluessel = min(math.hypot(x, y) - FUEHR_B_R,
-                     trog_profil(x, y) - FUEHR_K_LUFT)
-    unten = max(schluessel, Z_UNTEN - z, z - 0.0)
-    oben = max(schluessel, LAENGE - z, z - Z_OBEN)
+    r = math.hypot(x, y)
+    unten = max(r - FUEHR_B_R, Z_UNTEN - z, z - 0.0)
+    oben = max(r - FUEHR_B_R, LAENGE - z, z - Z_OBEN)
     # Durchgehende Fuehrung fuer den Schnurkern bis zur Aussenflaeche.
     # Sie muss seiner Senkung folgen: unter dem Bauteil ist der Kern Ø6,
     # in einer Ø5,1-Bohrung sass er fest.
@@ -540,8 +424,14 @@ def grenzen_kern_b():
     # Bis ueber den Zapfen hinaus, nicht bis Z_FUGE - sonst schneidet das
     # Gitter den Zapfen ab und das Netz endet dort offen.
     return ((-KNAUF_B_R - 1.5, KNAUF_B_R + 1.5),
-            (-RIPPE_UNTEN - 1.5, KNAUF_B_R + 1.5),
+            (-KNAUF_B_R - 1.5, KNAUF_B_R + 1.5),
             (Z_UNTEN - KNAUF_B - 1.5, Z_FUGE + FUGE_L + 1.5))
+
+
+def grenzen_kern_k():
+    return ((-M.D_KAMMER / 2.0 - 1.5, M.D_KAMMER / 2.0 + 1.5),
+            (-RIPPE_UNTEN - 1.5, -M.R_INNEN + 2.5),
+            (-1.5, LAENGE + 1.5))
 
 
 def grenzen_kern_s():
@@ -605,6 +495,52 @@ def kern_bohr_ziehbar(schritt=0.05):
     return fehler
 
 
+def hub_test(kernfeld, grenzen, schritt=0.25, dmax=15.0):
+    """Der Kammerkern kommt in zwei geraden Zuegen heraus.
+
+    Erst gerade nach oben, bis er ganz im Bohrungszylinder steht - was
+    darin steht, laesst sich danach axial herausschieben. Geprueft wird,
+    in welchem Hubbereich das gilt und ob er auf dem Weg Silikon
+    durchquert.
+    """
+    (x0, x1), (y0, y1), (z0, z1) = grenzen
+    punkte = []
+    x = x0
+    while x <= x1:
+        y = y0
+        while y <= y1:
+            z = z0
+            while z <= z1:
+                if kernfeld(x, y, z) < 0.0:
+                    punkte.append((x, y, z))
+                z += schritt
+            y += schritt
+        x += schritt
+
+    passt = []
+    d = 0.0
+    while d <= dmax:
+        if all(math.hypot(px, py + d) <= R_INNEN for px, py, _ in punkte):
+            passt.append(d)
+        d += schritt
+    if not passt:
+        return None, None, len(punkte), len(punkte), 0.0
+
+    hub = passt[0]
+    gesperrt, tief = 0, 0.0
+    for px, py, pz in punkte:
+        d, traf = schritt, False
+        while d <= hub:
+            v = M.feld(px, py + d, pz)
+            if v < 0.0:
+                traf = True
+                tief = max(tief, -v)
+            d += schritt
+        if traf:
+            gesperrt += 1
+    return hub, passt[-1], len(punkte), gesperrt, tief
+
+
 def zieh_test(kernfeld, grenzen, richtung, weg, schritt=0.25):
     """Kommt dieses Formteil in gerader Linie heraus?
 
@@ -665,6 +601,7 @@ def fuellweg(schritt=0.5):
             return False
         return (kern_bohrung(x, y, z) > 0.05
                 and kern_bohrung(-x, y, LAENGE - z) > 0.05
+                and kern_kammer(x, y, z) > 0.05
                 and kern_schnur(x, y, z) > 0.05)
 
     def auf(v):
@@ -744,6 +681,8 @@ if __name__ == "__main__":
     tri_b = vernetzen(feld_b, grenzen_halb(True), RASTER)
     print("Vernetze Bohrungskern ...")
     tri_bk = vernetzen(kern_bohrung, grenzen_kern_b(), RASTER * 0.6)
+    print("Vernetze Kammerkern ...")
+    tri_km = vernetzen(kern_kammer, grenzen_kern_k(), RASTER * 0.6)
     print("Vernetze Schnurkern ...")
     tri_kk = vernetzen(kern_schnur, grenzen_kern_s(), RASTER * 0.6)
 
@@ -756,6 +695,7 @@ if __name__ == "__main__":
     tri_a, vol_a = richte(tri_a)
     tri_b, vol_b = richte(tri_b)
     tri_bk, vol_bk = richte(tri_bk)
+    tri_km, vol_km = richte(tri_km)
     tri_kk, vol_kk = richte(tri_kk)
 
     ab_max, ab_mit = abweichung(feld_a, tri_a)
@@ -784,10 +724,16 @@ if __name__ == "__main__":
     # bleibt richtig - eine Korrektur wuerde sie umkehren.
     kk_druck = [tuple((p[0], Z_FUGE - p[2], p[1] - (Y_UNTEN - KNAUF_S))
                       for p in t) for t in tri_kk]
+    # Kammerkern liegt auf dem Ruecken - seine runde Unterseite wird
+    # dadurch zur Kuppel und braucht keine Stuetze. Drehung um 180 Grad
+    # um die z-Achse: (x, y, z) -> (-x, -y, z), eine echte Drehung.
+    km_druck = [tuple((-p[0], -(p[1] + M.KAMMER_ACHSE) + M.D_KAMMER / 2.0,
+                       p[2]) for p in t) for t in tri_km]
 
     schreibe_stl(a_druck, DATEI_H, "Tuerzwerg Manschette Haelfte A - mm")
     schreibe_stl(b_druck, DATEI_H2, "Tuerzwerg Manschette Haelfte B - mm")
     schreibe_stl(bk_druck, DATEI_B, "Tuerzwerg Manschette Bohrungskern - mm")
+    schreibe_stl(km_druck, DATEI_KM, "Tuerzwerg Manschette Kammerkern - mm")
     schreibe_stl(kk_druck, DATEI_K, "Tuerzwerg Manschette Schnurkern - mm")
 
     schreibe_3mf(
@@ -795,7 +741,8 @@ if __name__ == "__main__":
          ("Haelfte B", b_druck, (35.0, 92.0, 0.0)),
          ("Bohrungskern 1", bk_druck, (95.0, 40.0, 0.0)),
          ("Bohrungskern 2", bk_druck, (125.0, 40.0, 0.0)),
-         ("Schnurkern", kk_druck, (110.0, 80.0, 0.0))],
+         ("Kammerkern", km_druck, (105.0, 78.0, 0.0)),
+         ("Schnurkern", kk_druck, (142.0, 80.0, 0.0))],
         DATEI_3MF, "Tuerzwerg Giessform Manschette",
         "Beide Haelften flach mit der Trennflaeche nach oben, alle drei "
         "Kerne stehend auf ihren Knaeufen. PLA, 0,2 mm Schicht, "
@@ -809,6 +756,7 @@ if __name__ == "__main__":
                                  (0.0, 0.0, -1.0), LAENGE + 2.0)
     zs_s, zs_g, zs_t = zieh_test(kern_schnur, grenzen_kern_s(),
                                  (0.0, -1.0, 0.0), 12.0)
+    hub, hub_max, hg, hs, ht = hub_test(kern_kammer, grenzen_kern_k())
     err, ges, entl = fuellweg()
     wand, wo = engste_wand()
 
@@ -817,11 +765,13 @@ if __name__ == "__main__":
           f" x {X_HALB:.0f} mm")
     print(f"Bohrungskern    2 x gleich, {Z_FUGE-Z_UNTEN+KNAUF_B:.0f} mm lang, "
           f"{vol_bk/1000:.1f} cm^3")
+    print(f"Kammerkern      1 x, {vol_km/1000:.1f} cm^3")
     print(f"Schnurkern      1 x, {vol_kk/1000:.1f} cm^3")
     print(f"Dreiecke        {len(a_druck)} + {len(b_druck)} + "
-          f"{len(bk_druck)} + {len(kk_druck)}")
+          f"{len(bk_druck)} + {len(km_druck)} + {len(kk_druck)}")
     print(f"Offene Kanten   A {offene_kanten(a_druck)}, B {offene_kanten(b_druck)}, "
-          f"Bohrkern {offene_kanten(bk_druck)}, Schnurkern {offene_kanten(kk_druck)}")
+          f"Bohrkern {offene_kanten(bk_druck)}, Kammerkern "
+          f"{offene_kanten(km_druck)}, Schnurkern {offene_kanten(kk_druck)}")
     print(f"Bauteil         {kav/1000:.2f} cm^3 ({kav/1000*1.15:.1f} g Silikon)")
     print(f"Entformbar      {s} von {n} Saeulen gesperrt"
           + (f", bis {t:.1f} mm bei y={sw[0]:.0f} z={sw[1]:.0f}" if sw
@@ -833,6 +783,13 @@ if __name__ == "__main__":
           + (f", bis {zb_t:.2f} mm tief" if zb_s else ""))
     print(f"  Schnurkern -> y {zs_s} von {zs_g} Punkten gesperrt"
           + (f", bis {zs_t:.2f} mm tief" if zs_s else ""))
+    if hub is None:
+        print("Kammerkern      passt NIE ganz in die Bohrung")
+    else:
+        print(f"Kammerkern      erst {hub:.1f} mm hoch, dann axial heraus "
+              f"(Hub {hub:.1f} bis {hub_max:.1f} mm moeglich)")
+        print(f"  dabei         {hs} von {hg} Punkten mit Silikonkontakt"
+              + (f", bis {ht:.2f} mm tief" if hs else ""))
     print(f"Fuellweg        {100.0*err/ges:.1f} % der Kavitaet erreichbar, "
           f"Entlueftung {'an' if entl else 'AB'}")
     print(f"Duennste Wand   {wand:.1f} mm"
