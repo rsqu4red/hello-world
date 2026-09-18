@@ -5,6 +5,17 @@ Türzwerg – Zugring "Mix": Tropfenkontur mit Rev.-E-Oeffnung
 Was von welchem Entwurf kommt
 -----------------------------
 
+Von Rev. E auch die Knotenkammer: 14 x 7,2 mm statt der 12 x 6,4, die
+eine fruehere Fassung hatte - Rev. E hat 12 x 7,2, der Mix ist also
+sogar 2 mm breiter. Der Knoten muss hineinpassen, ohne dass man ihn
+hineinzwingt.
+
+Ihre Hoehe folgt dabei der Bandkontur. Am inneren Ende rundet der
+Querschnitt ab und das Band wird duenner; mit fester Kammerhoehe blieben
+dort nur 1,38 mm Wand stehen - weniger als bei Rev. E, und ausgerechnet
+an der Stelle, an der der Knoten drueckt. Die Kammer wird deshalb
+flacher, sobald ihr weniger als 1,9 mm bleiben.
+
 Von Rev. E die Grosszuegigkeit: eine Oeffnung, durch die eine
 Kinderhand wirklich hindurchgeht, nicht nur vier Fingerkuppen. Rev. E
 hat 64 x 48 mm, der Tropfen nur 53 x 41.
@@ -26,18 +37,27 @@ Die bisherigen Entwuerfe hatten ueberall denselben Querschnitt. Das ist
 fuer den Vergleich richtig und fuer die Hand falsch: oben am Ring wird
 Breite fuer die Knotenkammer gebraucht, unten Fuelle zum Anfassen.
 
-Deshalb aendern sich zwei Dinge ueber den Umfang:
+Geaendert wird deshalb der Eckradius ueber den Umfang: oben 0,72 des
+halben Kleinstmasses, unten voll. Unten ist der Querschnitt damit ein
+echtes Stadion - rundum gewoelbt, keine Kante, die in die Handflaeche
+schneidet. Oben bleibt er flacher, weil die Knotenkammer dort Platz
+braucht. Der Uebergang laeuft als Kosinus, es gibt also keine Stelle,
+an der die Aenderung anfaengt.
 
-  Dicke        11,0 mm oben, 13,5 mm unten. Das Band wird zur Zughand
-               hin fuelliger, ohne dass der Ring insgesamt dicker wird.
-  Eckradius    oben 0,72 des halben Kleinstmasses, unten voll. Unten
-               ist der Querschnitt damit ein echtes Stadion - rundum
-               gewoelbt, keine Kante, die in die Handflaeche schneidet.
-               Oben bleibt er flacher, weil die Kammer dort Platz
-               braucht.
+Die Dicke bleibt dagegen ueberall 11,0 mm. Eine fruehere Fassung lief
+von 11,0 oben auf 13,5 unten, mit der Begruendung, das Band werde zur
+Zughand hin fuelliger. Nachgerechnet traegt die Begruendung nicht:
 
-Beides laeuft als Kosinus, es gibt also keine Stelle, an der die
-Aenderung anfaengt.
+    unten     Griffumfang   Aufweitung bei 17 N
+    11,0 mm      46 mm            4,3 mm
+    12,0 mm      48 mm            4,0 mm
+    13,5 mm      50 mm            3,6 mm
+    15,0 mm      52 mm            3,3 mm
+
+Die 13,5 mm kosten 4 mm Griffumfang und bringen 0,7 mm Aufweitung. Ein
+Einjaehriger hakt den Ring eher mit zwei Fingern ein, als ihn zu
+umfassen; fuer ihn ist das schlanke Band das bessere. 4,3 mm sind
+immer noch ein Drittel von Rev. E's 10,7 mm.
 
 Keine Griffmulde. Eine Hohlkehle an der Innenkante klingt nach
 Ergonomie, traegt aber nur auf zwei Kanten statt auf der vollen Breite -
@@ -56,6 +76,7 @@ from reif_alt import e_modul, D_FINGER, ZYLINDER, KOPF
 TAU = 2.0 * math.pi
 
 D_SCHNUR = 5.0
+WAND_KAMMER = 1.9       # Mindestwand ueber der Knotenkammer, wie Rev. E
 RASTER = 0.47
 
 
@@ -77,9 +98,9 @@ def _reihe(oben, seite, unten):
 class Mix:
     def __init__(self, r0=43.0, e=4.5, w=2.0,
                  b_oben=23.0, b_seite=16.0, b_unten=18.0,
-                 d_oben=11.0, d_unten=13.5,
+                 d_oben=11.0, d_unten=11.0,
                  eck_oben=0.72, eck_unten=1.0,
-                 bohr_tiefe=8.0, a_kammer=6.0, b_kammer=3.2):
+                 bohr_tiefe=7.5, a_kammer=7.0, b_kammer=3.6):
         self.r0, self.e, self.w = r0, e, w
         self._breite = _reihe(b_oben, b_seite, b_unten)
         self.b_oben, self.b_seite, self.b_unten = b_oben, b_seite, b_unten
@@ -166,9 +187,22 @@ class Mix:
         kammer_aussen = self.aussen(1.0) - self.bohr_tiefe
         bohrung = max(math.hypot(x, z) - D_SCHNUR / 2.0, kammer_aussen - y)
 
+        # Die Kammerhoehe folgt der Bandkontur. Am inneren Ende rundet
+        # der Querschnitt ab, das Band wird dort duenner - eine Kammer
+        # mit fester Hoehe liesse darueber nur 1,38 mm Wand stehen, und
+        # genau dort drueckt der Knoten. Jetzt wird die Kammer flacher,
+        # sobald ihr weniger als WAND_KAMMER bleibt; ueber den mittleren
+        # zwei Dritteln ihrer Laenge behaelt sie die volle Hoehe.
+        a_top = self.b_oben / 2.0
+        b_top = self.d_oben / 2.0
+        k_top = self.eck_oben * min(a_top, b_top)
+        hoch = self._profil_z(y - (self.aussen(1.0) - a_top),
+                              a_top, b_top, k_top) - WAND_KAMMER
+        bk = max(0.8, min(self.b_kammer, hoch))
+
         kammer_innen = self.innen(1.0) - 1.0
-        quer = _rundbox(x, z, self.a_kammer, self.b_kammer,
-                        0.8 * min(self.a_kammer, self.b_kammer))
+        quer = _rundbox(x, z, self.a_kammer, bk,
+                        0.8 * min(self.a_kammer, bk))
         kammer = max(quer, y - kammer_aussen, kammer_innen - y)
 
         return weich_abziehen(max(koerper, -bohrung), kammer, 0.8)
