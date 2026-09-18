@@ -8,7 +8,8 @@ INK, AKZ, SOFT, LIN = "#161A17", "#C7422A", "#5E665E", "#B9C1B7"
 GRAU = "#9AA29A"
 
 
-def zeichne(m, vergleiche, datei="tuerzwerg-zugring-mix-zeichnung.svg"):
+def zeichne(m, vergleiche, datei="tuerzwerg-zugring-mix-zeichnung.svg",
+            titel="Zugring „Mix“", untertitel=None, eigen="Mix"):
     S = 1.85          # Hauptmassstab
     SQ = 3.4          # Schnitte
     W, H = 1420, 1120
@@ -48,9 +49,9 @@ def zeichne(m, vergleiche, datei="tuerzwerg-zugring-mix-zeichnung.svg"):
     br_a, ho_a = m.aussenmass()
     ob, oh = m.oeffnung()
 
-    txt(56, 52, "Türzwerg · Zugring „Mix“", 27, INK, 700)
-    txt(56, 78, "Tropfenkontur mit Rev.-E-Öffnung · Silikon Shore A 60–70 · "
-                "Maße in mm", 13.5, SOFT, 400)
+    txt(56, 52, "Türzwerg · " + titel, 27, INK, 700)
+    txt(56, 78, untertitel or "Silikon Shore A 60–70 · Maße in mm",
+        13.5, SOFT, 400)
 
     # ---------------------------------------------------- 1 Vorderansicht --
     VX, VY = 240, 330
@@ -132,23 +133,26 @@ def zeichne(m, vergleiche, datei="tuerzwerg-zugring-mix-zeichnung.svg"):
 
     # ----------------------------------------------------- 5 Ueberlagerung -
     UX, UY = 240, 810
-    txt(UX, UY - 120, "5  Mix gegen die drei Vorentwürfe", 17, INK, 700, "middle")
-    farben = {"Tropfen w = 2": AKZ, "Kreis": SOFT, "Rev. E": GRAU}
+    txt(UX, UY - 120, f"5  {eigen} gegen die Vorentwürfe", 17, INK, 700, "middle")
+    palette = [AKZ, SOFT, GRAU, "#7C8A9A", "#A8845C"]
+    farben = {n: palette[i % len(palette)]
+              for i, (n, _) in enumerate(vergleiche)}
     for name, v in vergleiche:
         polar(v.aussen, UX, UY, farben.get(name, LIN), 1.6, "5 4")
         polar(v.innen, UX, UY, farben.get(name, LIN), 1.6, "5 4")
     polar(m.aussen, UX, UY, INK, 2.6)
     polar(m.innen, UX, UY, INK, 2.6)
     lx = UX + 120
-    txt(lx, UY - 40, "Mix", 12.5, INK, 700)
+    txt(lx, UY - 40, eigen, 12.5, INK, 700)
     for j, (name, _) in enumerate(vergleiche):
         txt(lx, UY - 20 + j * 19, name, 12.5, farben.get(name, LIN), 600)
 
     # --------------------------------------------------------- 6 Tabelle ---
     TX, TY = 560, 700
     txt(TX, TY, "6  Zahlen, alle bei Shore A 70", 17, INK, 700)
-    spalten = [("Mix", m)] + list(vergleiche)
-    SPX = [TX + 300, TX + 440, TX + 570, TX + 700]
+    spalten = [(eigen, m)] + list(vergleiche)
+    schritt = min(140, int(760 / max(1, len(spalten))))
+    SPX = [TX + 300 + i * schritt for i in range(len(spalten))]
     zeilen = [
         ("Außen", lambda k: "%.0f × %.0f" % k.aussenmass()),
         ("Öffnung", lambda k: "%.0f × %.0f" % k.oeffnung()),
