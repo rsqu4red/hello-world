@@ -54,13 +54,39 @@ Alle Kanaele liegen je zur Haelfte in beiden Formhaelften und sind
 damit voll rund. Nur in einer waeren sie halbrund, und ein halbrunder
 Kanal fuehrt bei gleichem Radius nur 18,9 Prozent des Stroms.
 
+Der Lauf hat keine Ecken
+------------------------
+
+Die erste Fassung setzte den senkrechten Lauf, den waagerechten und den
+Anschnitt stumpf aneinander - drei rechte Winkel. In einer solchen Ecke
+steht das Silikon, statt zu fliessen: aussen reisst der Strom ab, innen
+bleibt eine Totzone stehen, in der Luft haengt.
+
+Jetzt sind die beiden Umlenkungen echte Viertelkreise vom
+Kruemmungsradius 7 mm, also 1,75 mal dem Rohrradius. Sie stossen
+tangential an die geraden Stuecke, der Querschnitt bleibt dabei ueberall
+gleich. Der Trichter oben laeuft ueber eine Smoothstep-Kurve auf, hat
+also weder am Anfang noch am Ende einen Knick, und der Anschnitt
+verjuengt sich auf dieselbe Weise von 8 auf 6 mm. Wo Lauf und
+Entlueftungen in die Kavitaet muenden, sitzt eine 1,5-mm-Verrundung.
+
+Zentrierung
+-----------
+
+Drei Halbrundzapfen Ø6 statt zwei, und keiner mehr am Kanal: der linke
+sass mit 3 mm Abstand neben dem senkrechten Lauf. Die Form ist dafuer
+links um 10 mm breiter geworden, der Zapfen steht jetzt aussen daneben
+mit 5,4 mm Wand nach beiden Seiten. Die drei liegen so, dass die um 180
+Grad verdrehte Lage nicht passt - falsch herum kann man sie nicht
+zusammenlegen.
+
     python3 giessform_revh.py
 """
 
 import math
 
 from netz import (vernetzen, volumen, offene_kanten, ueberhang, abweichung,
-                  schreibe_stl, schreibe_3mf, quader)
+                  schreibe_stl, schreibe_3mf, quader, weich_vereinen)
 from reif_revh import REV_H as R
 from reif_mix import _rundbox, D_SCHNUR
 
@@ -77,26 +103,31 @@ STIFT_R = D_SCHNUR / 2.0                    # 2,5
 
 # ------------------------------------------------------------------ Form ----
 
-X_LINKS, X_RECHTS = -62.0, 50.0
-Y_UNTEN, Y_OBEN = -56.0, 50.0
+X_LINKS, X_RECHTS = -72.0, 50.0
+Y_UNTEN, Y_OBEN = -63.0, 50.0
 Z_TIEF = 14.0
-TURM_X, TURM_Y = -40.0, 72.0
+TURM_X, TURM_Y = -34.0, 72.0
 
 LUFT = 0.05
 SITZ_AUSSEN = R_AUSSEN + 4.0                # Stiftsitz in der Stirnwand
 SITZ_INNEN = KAMMER_I - 3.0                 # Zapfensitz im Oeffnungskern
 
 # Kanaele, alle in der Trennebene z = 0
-LAUF_R = 4.0
-LAUF_X = -51.0
-LAUF_UNTEN = -50.0
-TRICHTER_AB, TRICHTER_BIS = 66.0, 70.0
+LAUF_R = 4.0                                # Rohrradius, ueberall gleich
+LAUF_X = -51.0                              # Achse des senkrechten Laufs
+LAUF_UNTEN = -54.0                          # Achse des waagerechten Laufs
+BOGEN_R = 7.0                               # Kruemmungsradius der Umlenkungen
+TRICHTER_AB, TRICHTER_BIS = 62.0, 72.0
+TRICHTER_WEIT = 7.0                         # Zuwachs bis zur Muendung
 ANSCHNITT_R = 3.0
+VERRUNDUNG = 1.5                            # Uebergang Kanal -> Kavitaet
 ENTL_R = 1.0
 ENTL_WINKEL = 8.0                           # Grad neben der Schnurbohrung
 
 ZENTRIER_R, ZENTRIER_NUT_R = 3.0, 3.1
-ZENTRIER = [(-56.0, 30.0), (44.0, -46.0)]   # unsymmetrisch: nur eine Lage passt
+# Drei Zapfen, unsymmetrisch: um 180 Grad verdreht passt keine Lage.
+# Der linke sitzt aussen neben dem senkrechten Lauf, nicht mehr an ihm.
+ZENTRIER = [(-63.5, 30.0), (42.0, -48.0), (42.0, 36.0)]
 
 RASTER = 0.6
 DATEI_A = "tuerzwerg-giessform-revh-haelfte-a.stl"
@@ -104,7 +135,11 @@ DATEI_B = "tuerzwerg-giessform-revh-haelfte-b.stl"
 DATEI_K = "tuerzwerg-giessform-revh-kern.stl"
 DATEI_3MF = "tuerzwerg-giessform-revh.3mf"
 
-_SCHRAEG = math.sqrt(0.5)
+# Tangentenpunkte der beiden Umlenkungen
+_TANG_Y = LAUF_UNTEN + BOGEN_R              # -47: Ende senkrecht, Beginn Anschnitt
+_TANG_XL = LAUF_X + BOGEN_R                 # -44: Beginn waagerecht
+_TANG_XR = -BOGEN_R                         # -7:  Ende waagerecht
+ANSCHNITT_BIS = -R_AUSSEN + 2.0             # -41: 2 mm im Bauteil
 
 
 # ------------------------------------------------------------- Kammerkern ---
@@ -152,27 +187,65 @@ def kernsitz(x, y, z):
 
 # ---------------------------------------------------------------- Kanaele ---
 
+def _weich(t):
+    """Smoothstep: laeuft an beiden Enden mit Steigung null an.
+
+    Damit bekommt eine Aufweitung weder am Anfang noch am Ende einen
+    Knick - anders als eine Gerade, die zweimal eine Kante hinterlaesst.
+    """
+    t = min(max(t, 0.0), 1.0)
+    return t * t * (3.0 - 2.0 * t)
+
+
+def _bogen(x, y, z, cx, cy, sx, sy, rb, r):
+    """Viertelkreisbogen als Rohr vom Radius r.
+
+    Die Achse ist ein Kreisviertel vom Radius rb um (cx, cy) in der
+    Ebene z = 0; sx und sy waehlen den Quadranten. Der naechste
+    Achsenpunkt ergibt sich, indem die Richtung (x - cx, y - cy) auf
+    diesen Quadranten geklemmt und auf rb normiert wird - fuer einen
+    Kreisbogen ist das der exakte Abstand, nicht genaehert.
+    """
+    dx = max((x - cx) * sx, 0.0)
+    dy = max((y - cy) * sy, 0.0)
+    n = math.hypot(dx, dy)
+    if n < 1e-12:
+        dx, dy, n = 1.0, 0.0, 1.0
+    ax = cx + rb * dx / n * sx
+    ay = cy + rb * dy / n * sy
+    return math.hypot(math.hypot(x - ax, y - ay), z) - r
+
+
 def kanal(x, y, z):
-    """Lauf, Anschnitt und die beiden Entlueftungen, alle bei z = 0."""
-    # senkrechter Lauf, oben zum Trichter aufgeweitet
+    """Lauf, Anschnitt und die beiden Entlueftungen, alle bei z = 0.
+
+    Fuenf Stuecke, die tangential ineinander laufen: senkrechter Lauf mit
+    Trichter, Bogen, waagerechter Lauf, Bogen, Anschnitt. Weil die Boegen
+    an den Tangentenpunkten dieselbe Richtung und denselben Querschnitt
+    haben wie die Geraden, gibt min() hier keine Kante.
+    """
+    # senkrechter Lauf, oben weich zum Trichter aufgeweitet
     rad = math.hypot(x - LAUF_X, z)
-    if y <= TRICHTER_AB:
-        d = rad - LAUF_R
-    elif y <= TRICHTER_BIS:
-        d = (rad - LAUF_R - (y - TRICHTER_AB)) * _SCHRAEG
-    else:
-        d = rad - (LAUF_R + (TRICHTER_BIS - TRICHTER_AB))
-    senkrecht = max(d, LAUF_UNTEN - y)
+    r_lauf = LAUF_R + TRICHTER_WEIT * _weich(
+        (y - TRICHTER_AB) / (TRICHTER_BIS - TRICHTER_AB))
+    senkrecht = max(rad - r_lauf, _TANG_Y - y)
+
+    # Umlenkung nach unten links
+    bogen_l = _bogen(x, y, z, _TANG_XL, _TANG_Y, -1.0, -1.0, BOGEN_R, LAUF_R)
 
     # waagerechter Lauf unter dem Reif
     waagerecht = max(math.hypot(y - LAUF_UNTEN, z) - LAUF_R,
-                     LAUF_X - x, x - 0.0)
+                     _TANG_XL - x, x - _TANG_XR)
 
-    # Anschnitt: kurzes Stueck senkrecht in den tiefsten Punkt
-    anschnitt = max(math.hypot(x, z) - ANSCHNITT_R,
-                    LAUF_UNTEN - y, y - (-R_AUSSEN + 2.0))
+    # Umlenkung nach oben rechts
+    bogen_r = _bogen(x, y, z, _TANG_XR, _TANG_Y, 1.0, -1.0, BOGEN_R, LAUF_R)
 
-    d = min(senkrecht, waagerecht, anschnitt)
+    # Anschnitt: senkrecht in den tiefsten Punkt, dabei weich verjuengt
+    r_an = LAUF_R + (ANSCHNITT_R - LAUF_R) * _weich(
+        (y - _TANG_Y) / (ANSCHNITT_BIS - _TANG_Y))
+    anschnitt = max(math.hypot(x, z) - r_an, _TANG_Y - y, y - ANSCHNITT_BIS)
+
+    d = min(senkrecht, bogen_l, waagerecht, bogen_r, anschnitt)
 
     # zwei Entlueftungen, radial nach aussen neben der Schnurbohrung
     for vz in (1.0, -1.0):
@@ -212,10 +285,13 @@ def haelfte(x, y, z, gespiegelt):
     turm = quader(x, y, z, X_LINKS, TURM_X, Y_OBEN, TURM_Y, 0.0, Z_TIEF)
     d = min(d, turm)
 
-    d = max(d, -max(R.feld(x, y, z), -z))        # Kavitaet, nur z >= 0
+    # Kavitaet und Kanal zusammen abziehen, mit weichem Uebergang: wo
+    # Anschnitt und Entlueftungen in die Kavitaet muenden, steht so eine
+    # Verrundung statt einer Kerbe. Nur z >= 0, die andere Haelfte spiegelt.
+    hohl = weich_vereinen(R.feld(x, y, z), kanal(x, y, z), VERRUNDUNG)
+    d = max(d, -max(hohl, -z))
     d = max(d, -max(kern(x, y, z), -z))
     d = max(d, -max(kernsitz(x, y, z), -z))
-    d = max(d, -max(kanal(x, y, z), -z))
 
     # Zentrierung: Zapfen der einen, Nut der anderen Haelfte
     nut = _zentrier(x, y, z, ZENTRIER_NUT_R, not gespiegelt, True)
@@ -325,6 +401,21 @@ def zieh_test(feld, grenzen, richtung, weg, schritt=0.6):
     return gesperrt, gesamt, tief
 
 
+def drucklage(tri):
+    """Die Haelfte so hinlegen, wie sie gedruckt wird.
+
+    ueberhang() nimmt an, dass entlang +z aufgebaut wird und z = 0 auf
+    dem Bett liegt. Die Haelfte wird aber mit der Trennflaeche nach oben
+    gedruckt, das Bett ist also die Rueckseite bei z = Z_TIEF. Ohne
+    diese Spiegelung misst die Pruefung die Form auf dem Kopf stehend -
+    genau umgekehrt. Das Spiegeln dreht den Umlaufsinn um, deshalb
+    werden zwei Ecken getauscht.
+    """
+    return [((a[0], a[1], Z_TIEF - a[2]),
+             (c[0], c[1], Z_TIEF - c[2]),
+             (b[0], b[1], Z_TIEF - b[2])) for a, b, c in tri]
+
+
 def kavitaet_volumen(schritt=0.6):
     v = 0.0
     x = -R_AUSSEN - 1
@@ -371,7 +462,10 @@ if __name__ == "__main__":
     za_s, za_g, za_t = zieh_test(feld_a, grenzen_halb(), (0.0, 0.0, 1.0), 20.0)
     schub, schub_max, zk_g, zk_s, zk_t = kern_frei()
     kav = kavitaet_volumen()
-    anteil, grad, flaeche = ueberhang(tri_a)
+    tri_druck = drucklage(tri_a)
+    anteil, grad, flaeche = ueberhang(tri_druck, RASTER)
+    anteil_saum = ueberhang(tri_druck)[0]
+    anteil_falsch = ueberhang(tri_a, RASTER)[0]
     ab_max, ab_mit = abweichung(feld_a, tri_a)
 
     print(f"\nDateien         {DATEI_3MF}")
@@ -393,6 +487,11 @@ if __name__ == "__main__":
               + (f", bis {zk_t:.2f} mm tief" if zk_s else "")
               + f"; Schub {schub:.1f} bis {schub_max:.1f} mm, dann steht er "
                 f"ganz in der Oeffnung")
-    print(f"Ueberhang       {anteil:.2f} % der Flaeche ueber 45 Grad")
+    print(f"Ueberhang       {anteil:.2f} % der Flaeche ueber 45 Grad, "
+          f"hoechstens {grad:.0f} Grad")
+    print(f"                mit dem alten 0,3-mm-Saum {anteil_saum:.2f} % - "
+          f"die Differenz ist die Netzkante am Druckbett")
+    print(f"                kopfueber gedruckt waeren es "
+          f"{anteil_falsch:.2f} %")
     print(f"Formtreue       hoechstens {ab_max*1000:.0f} um, "
           f"im Mittel {ab_mit*1000:.0f} um")

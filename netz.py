@@ -206,17 +206,24 @@ def offene_kanten(tri):
     return sum(1 for c in kanten.values() if c != 2)
 
 
-def ueberhang(tri):
+def ueberhang(tri, bett=0.3):
     """Flaechenanteil, der beim Drucken ueber 45 Grad ueberhaengt.
 
     Gedruckt wird mit der Rohrachse senkrecht, aufgebaut also entlang z.
     Eine senkrechte Wand hat 0 Grad, eine waagerechte Decke 90 Grad. Die
     Standflaeche bei z = 0 liegt auf dem Druckbett und bleibt aussen vor.
+
+    bett ist die Hoehe dieses Saums. Der Vorgabewert 0,3 lohnt einen
+    zweiten Blick, wenn das Teil eine grosse ebene Standflaeche hat: dort,
+    wo die Standflaeche in die senkrechte Wand umbricht, legt das Netz
+    eine Reihe leicht gekippter Dreiecke, die knapp ueber dem Saum liegen
+    und als Ueberhang gezaehlt werden, obwohl sie direkt auf dem Bett
+    aufliegen. Mit bett = eine Rasterweite verschwinden sie.
     """
     schlimm = gesamt = 0.0
     grad_max = 0.0
     for p, q, r in tri:
-        if max(p[2], q[2], r[2]) < 0.3:      # liegt auf dem Druckbett
+        if max(p[2], q[2], r[2]) < bett:     # liegt auf dem Druckbett
             continue
         u = [q[n] - p[n] for n in range(3)]
         v = [r[n] - p[n] for n in range(3)]
