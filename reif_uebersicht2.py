@@ -135,116 +135,117 @@ ENTWUERFE = [
            "an der Tür an."),
 ]
 
-# --------------------------------------------------------------- Zeichnung --
+if __name__ == "__main__":
+    # --------------------------------------------------------------- Zeichnung --
 
-S = 1.62
-W, H = 1280, 1010
-INK, AKZ, SOFT, LIN = "#161A17", "#C7422A", "#5E665E", "#B9C1B7"
+    S = 1.62
+    W, H = 1280, 1010
+    INK, AKZ, SOFT, LIN = "#161A17", "#C7422A", "#5E665E", "#B9C1B7"
 
-out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
-       f'width="{W}" height="{H}"><rect width="{W}" height="{H}" fill="#F2F4F1"/>']
-
-
-def txt(x, y, s, size=14, farbe=INK, w=600, anchor="start"):
-    out.append(f'<text x="{x}" y="{y}" font-family="IBM Plex Sans Condensed,'
-               f'DejaVu Sans Condensed,sans-serif" font-size="{size}" '
-               f'font-weight="{w}" fill="{farbe}" text-anchor="{anchor}">{s}</text>')
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
+           f'width="{W}" height="{H}"><rect width="{W}" height="{H}" fill="#F2F4F1"/>']
 
 
-def pfad(f, ox, oy, farbe, br, strich=None, n=540):
-    d = []
-    for i in range(n + 1):
-        th = TAU * i / n
-        r = f(th)
-        d.append(("M" if i == 0 else "L")
-                 + f"{ox + r*math.sin(th)*S:.2f} {oy - r*math.cos(th)*S:.2f}")
-    dash = f' stroke-dasharray="{strich}"' if strich else ""
-    out.append(f'<path d="{"".join(d)}Z" fill="none" stroke="{farbe}" '
-               f'stroke-width="{br}"{dash}/>')
+    def txt(x, y, s, size=14, farbe=INK, w=600, anchor="start"):
+        out.append(f'<text x="{x}" y="{y}" font-family="IBM Plex Sans Condensed,'
+                   f'DejaVu Sans Condensed,sans-serif" font-size="{size}" '
+                   f'font-weight="{w}" fill="{farbe}" text-anchor="{anchor}">{s}</text>')
 
 
-txt(52, 52, "Türzwerg · Zugring · was mit der Öffnung passiert", 26, INK, 700)
-txt(52, 78, "Außenkontur bei allen ein exakter Kreis · gleicher Maßstab · "
-            "Shore A 60 · Aufweitung bei 17 N", 13, SOFT, 400)
+    def pfad(f, ox, oy, farbe, br, strich=None, n=540):
+        d = []
+        for i in range(n + 1):
+            th = TAU * i / n
+            r = f(th)
+            d.append(("M" if i == 0 else "L")
+                     + f"{ox + r*math.sin(th)*S:.2f} {oy - r*math.cos(th)*S:.2f}")
+        dash = f' stroke-dasharray="{strich}"' if strich else ""
+        out.append(f'<path d="{"".join(d)}Z" fill="none" stroke="{farbe}" '
+                   f'stroke-width="{br}"{dash}/>')
 
-SP, BREIT, HOCH = 4, 306, 330
-X0, Y0 = 208, 250
 
-for i, k in enumerate(ENTWUERFE):
-    ox = X0 + (i % SP) * BREIT
-    oy = Y0 + (i // SP) * HOCH
+    txt(52, 52, "Türzwerg · Zugring · was mit der Öffnung passiert", 26, INK, 700)
+    txt(52, 78, "Außenkontur bei allen ein exakter Kreis · gleicher Maßstab · "
+                "Shore A 60 · Aufweitung bei 17 N", 13, SOFT, 400)
 
-    pfad(k.aussen, ox, oy, INK, 2.2)
-    pfad(k.innen, ox, oy, INK, 2.2)
+    SP, BREIT, HOCH = 4, 306, 330
+    X0, Y0 = 208, 250
 
-    if k.steg:
-        hb, ym = k.steg
-        ri = k.innen(math.pi / 2)
-        out.append(f'<rect x="{ox - ri*S:.1f}" y="{oy - hb/2*S:.1f}" '
-                   f'width="{2*ri*S:.1f}" height="{hb*S:.1f}" rx="{hb/2*S:.1f}" '
-                   f'fill="none" stroke="{INK}" stroke-width="2.2"/>')
+    for i, k in enumerate(ENTWUERFE):
+        ox = X0 + (i % SP) * BREIT
+        oy = Y0 + (i // SP) * HOCH
 
-    if k.oese:
-        ob, oh = k.oese
-        top = k.aussen(0.0)
-        out.append(f'<rect x="{ox - ob/2*S:.1f}" y="{oy - (top+oh-4)*S:.1f}" '
-                   f'width="{ob*S:.1f}" height="{(oh+6)*S:.1f}" '
-                   f'rx="{ob/2*S:.1f}" fill="none" stroke="{INK}" '
-                   f'stroke-width="2.2"/>')
-        out.append(f'<circle cx="{ox}" cy="{oy - (top+oh-6)*S:.1f}" r="{2.5*S:.1f}" '
-                   f'fill="none" stroke="{AKZ}" stroke-width="1.6"/>')
+        pfad(k.aussen, ox, oy, INK, 2.2)
+        pfad(k.innen, ox, oy, INK, 2.2)
 
-    top = k.aussen(0.0) + (k.oese[1] if k.oese else 0.0)
-    out.append(f'<path d="M{ox} {oy - top*S - 4:.1f}'
-               f'L{ox} {oy - top*S - 32:.1f}" stroke="{AKZ}" stroke-width="2.2"/>')
-    if not k.oese:
-        out.append(f'<circle cx="{ox}" cy="{oy - (k.innen(0.0)+4)*S:.1f}" '
-                   f'r="5.5" fill="none" stroke="{AKZ}" stroke-width="1.6"/>')
+        if k.steg:
+            hb, ym = k.steg
+            ri = k.innen(math.pi / 2)
+            out.append(f'<rect x="{ox - ri*S:.1f}" y="{oy - hb/2*S:.1f}" '
+                       f'width="{2*ri*S:.1f}" height="{hb*S:.1f}" rx="{hb/2*S:.1f}" '
+                       f'fill="none" stroke="{INK}" stroke-width="2.2"/>')
 
-    ab, ah = k.aussenmass()
-    ob_, oh_ = k.oeffnung()
-    bo, bs, bu = k.bandmasse()
-    d17 = k.aufweitung(17.0)
+        if k.oese:
+            ob, oh = k.oese
+            top = k.aussen(0.0)
+            out.append(f'<rect x="{ox - ob/2*S:.1f}" y="{oy - (top+oh-4)*S:.1f}" '
+                       f'width="{ob*S:.1f}" height="{(oh+6)*S:.1f}" '
+                       f'rx="{ob/2*S:.1f}" fill="none" stroke="{INK}" '
+                       f'stroke-width="2.2"/>')
+            out.append(f'<circle cx="{ox}" cy="{oy - (top+oh-6)*S:.1f}" r="{2.5*S:.1f}" '
+                       f'fill="none" stroke="{AKZ}" stroke-width="1.6"/>')
 
-    y = oy + ah / 2 * S + 40
-    txt(ox, y, k.titel, 19, INK, 700, "middle")
-    txt(ox, y + 42, f"Ø{ab:.0f} × {k.dicke:.0f}   Öffnung {ob_:.0f} × {oh_:.0f}",
-        13, INK, 600, "middle")
-    txt(ox, y + 60, f"Band {bo:.0f} / {bs:.0f} / {bu:.0f}", 12, SOFT, 500, "middle")
-    stern = "*" if k.steif != 1.0 else ""
-    txt(ox, y + 80, f"{d17:.1f} mm auf{stern} · Grenze {k.grenzkraft():.0f} N{stern}",
-        12.5, INK, 600, "middle")
-    # Notiz umbrechen
-    worte, zeile, zeilen = k.notiz.split(), "", []
-    for wort in worte:
-        if len(zeile) + len(wort) > 34:
-            zeilen.append(zeile); zeile = wort
-        else:
-            zeile = (zeile + " " + wort).strip()
-    zeilen.append(zeile)
-    for j, zl in enumerate(zeilen):
-        txt(ox, y + 100 + j * 15, zl, 11.5, SOFT, 400, "middle")
+        top = k.aussen(0.0) + (k.oese[1] if k.oese else 0.0)
+        out.append(f'<path d="M{ox} {oy - top*S - 4:.1f}'
+                   f'L{ox} {oy - top*S - 32:.1f}" stroke="{AKZ}" stroke-width="2.2"/>')
+        if not k.oese:
+            out.append(f'<circle cx="{ox}" cy="{oy - (k.innen(0.0)+4)*S:.1f}" '
+                       f'r="5.5" fill="none" stroke="{AKZ}" stroke-width="1.6"/>')
 
-txt(52, H - 66, "* Der Steg verstrebt den Ring. Die Ringformel gilt dafür "
-                "nicht mehr; der Faktor 3,2 ist geschätzt, nicht gerechnet – "
-                "er wäre nachzurechnen, wenn die Variante weiterkommt.",
-    12, SOFT, 400)
-txt(52, H - 46, "„Grenze“ = Kraft, ab der sich der Ring um mehr als ein "
-                "Zehntel seiner Höhe aufzieht.", 12, SOFT, 400)
-txt(52, H - 26, "Vier Kinderfinger brauchen rund 44 mm Öffnung · "
-                "Fingerfalle unter 12 mm · Kopffalle ab 95 mm · "
-                "Kleinteilezylinder 31,7 mm.", 12, SOFT, 400)
+        ab, ah = k.aussenmass()
+        ob_, oh_ = k.oeffnung()
+        bo, bs, bu = k.bandmasse()
+        d17 = k.aufweitung(17.0)
 
-out.append("</svg>")
-open("tuerzwerg-zugring-uebersicht2.svg", "w").write("\n".join(out))
+        y = oy + ah / 2 * S + 40
+        txt(ox, y, k.titel, 19, INK, 700, "middle")
+        txt(ox, y + 42, f"Ø{ab:.0f} × {k.dicke:.0f}   Öffnung {ob_:.0f} × {oh_:.0f}",
+            13, INK, 600, "middle")
+        txt(ox, y + 60, f"Band {bo:.0f} / {bs:.0f} / {bu:.0f}", 12, SOFT, 500, "middle")
+        stern = "*" if k.steif != 1.0 else ""
+        txt(ox, y + 80, f"{d17:.1f} mm auf{stern} · Grenze {k.grenzkraft():.0f} N{stern}",
+            12.5, INK, 600, "middle")
+        # Notiz umbrechen
+        worte, zeile, zeilen = k.notiz.split(), "", []
+        for wort in worte:
+            if len(zeile) + len(wort) > 34:
+                zeilen.append(zeile); zeile = wort
+            else:
+                zeile = (zeile + " " + wort).strip()
+        zeilen.append(zeile)
+        for j, zl in enumerate(zeilen):
+            txt(ox, y + 100 + j * 15, zl, 11.5, SOFT, 400, "middle")
 
-print(f"{'Entwurf':<17}{'aussen':>8}{'Oeffnung':>12}{'Band o/s/u':>14}"
-      f"{'17 N':>8}{'Grenze':>9}")
-for k in ENTWUERFE:
-    ab, ah = k.aussenmass()
-    ob_, oh_ = k.oeffnung()
-    bo, bs, bu = k.bandmasse()
-    print(f"{k.titel:<17}{ab:>7.0f} {f'{ob_:.0f} x {oh_:.0f}':>11} "
-          f"{f'{bo:.0f}/{bs:.0f}/{bu:.0f}':>13}{k.aufweitung(17.0):>7.1f} "
-          f"{k.grenzkraft():>6.0f} N")
-print("\ngeschrieben: tuerzwerg-zugring-uebersicht2.svg")
+    txt(52, H - 66, "* Der Steg verstrebt den Ring. Die Ringformel gilt dafür "
+                    "nicht mehr; der Faktor 3,2 ist geschätzt, nicht gerechnet – "
+                    "er wäre nachzurechnen, wenn die Variante weiterkommt.",
+        12, SOFT, 400)
+    txt(52, H - 46, "„Grenze“ = Kraft, ab der sich der Ring um mehr als ein "
+                    "Zehntel seiner Höhe aufzieht.", 12, SOFT, 400)
+    txt(52, H - 26, "Vier Kinderfinger brauchen rund 44 mm Öffnung · "
+                    "Fingerfalle unter 12 mm · Kopffalle ab 95 mm · "
+                    "Kleinteilezylinder 31,7 mm.", 12, SOFT, 400)
+
+    out.append("</svg>")
+    open("tuerzwerg-zugring-uebersicht2.svg", "w").write("\n".join(out))
+
+    print(f"{'Entwurf':<17}{'aussen':>8}{'Oeffnung':>12}{'Band o/s/u':>14}"
+          f"{'17 N':>8}{'Grenze':>9}")
+    for k in ENTWUERFE:
+        ab, ah = k.aussenmass()
+        ob_, oh_ = k.oeffnung()
+        bo, bs, bu = k.bandmasse()
+        print(f"{k.titel:<17}{ab:>7.0f} {f'{ob_:.0f} x {oh_:.0f}':>11} "
+              f"{f'{bo:.0f}/{bs:.0f}/{bu:.0f}':>13}{k.aufweitung(17.0):>7.1f} "
+              f"{k.grenzkraft():>6.0f} N")
+    print("\ngeschrieben: tuerzwerg-zugring-uebersicht2.svg")
