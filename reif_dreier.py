@@ -6,9 +6,9 @@ Drei Silhouetten nebeneinander, darunter der Griffquerschnitt im selben
 Massstab, und alle drei noch einmal uebereinandergelegt. Die Ueberlagerung
 ist zum Beurteilen das Ehrlichste - nebeneinander taeuscht die Groesse.
 
-Rev. E steht zweimal in der Tabelle: einmal in Shore A 80, fuer die er
-gerechnet ist, und einmal in A 60. Die zweite Zeile beantwortet die
-Frage, ob die vorhandene Form fuer das weichere Silikon taugt.
+Alle drei in Shore A 70 und 11 mm Dicke. Damit ist als Unterschied nur
+noch die Kontur uebrig - Bandbreite, Radius, Verlauf. Zum Einordnen
+steht Rev. E zusaetzlich an seinem Auslegungspunkt A 80 in der Tabelle.
 
     python3 reif_dreier.py
 """
@@ -53,17 +53,22 @@ A_TROPFEN = tropfen(40.0, 4.5, 2.0)
 A_KREIS = kreis(40.0)
 A_REVE = kreis(43.0)
 
+# Alle drei in Shore A 70 und 11 mm Dicke - damit bleibt als Unterschied
+# nur noch die Kontur, und die Zahlen sind unmittelbar vergleichbar.
+DICKE, SHORE = 11.0, 70
+
 TROPFEN = Kontur("tropfen", "Tropfen w = 2", A_TROPFEN,
-                 band_von(A_TROPFEN, 21, 16, 18), 15.0, 60,
+                 band_von(A_TROPFEN, 21, 16, 18), DICKE, SHORE,
                  "Oben schmal, unten breit, Flanken leicht geweitet.")
 KREIS = Kontur("kreis", "Kreis", A_KREIS,
-               band_von(A_KREIS, 21, 16, 18), 15.0, 60,
+               band_von(A_KREIS, 21, 16, 18), DICKE, SHORE,
                "Außen exakter Kreis, Band nach innen unterschiedlich.")
 REV_E = Kontur("reve", "Rev. E", A_REVE,
-               band_von(A_REVE, 23, 11, 15), 11.0, 80,
-               "Der bestehende. Form ist gebaut, ausgelegt für A 80.")
-REV_E60 = Kontur("reve60", "Rev. E in A 60", A_REVE,
-                 band_von(A_REVE, 23, 11, 15), 11.0, 60, "")
+               band_von(A_REVE, 23, 11, 15), DICKE, SHORE,
+               "Der bestehende. Form ist gebaut.")
+# Zum Einordnen: Rev. E an seinem Auslegungspunkt.
+REV_E80 = Kontur("reve80", "Rev. E in A 80", A_REVE,
+                 band_von(A_REVE, 23, 11, 15), DICKE, 80, "")
 
 DREI = [TROPFEN, KREIS, REV_E]
 
@@ -97,8 +102,8 @@ def pfad(f, ox, oy, farbe, br, strich=None, n=600):
 
 
 txt(52, 50, "Türzwerg · Zugring · Tropfen w = 2, Kreis, Rev. E", 26, INK, 700)
-txt(52, 76, "Gleicher Maßstab · Silhouette, Griffquerschnitt, Überlagerung",
-    13, SOFT, 400)
+txt(52, 76, "Alle in Shore A 70 · alle 11 mm dick · gleicher Maßstab — "
+            "der einzige Unterschied ist die Kontur", 13, SOFT, 400)
 
 FARBEN = {"tropfen": AKZ, "kreis": INK, "reve": GRAU}
 X = [230, 620, 1010]
@@ -187,17 +192,17 @@ for j, name in enumerate([z[0] for z in zeilen[1:]]):
                f'stroke-width="0.6"/>')
 
 y += 34
-txt(TX, y, "Rev. E in A 60 gegossen", 13, AKZ, 600)
-txt(SPX[2], y, f"{REV_E60.aufweitung(17.0):.1f} mm · "
-               f"{REV_E60.grenzkraft():.0f} N", 14, AKZ, 700, "middle")
+txt(TX, y, "Rev. E an seinem Auslegungspunkt A 80", 13, AKZ, 600)
+txt(SPX[2], y, f"{REV_E80.aufweitung(17.0):.1f} mm · "
+               f"{REV_E80.grenzkraft():.0f} N", 14, AKZ, 700, "middle")
 
 txt(52, H - 44, "Rev. E gestrichelt in der Überlagerung. Er ist der größte "
                 "und zugleich der weichste – Band seitlich nur 11 mm, "
                 "Radius 43 mm, beides geht mit der dritten Potenz ein.",
     12, SOFT, 400)
 txt(52, H - 24, "Die Griffquerschnitte sind im selben Maßstab wie die "
-                "Silhouetten gezeichnet: Rev. E ist mit 11 mm Tiefe "
-                "spürbar flacher als die beiden neuen mit 15 mm.",
+                "Silhouetten gezeichnet. Bei gleicher Tiefe unterscheiden "
+                "sie sich nur noch in der Breite: 18 gegen 15 mm.",
     12, SOFT, 400)
 
 out.append("</svg>")
@@ -207,7 +212,7 @@ kopf = ["Entwurf", "aussen", "Oeffnung", "Band", "Griff", "g", "Shore",
         "17 N", "Grenze"]
 print(f"{kopf[0]:<16}{kopf[1]:>14}{kopf[2]:>10}{kopf[3]:>13}{kopf[4]:>9}"
       f"{kopf[5]:>6}{kopf[6]:>7}{kopf[7]:>8}{kopf[8]:>9}")
-for k in DREI + [REV_E60]:
+for k in DREI + [REV_E80]:
     v = werte(k)
     print(f"{k.titel:<16}{v[0]:>14}{v[1]:>10}{v[2]:>13}{v[3]:>9}"
           f"{v[4]:>6}{v[5]:>7}{v[6]:>8}{v[7]:>9}")
