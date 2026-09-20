@@ -80,7 +80,17 @@ KAMMER_LAENGE = 10.0    # gerader Teil; mit den 45-Grad-Kegeln 21 mm gesamt,
 # waechst die Rippe mit, sonst sitzt eine duenne Kammer in einem dicken Rohr.
 RIPPE_WAND = WAND
 
-D_SCHNUR = 5.0          # Schnurbohrung nach aussen, rund
+# Schnurbohrung nach aussen, rund. Gleich dem Schnurdurchmesser, nicht
+# groesser: Silikon dehnt sich beim Einfaedeln ohne weiteres, und was
+# zurueckbleibt, ist eine Bohrung ohne Spiel. Das haelt den Knoten und
+# verhindert zugleich, dass die Manschette auf der Schnur wandert.
+#
+# Der Knoten haelt nicht, weil er dicker ist als die Bohrung - das ist er
+# immer -, sondern weil das Verhaeltnis stimmt: ein Sackstich in 4-mm-Schnur
+# misst rund 8 mm. Durch eine 5er Bohrung muesste er sie um 60 Prozent
+# weiten, durch eine 4er um 100. Das ist der Unterschied zwischen
+# "rutscht unter Dauerzug irgendwann durch" und "geht nicht".
+D_SCHNUR = 4.0
 SCHNUR_SENK = 0.5       # 45-Grad-Senkung am aeusseren Ende, fuer die Schnur
 VERRUNDUNG = 4.0        # weicher Uebergang Rohr zu Rippe
 
