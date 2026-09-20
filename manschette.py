@@ -34,13 +34,19 @@ LAENGE = 28.0           # Laenge der Manschette entlang des Drueckers
 # Silikonmanschette haben, damit sie sich aufspannt.
 D_INNEN = 18.0
 
-# Wandstaerke in der Mitte. 2,0 mm sind beim Drucken genau fuenf Bahnen einer
-# 0,4-mm-Duese. Krumme Vielfache sind bei TPU der haeufigste Grund fuer
-# poroese Waende: der Slicer laesst dann zwischen den Bahnen eine Luecke, die
-# er mit Lueckenfuellung zu schliessen versucht, was bei weichem Filament
-# schlecht haelt. Fuer die gegossene Silikonfassung gilt das Bahnenargument
-# nicht mehr - dort zaehlt nur, dass die Form sich fuellt.
-WAND = 2.0
+# Wandstaerke in der Mitte.
+#
+# 3,0 mm fuer die gegossene Silikonfassung. Silikon in Shore A 50 bis 60 ist
+# um Groessenordnungen nachgiebiger als gedrucktes TPU; eine Wand, die als
+# PLA- oder TPU-Teil steif genug war, fuehlt sich in Silikon weich an.
+#
+# Fuer den Druck ist 3,0 allerdings kein guter Wert: bei 0,4 mm Bahnbreite
+# sind das 7,5 Bahnen. Krumme Vielfache sind bei TPU der haeufigste Grund
+# fuer poroese Waende - der Slicer laesst zwischen den Bahnen eine Luecke,
+# die er mit Lueckenfuellung zu schliessen versucht, was bei weichem
+# Filament schlecht haelt. Wer diese Fassung drucken will, nimmt 2,8 (7
+# Bahnen) oder 3,2 (8). Gegossen spielt es keine Rolle.
+WAND = 3.0
 BAHN = 0.4              # angenommene Extrusionsbreite, nur zur Kontrolle
 
 # Abflachung zu den Stirnseiten hin.
@@ -54,8 +60,12 @@ BAHN = 0.4              # angenommene Extrusionsbreite, nur zur Kontrolle
 # Die Rampe laeuft als Smoothstep, hat an beiden Enden also Steigung null und
 # hinterlaesst weder am Mundstueck noch dort, wo sie in die volle Wand
 # einlaeuft, eine Kante.
+# Die Rampe ist laenger als bei der 2-mm-Fassung (6 mm): abzutragen sind
+# jetzt 1,8 statt 0,8 mm, und bei gleicher Laenge waere sie entsprechend
+# steiler geworden. Mit 7 mm bleibt die steilste Stelle bei rund 21 Grad
+# gegen die Drueckerachse - das laeuft der Hand noch weich zu.
 WAND_ENDE = 1.2
-ABFLACHUNG = 6.0
+ABFLACHUNG = 7.0
 
 # Rippe an der Unterseite: nimmt die Knotenkammer auf und laeuft ueber die
 # volle Laenge durch. Das ist nicht nur Optik - ein durchlaufendes Profil
@@ -93,6 +103,7 @@ EINLAUF = 0.5
 
 # Wandstaerke laesst sich beim Aufruf ueberschreiben, um Varianten zu
 # vergleichen:   python3 manschette.py 2.5
+WAND_VORGABE = WAND
 if len(sys.argv) > 1:
     WAND = float(sys.argv[1])
     RIPPE_WAND = WAND
@@ -104,8 +115,25 @@ R_RIPPE = D_KAMMER / 2.0 + RIPPE_WAND
 RIPPE_UNTEN = KAMMER_ACHSE + R_RIPPE           # tiefster Punkt der Rippe
 HOEHE = R_AUSSEN + RIPPE_UNTEN                 # Gesamthoehe ueber alles
 
-RASTER = 0.36           # Kantenlaenge der Gitterzelle
-DATEI = ("tuerzwerg-manschette.stl" if abs(WAND - 2.0) < 1e-9
+# Kantenlaenge der Gitterzelle.
+#
+# 0,31 statt 0,36. Bei 3 mm Wand streift der 45-Grad-Kegel der Knotenkammer
+# die Bohrungswand fast tangential, und dort setzte der Vernetzer bei 0,36
+# mehrfach belegte und entartete Kanten - kein Loch: keine einzige Kante hatte
+# nur ein Dreieck, die Flaeche war geschlossen. Dass es am Gitter lag und
+# nicht am Koerper, zeigt das Volumen ueber mehrere Raster:
+#
+#   Raster   Dreiecke   mehrfach belegte Kanten   Volumen
+#   0,31      422 844                         0   7,065 cm^3
+#   0,33      373 152                         5   7,065
+#   0,36      311 964                       267   7,063
+#   0,40      253 716                       188   7,062
+#   0,43      219 484                         0   7,061
+#
+# Das Volumen ist ueber alle Raster gleich, die Kantenzahl springt. Waere es
+# ein Loch, haette das Volumen mitgewandert.
+RASTER = 0.31
+DATEI = ("tuerzwerg-manschette.stl" if abs(WAND - WAND_VORGABE) < 1e-9
          else f"tuerzwerg-manschette-wand{WAND:.1f}".replace(".", "") + ".stl")
 
 
@@ -128,13 +156,15 @@ def feld(x, y, z):
     """Signierter Abstand. Negativ bedeutet Material."""
     r = math.hypot(x, y)
 
-    # Querschnitt: Rohr und Rippe, weich vereinigt. Zu den Stirnseiten hin
-    # wird das ganze Profil zurueckgenommen - ein positiver Summand auf ein
-    # Distanzfeld schrumpft den Koerper genau um diesen Betrag, und zwar
-    # senkrecht zur Flaeche, also an Rohr und Rippe gleich viel.
-    profil = _weich_vereinen(r - R_AUSSEN,
+    # Querschnitt: Rohr und Rippe, weich vereinigt.
+    #
+    # Abgeflacht wird nur das Rohr, nicht die Rippe. Der Uebergang, um den es
+    # geht, liegt am Rohr - dort laeuft der blanke Druecker in die Manschette.
+    # Die Rippe beruehrt den Druecker nirgends, und sie soll ueber der
+    # Knotenkammer ihre volle Wand behalten: dort zieht die Schnur.
+    profil = _weich_vereinen(r - (R_AUSSEN - _ruecknahme(z)),
                              math.hypot(x, y + KAMMER_ACHSE) - R_RIPPE,
-                             VERRUNDUNG) + _ruecknahme(z)
+                             VERRUNDUNG)
 
     # Gerundete Extrusion: das Profil wird um KANTE geschrumpft, in z um
     # KANTE gekuerzt und der Koerper anschliessend wieder um KANTE
@@ -284,13 +314,20 @@ if __name__ == "__main__":
     for z, was in ((LAENGE / 2.0, "Mitte"),
                    (ABFLACHUNG, "Ende der Rampe"),
                    (ABFLACHUNG / 2.0, "Mitte der Rampe"),
+                   (2.0, "2 mm vom Rand"),
                    (1.0, "1 mm vom Rand"),
                    (0.3, "0,3 mm vom Rand")):
         print(f"  z = {z:5.1f}  {was:<17}{wand_bei(z):5.2f} mm")
+    steig = 1.5 * (WAND - WAND_ENDE) / ABFLACHUNG
+    print(f"  steilste Stelle der Rampe {math.degrees(math.atan(steig)):.0f} "
+          f"Grad gegen die Drueckerachse")
     print(f"  Soll: {WAND:.1f} in der Mitte, {WAND_ENDE:.1f} an der Stirnseite, "
           f"Rampe {ABFLACHUNG:.0f} mm")
-    print(f"  Duese 0,4: Mitte {WAND/BAHN:.0f} Bahnen, "
-          f"Kiel {RIPPE_WAND/BAHN:.0f} Bahnen")
+    bahnen = WAND / BAHN
+    print(f"  Duese {BAHN}: Mitte {bahnen:.2f} Bahnen"
+          + ("" if abs(bahnen - round(bahnen)) < 0.02 else
+             f"  -  krumm; zum Drucken {round(bahnen-0.5)*BAHN:.1f} oder "
+             f"{round(bahnen+0.5)*BAHN:.1f} nehmen, gegossen egal"))
     print(f"Knotenkammer   {D_KAMMER:.1f} x {KAMMER_LAENGE:.0f} mm, "
           f"Stirnwand {(LAENGE - KAMMER_LAENGE)/2 - D_KAMMER/2:.1f} mm, "
           f"Schnurbohrung {D_SCHNUR:.1f} mm")
