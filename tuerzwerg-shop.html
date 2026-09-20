@@ -1,0 +1,553 @@
+<title>Türzwerg</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --papier:  #FBFAF7;
+    --flaeche: #EFEDE6;
+    --linie:   #E2DFD5;
+    --ink:     #17160F;
+    --soft:    #6C675A;
+    --metall:  #CBC8BF;
+    --schnur:  #ABA394;
+    --akzent:  #D2452B;
+    --auf-akzent: #FFFFFF;
+
+    --disp: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --sans: "Figtree", "Helvetica Neue", Arial, sans-serif;
+
+    --breit: 1040px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --papier:  #131310;
+      --flaeche: #1E1D18;
+      --linie:   #302E27;
+      --ink:     #F4F2EA;
+      --soft:    #9C9787;
+      --metall:  #3B3931;
+      --schnur:  #55503F;
+      --auf-akzent: #14130E;
+    }
+  }
+  :root[data-theme="dark"] {
+    --papier:  #131310;
+    --flaeche: #1E1D18;
+    --linie:   #302E27;
+    --ink:     #F4F2EA;
+    --soft:    #9C9787;
+    --metall:  #3B3931;
+    --schnur:  #55503F;
+    --auf-akzent: #14130E;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--papier); color: var(--ink);
+    font-family: var(--sans); font-size: 1.03rem; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--disp); font-weight: 800; margin: 0;
+    letter-spacing: -0.02em; text-wrap: balance; line-height: 1.08;
+  }
+  p { margin: 0; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--akzent); outline-offset: 3px; border-radius: 3px; }
+
+  .bahn { max-width: var(--breit); margin: 0 auto; padding: 0 24px; }
+
+  .eyebrow {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--soft);
+  }
+
+  /* ------------------------------------------------------------ Kopf ---- */
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--papier) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linie);
+  }
+  .kopf { display: flex; align-items: center; gap: 20px; height: 62px; }
+  .wortmarke {
+    font-family: var(--disp); font-weight: 800; font-size: 1.32rem;
+    letter-spacing: -0.03em; display: flex; align-items: center; gap: 9px;
+  }
+  .wortmarke .punkt {
+    width: 15px; height: 15px; border-radius: 50%;
+    border: 4px solid var(--akzent); flex: none;
+  }
+  .kopf .schub { margin-left: auto; }
+  .sprache { display: flex; border: 1px solid var(--linie); border-radius: 999px; overflow: hidden; }
+  .sprache button {
+    font: inherit; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
+    padding: 6px 13px; border: 0; background: transparent; color: var(--soft);
+    cursor: pointer;
+  }
+  .sprache button[aria-pressed="true"] { background: var(--ink); color: var(--papier); }
+
+  /* ------------------------------------------------------------ Hero ---- */
+  .hero {
+    display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 56px;
+    align-items: center; padding: 64px 0 76px;
+  }
+  .buehne {
+    background: var(--flaeche); border-radius: 4px; padding: 26px 10px;
+    display: flex; justify-content: center; color: var(--akzent);
+  }
+  .buehne svg { width: 100%; max-width: 330px; height: auto; display: block; }
+  .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); }
+  .hero .lead { color: var(--soft); font-size: 1.16rem; margin-top: 20px; max-width: 40ch; }
+  .hero .unterzeile { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px 22px; }
+  .marke {
+    font-size: 0.86rem; color: var(--soft); display: flex; align-items: center; gap: 8px;
+  }
+  .marke::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--akzent); flex: none;
+  }
+
+  /* ---------------------------------------------------------- Schritte -- */
+  section { padding: 72px 0; border-top: 1px solid var(--linie); }
+  .titel { max-width: 30ch; margin-bottom: 40px; }
+  .titel h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); margin-top: 12px; }
+  .titel p { color: var(--soft); margin-top: 14px; max-width: 56ch; }
+
+  .schritte { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .schritt { display: flex; flex-direction: column; gap: 10px; }
+  .schritt .nr {
+    font-family: var(--disp); font-weight: 800; font-size: 0.9rem;
+    color: var(--akzent); letter-spacing: 0.04em;
+  }
+  .schritt h3 { font-size: 1.12rem; font-weight: 600; }
+  .schritt p { color: var(--soft); font-size: 0.97rem; }
+
+  /* ----------------------------------------------------------- Produkt -- */
+  .produkt { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .produkt .buehne { padding: 44px 24px; }
+  .produkt .buehne svg { max-width: 300px; }
+
+  .kauf { display: flex; flex-direction: column; gap: 26px; }
+  .kauf h2 { font-size: clamp(1.8rem, 3.6vw, 2.3rem); }
+  .preis {
+    font-family: var(--disp); font-weight: 800; font-size: 2rem;
+    font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: 12px;
+  }
+  .preis small { font-family: var(--sans); font-size: 0.84rem; font-weight: 500; color: var(--soft); }
+
+  .farben { display: flex; flex-direction: column; gap: 12px; }
+  .farbreihe { display: flex; gap: 10px; }
+  .farbe {
+    width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--linie);
+    cursor: pointer; padding: 0; position: relative;
+  }
+  .farbe[aria-pressed="true"] { border-color: var(--ink); }
+  .farbe[aria-pressed="true"]::after {
+    content: ""; position: absolute; inset: 4px; border-radius: 50%;
+    border: 2px solid var(--papier);
+  }
+  .farbname { font-size: 0.9rem; color: var(--soft); }
+
+  .menge { display: flex; align-items: center; gap: 14px; }
+  .menge button {
+    width: 34px; height: 34px; border: 1px solid var(--linie); background: transparent;
+    color: var(--ink); font: inherit; font-size: 1.1rem; border-radius: 4px; cursor: pointer;
+  }
+  .menge output { font-variant-numeric: tabular-nums; min-width: 2ch; text-align: center; font-weight: 600; }
+
+  .knopf {
+    font: inherit; font-weight: 700; font-size: 1rem;
+    background: var(--akzent); color: var(--auf-akzent);
+    border: 0; border-radius: 4px; padding: 15px 26px; cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  .knopf:hover { transform: translateY(-1px); }
+  .knopf.leise { background: transparent; color: var(--ink); border: 1px solid var(--linie); }
+  .hinweis { font-size: 0.84rem; color: var(--soft); }
+
+  .lieferumfang { border-top: 1px solid var(--linie); padding-top: 20px; display: grid; gap: 8px; }
+  .lieferumfang li { list-style: none; font-size: 0.95rem; display: flex; gap: 10px; }
+  .lieferumfang ul { margin: 0; padding: 0; display: grid; gap: 8px; }
+  .lieferumfang li::before { content: "—"; color: var(--akzent); }
+
+  /* ------------------------------------------------------------ Masse --- */
+  .rahmen { overflow-x: auto; border: 1px solid var(--linie); border-radius: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+  th, td { padding: 13px 18px; text-align: left; border-bottom: 1px solid var(--linie); }
+  td:last-child { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  th { font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--soft); font-weight: 700; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  .sicher { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 34px; }
+  .sicher div { display: flex; flex-direction: column; gap: 8px; }
+  .sicher h3 { font-size: 1.02rem; font-weight: 600; }
+  .sicher p { color: var(--soft); font-size: 0.95rem; }
+
+  /* -------------------------------------------------------------- FAQ --- */
+  .faq { display: grid; gap: 0; border-top: 1px solid var(--linie); }
+  details { border-bottom: 1px solid var(--linie); }
+  summary {
+    cursor: pointer; padding: 20px 0; font-weight: 600; font-size: 1.04rem;
+    list-style: none; display: flex; justify-content: space-between; gap: 20px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--akzent); font-weight: 700; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--soft); padding-bottom: 22px; max-width: 62ch; font-size: 0.97rem; }
+
+  footer {
+    border-top: 1px solid var(--linie); padding: 34px 0 60px;
+    display: flex; flex-wrap: wrap; gap: 14px 30px; align-items: center;
+    color: var(--soft); font-size: 0.86rem;
+  }
+  footer .schub { margin-left: auto; }
+
+  /* ------------------------------------------------------------ Korb ---- */
+  .korb {
+    position: fixed; right: 20px; bottom: 20px; z-index: 30;
+    background: var(--flaeche); border: 1px solid var(--linie); border-radius: 6px;
+    padding: 18px 20px; display: none; flex-direction: column; gap: 12px;
+    max-width: 320px; box-shadow: 0 12px 34px rgba(0,0,0,0.12);
+  }
+  .korb.offen { display: flex; }
+  .korb .zeile { display: flex; justify-content: space-between; gap: 20px; font-size: 0.94rem; }
+  .korb .summe { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 860px) {
+    .hero, .produkt { grid-template-columns: 1fr; gap: 34px; }
+    .schritte, .sicher { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<header>
+  <div class="bahn kopf">
+    <span class="wortmarke"><i class="punkt"></i><span data-t="marke">Türzwerg</span></span>
+    <div class="schub"></div>
+    <div class="sprache" role="group" aria-label="Sprache">
+      <button type="button" data-lang="de" aria-pressed="true">DE</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main class="bahn">
+
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-t="ab">Ab 1,5 Jahren</div>
+      <h1 data-t="h1">Die Tür geht auf. Ohne dich.</h1>
+      <p class="lead" data-t="lead">Ein Ring an einer Schnur, ein Silikonring auf der Klinke. Mehr ist es nicht. Und plötzlich kommt dein Kind allein ins Kinderzimmer.</p>
+      <div class="unterzeile">
+        <span class="marke" data-t="u1">Silikon, ohne Weichmacher</span>
+        <span class="marke" data-t="u2">In 30 Sekunden montiert</span>
+        <span class="marke" data-t="u3">Passt auf runde Drücker 18–23 mm</span>
+      </div>
+    </div>
+    <div class="buehne"><svg viewBox="-30 -46 300 400" role="img" aria-label="Der Reif haengt an einer Schnur von der Tuerklinke herab">
+<rect x="196" y="-46" width="76" height="400" fill="var(--flaeche)"/>
+<circle cx="228" cy="0" r="27" fill="var(--metall)"/>
+<path d="M60 -11 H222 a11 11 0 0 1 0 22 H60 a11 11 0 0 1 0-22 Z" fill="var(--metall)"/>
+<path d="M96 -13 h30 v26 h-30 a4 4 0 0 1 -4 -4 v-18 a4 4 0 0 1 4 -4 Z" fill="currentColor"/>
+<path d="M104 13 h14 l-3 9 h-8 Z" fill="currentColor"/>
+<path d="M111 20 C 107 90, 116 160, 111 231" stroke="var(--schnur)" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M 111.0 231.0 L 111.9 231.0 L 112.9 231.0 L 113.8 231.1 L 114.7 231.2 L 115.7 231.3 L 116.6 231.4 L 117.5 231.5 L 118.5 231.7 L 119.4 231.8 L 120.3 232.0 L 121.2 232.2 L 122.1 232.5 L 123.0 232.7 L 123.9 233.0 L 124.8 233.3 L 125.7 233.6 L 126.6 233.9 L 127.5 234.3 L 128.3 234.6 L 129.2 235.0 L 130.0 235.4 L 130.9 235.9 L 131.7 236.3 L 132.5 236.8 L 133.3 237.2 L 134.1 237.7 L 134.9 238.2 L 135.7 238.8 L 136.4 239.3 L 137.2 239.9 L 137.9 240.5 L 138.6 241.1 L 139.4 241.7 L 140.1 242.3 L 140.7 242.9 L 141.4 243.6 L 142.1 244.3 L 142.7 244.9 L 143.3 245.6 L 143.9 246.4 L 144.5 247.1 L 145.1 247.8 L 145.7 248.6 L 146.2 249.3 L 146.8 250.1 L 147.3 250.9 L 147.8 251.7 L 148.2 252.5 L 148.7 253.3 L 149.1 254.1 L 149.6 255.0 L 150.0 255.8 L 150.4 256.7 L 150.7 257.5 L 151.1 258.4 L 151.4 259.3 L 151.7 260.2 L 152.0 261.1 L 152.3 262.0 L 152.5 262.9 L 152.8 263.8 L 153.0 264.7 L 153.2 265.6 L 153.3 266.5 L 153.5 267.5 L 153.6 268.4 L 153.7 269.3 L 153.8 270.3 L 153.9 271.2 L 154.0 272.1 L 154.0 273.1 L 154.0 274.0 L 154.0 274.9 L 154.0 275.9 L 153.9 276.8 L 153.8 277.7 L 153.7 278.7 L 153.6 279.6 L 153.5 280.5 L 153.3 281.5 L 153.2 282.4 L 153.0 283.3 L 152.8 284.2 L 152.5 285.1 L 152.3 286.0 L 152.0 286.9 L 151.7 287.8 L 151.4 288.7 L 151.1 289.6 L 150.7 290.5 L 150.4 291.3 L 150.0 292.2 L 149.6 293.0 L 149.1 293.9 L 148.7 294.7 L 148.2 295.5 L 147.8 296.3 L 147.3 297.1 L 146.8 297.9 L 146.2 298.7 L 145.7 299.4 L 145.1 300.2 L 144.5 300.9 L 143.9 301.6 L 143.3 302.4 L 142.7 303.1 L 142.1 303.7 L 141.4 304.4 L 140.7 305.1 L 140.1 305.7 L 139.4 306.3 L 138.6 306.9 L 137.9 307.5 L 137.2 308.1 L 136.4 308.7 L 135.7 309.2 L 134.9 309.8 L 134.1 310.3 L 133.3 310.8 L 132.5 311.2 L 131.7 311.7 L 130.9 312.1 L 130.0 312.6 L 129.2 313.0 L 128.3 313.4 L 127.5 313.7 L 126.6 314.1 L 125.7 314.4 L 124.8 314.7 L 123.9 315.0 L 123.0 315.3 L 122.1 315.5 L 121.2 315.8 L 120.3 316.0 L 119.4 316.2 L 118.5 316.3 L 117.5 316.5 L 116.6 316.6 L 115.7 316.7 L 114.7 316.8 L 113.8 316.9 L 112.9 317.0 L 111.9 317.0 L 111.0 317.0 L 110.1 317.0 L 109.1 317.0 L 108.2 316.9 L 107.3 316.8 L 106.3 316.7 L 105.4 316.6 L 104.5 316.5 L 103.5 316.3 L 102.6 316.2 L 101.7 316.0 L 100.8 315.8 L 99.9 315.5 L 99.0 315.3 L 98.1 315.0 L 97.2 314.7 L 96.3 314.4 L 95.4 314.1 L 94.5 313.7 L 93.7 313.4 L 92.8 313.0 L 92.0 312.6 L 91.1 312.1 L 90.3 311.7 L 89.5 311.2 L 88.7 310.8 L 87.9 310.3 L 87.1 309.8 L 86.3 309.2 L 85.6 308.7 L 84.8 308.1 L 84.1 307.5 L 83.4 306.9 L 82.6 306.3 L 81.9 305.7 L 81.3 305.1 L 80.6 304.4 L 79.9 303.7 L 79.3 303.1 L 78.7 302.4 L 78.1 301.6 L 77.5 300.9 L 76.9 300.2 L 76.3 299.4 L 75.8 298.7 L 75.2 297.9 L 74.7 297.1 L 74.2 296.3 L 73.8 295.5 L 73.3 294.7 L 72.9 293.9 L 72.4 293.0 L 72.0 292.2 L 71.6 291.3 L 71.3 290.5 L 70.9 289.6 L 70.6 288.7 L 70.3 287.8 L 70.0 286.9 L 69.7 286.0 L 69.5 285.1 L 69.2 284.2 L 69.0 283.3 L 68.8 282.4 L 68.7 281.5 L 68.5 280.5 L 68.4 279.6 L 68.3 278.7 L 68.2 277.7 L 68.1 276.8 L 68.0 275.9 L 68.0 274.9 L 68.0 274.0 L 68.0 273.1 L 68.0 272.1 L 68.1 271.2 L 68.2 270.3 L 68.3 269.3 L 68.4 268.4 L 68.5 267.5 L 68.7 266.5 L 68.8 265.6 L 69.0 264.7 L 69.2 263.8 L 69.5 262.9 L 69.7 262.0 L 70.0 261.1 L 70.3 260.2 L 70.6 259.3 L 70.9 258.4 L 71.3 257.5 L 71.6 256.7 L 72.0 255.8 L 72.4 255.0 L 72.9 254.1 L 73.3 253.3 L 73.8 252.5 L 74.2 251.7 L 74.7 250.9 L 75.2 250.1 L 75.8 249.3 L 76.3 248.6 L 76.9 247.8 L 77.5 247.1 L 78.1 246.4 L 78.7 245.6 L 79.3 244.9 L 79.9 244.3 L 80.6 243.6 L 81.3 242.9 L 81.9 242.3 L 82.6 241.7 L 83.4 241.1 L 84.1 240.5 L 84.8 239.9 L 85.6 239.3 L 86.3 238.8 L 87.1 238.2 L 87.9 237.7 L 88.7 237.2 L 89.5 236.8 L 90.3 236.3 L 91.1 235.9 L 92.0 235.4 L 92.8 235.0 L 93.7 234.6 L 94.5 234.3 L 95.4 233.9 L 96.3 233.6 L 97.2 233.3 L 98.1 233.0 L 99.0 232.7 L 99.9 232.5 L 100.8 232.2 L 101.7 232.0 L 102.6 231.8 L 103.5 231.7 L 104.5 231.5 L 105.4 231.4 L 106.3 231.3 L 107.3 231.2 L 108.2 231.1 L 109.1 231.0 L 110.1 231.0 Z M 110.6 254.0 L 110.1 254.0 L 109.7 254.0 L 109.3 254.0 L 108.8 254.0 L 108.4 254.0 L 107.9 254.0 L 107.5 254.0 L 107.0 254.0 L 106.6 254.0 L 106.1 254.0 L 105.6 254.0 L 105.2 254.0 L 104.7 254.1 L 104.2 254.1 L 103.8 254.1 L 103.3 254.1 L 102.8 254.2 L 102.3 254.2 L 101.8 254.2 L 101.3 254.3 L 100.8 254.3 L 100.3 254.4 L 99.7 254.5 L 99.2 254.6 L 98.7 254.7 L 98.1 254.8 L 97.6 254.9 L 97.1 255.0 L 96.5 255.1 L 96.0 255.3 L 95.4 255.4 L 94.9 255.6 L 94.3 255.8 L 93.8 256.0 L 93.2 256.2 L 92.6 256.4 L 92.1 256.7 L 91.5 256.9 L 91.0 257.2 L 90.4 257.5 L 89.9 257.8 L 89.4 258.1 L 88.8 258.5 L 88.3 258.8 L 87.8 259.2 L 87.3 259.6 L 86.8 260.0 L 86.3 260.4 L 85.8 260.9 L 85.3 261.3 L 84.8 261.8 L 84.4 262.3 L 83.9 262.8 L 83.5 263.3 L 83.1 263.8 L 82.7 264.4 L 82.3 265.0 L 82.0 265.5 L 81.6 266.1 L 81.3 266.7 L 81.0 267.3 L 80.7 268.0 L 80.4 268.6 L 80.2 269.3 L 79.9 269.9 L 79.7 270.6 L 79.5 271.2 L 79.4 271.9 L 79.2 272.6 L 79.1 273.3 L 79.0 274.0 L 78.9 274.7 L 78.9 275.4 L 78.8 276.1 L 78.8 276.8 L 78.9 277.5 L 78.9 278.2 L 79.0 278.9 L 79.0 279.6 L 79.1 280.3 L 79.3 281.0 L 79.4 281.7 L 79.6 282.4 L 79.8 283.1 L 80.0 283.8 L 80.3 284.4 L 80.5 285.1 L 80.8 285.7 L 81.1 286.4 L 81.4 287.0 L 81.8 287.6 L 82.1 288.2 L 82.5 288.8 L 82.9 289.4 L 83.3 290.0 L 83.7 290.6 L 84.1 291.1 L 84.6 291.6 L 85.1 292.2 L 85.5 292.7 L 86.0 293.2 L 86.5 293.6 L 87.0 294.1 L 87.6 294.5 L 88.1 295.0 L 88.6 295.4 L 89.2 295.8 L 89.8 296.2 L 90.3 296.6 L 90.9 296.9 L 91.5 297.3 L 92.1 297.6 L 92.7 297.9 L 93.2 298.2 L 93.8 298.5 L 94.4 298.8 L 95.1 299.0 L 95.7 299.3 L 96.3 299.5 L 96.9 299.7 L 97.5 299.9 L 98.1 300.1 L 98.7 300.3 L 99.3 300.5 L 100.0 300.7 L 100.6 300.8 L 101.2 301.0 L 101.8 301.1 L 102.4 301.2 L 103.0 301.3 L 103.6 301.4 L 104.3 301.5 L 104.9 301.6 L 105.5 301.7 L 106.1 301.8 L 106.7 301.8 L 107.3 301.9 L 107.9 301.9 L 108.6 301.9 L 109.2 302.0 L 109.8 302.0 L 110.4 302.0 L 111.0 302.0 L 111.6 302.0 L 112.2 302.0 L 112.8 302.0 L 113.4 301.9 L 114.1 301.9 L 114.7 301.9 L 115.3 301.8 L 115.9 301.8 L 116.5 301.7 L 117.1 301.6 L 117.7 301.5 L 118.4 301.4 L 119.0 301.3 L 119.6 301.2 L 120.2 301.1 L 120.8 301.0 L 121.4 300.8 L 122.0 300.7 L 122.7 300.5 L 123.3 300.3 L 123.9 300.1 L 124.5 299.9 L 125.1 299.7 L 125.7 299.5 L 126.3 299.3 L 126.9 299.0 L 127.6 298.8 L 128.2 298.5 L 128.8 298.2 L 129.3 297.9 L 129.9 297.6 L 130.5 297.3 L 131.1 296.9 L 131.7 296.6 L 132.2 296.2 L 132.8 295.8 L 133.4 295.4 L 133.9 295.0 L 134.4 294.5 L 135.0 294.1 L 135.5 293.6 L 136.0 293.2 L 136.5 292.7 L 136.9 292.2 L 137.4 291.6 L 137.9 291.1 L 138.3 290.6 L 138.7 290.0 L 139.1 289.4 L 139.5 288.8 L 139.9 288.2 L 140.2 287.6 L 140.6 287.0 L 140.9 286.4 L 141.2 285.7 L 141.5 285.1 L 141.7 284.4 L 142.0 283.8 L 142.2 283.1 L 142.4 282.4 L 142.6 281.7 L 142.7 281.0 L 142.9 280.3 L 143.0 279.6 L 143.0 278.9 L 143.1 278.2 L 143.1 277.5 L 143.2 276.8 L 143.2 276.1 L 143.1 275.4 L 143.1 274.7 L 143.0 274.0 L 142.9 273.3 L 142.8 272.6 L 142.6 271.9 L 142.5 271.2 L 142.3 270.6 L 142.1 269.9 L 141.8 269.3 L 141.6 268.6 L 141.3 268.0 L 141.0 267.3 L 140.7 266.7 L 140.4 266.1 L 140.0 265.5 L 139.7 265.0 L 139.3 264.4 L 138.9 263.8 L 138.5 263.3 L 138.1 262.8 L 137.6 262.3 L 137.2 261.8 L 136.7 261.3 L 136.2 260.9 L 135.7 260.4 L 135.2 260.0 L 134.7 259.6 L 134.2 259.2 L 133.7 258.8 L 133.2 258.5 L 132.6 258.1 L 132.1 257.8 L 131.6 257.5 L 131.0 257.2 L 130.5 256.9 L 129.9 256.7 L 129.4 256.4 L 128.8 256.2 L 128.2 256.0 L 127.7 255.8 L 127.1 255.6 L 126.6 255.4 L 126.0 255.3 L 125.5 255.1 L 124.9 255.0 L 124.4 254.9 L 123.9 254.8 L 123.3 254.7 L 122.8 254.6 L 122.3 254.5 L 121.7 254.4 L 121.2 254.3 L 120.7 254.3 L 120.2 254.2 L 119.7 254.2 L 119.2 254.2 L 118.7 254.1 L 118.2 254.1 L 117.8 254.1 L 117.3 254.1 L 116.8 254.0 L 116.4 254.0 L 115.9 254.0 L 115.4 254.0 L 115.0 254.0 L 114.5 254.0 L 114.1 254.0 L 113.6 254.0 L 113.2 254.0 L 112.7 254.0 L 112.3 254.0 L 111.9 254.0 L 111.4 254.0 L 111.0 254.0 Z" fill="currentColor" fill-rule="evenodd"/>
+</svg></div>
+  </div>
+
+  <section>
+    <div class="titel">
+      <div class="eyebrow" data-t="e-so">So funktioniert es</div>
+      <h2 data-t="h-so">Drei Handgriffe, kein Werkzeug</h2>
+      <p data-t="p-so">Nichts wird geschraubt, geklebt oder gebohrt. Die Manschette sitzt allein durch ihre Spannung — beim Umzug ziehst du sie einfach ab.</p>
+    </div>
+    <div class="schritte">
+      <div class="schritt">
+        <span class="nr">1</span>
+        <h3 data-t="s1h">Manschette aufschieben</h3>
+        <p data-t="s1p">Der Silikonring wird über den Türdrücker geschoben. Sein Innendurchmesser ist 11 % kleiner als der Drücker — er spannt sich selbst fest.</p>
+      </div>
+      <div class="schritt">
+        <span class="nr">2</span>
+        <h3 data-t="s2h">Schnur einhängen</h3>
+        <p data-t="s2p">Die Schnur ist bereits eingeknotet, der Knoten verschwindet in der Manschette. Von außen sieht man nur die Schnur.</p>
+      </div>
+      <div class="schritt">
+        <span class="nr">3</span>
+        <h3 data-t="s3h">Fertig</h3>
+        <p data-t="s3p">Der Ring hängt auf Höhe der Kinderhand. Dein Kind greift hinein und zieht — die Klinke geht runter, die Tür auf.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="produkt">
+      <div class="buehne"><svg viewBox="-46 -46 92 92" role="img" aria-label="Der Reif von vorn"><path d="M 0.0 -43.0 L 0.9 -43.0 L 1.9 -43.0 L 2.8 -42.9 L 3.7 -42.8 L 4.7 -42.7 L 5.6 -42.6 L 6.5 -42.5 L 7.5 -42.3 L 8.4 -42.2 L 9.3 -42.0 L 10.2 -41.8 L 11.1 -41.5 L 12.0 -41.3 L 12.9 -41.0 L 13.8 -40.7 L 14.7 -40.4 L 15.6 -40.1 L 16.5 -39.7 L 17.3 -39.4 L 18.2 -39.0 L 19.0 -38.6 L 19.9 -38.1 L 20.7 -37.7 L 21.5 -37.2 L 22.3 -36.8 L 23.1 -36.3 L 23.9 -35.8 L 24.7 -35.2 L 25.4 -34.7 L 26.2 -34.1 L 26.9 -33.5 L 27.6 -32.9 L 28.4 -32.3 L 29.1 -31.7 L 29.7 -31.1 L 30.4 -30.4 L 31.1 -29.7 L 31.7 -29.1 L 32.3 -28.4 L 32.9 -27.6 L 33.5 -26.9 L 34.1 -26.2 L 34.7 -25.4 L 35.2 -24.7 L 35.8 -23.9 L 36.3 -23.1 L 36.8 -22.3 L 37.2 -21.5 L 37.7 -20.7 L 38.1 -19.9 L 38.6 -19.0 L 39.0 -18.2 L 39.4 -17.3 L 39.7 -16.5 L 40.1 -15.6 L 40.4 -14.7 L 40.7 -13.8 L 41.0 -12.9 L 41.3 -12.0 L 41.5 -11.1 L 41.8 -10.2 L 42.0 -9.3 L 42.2 -8.4 L 42.3 -7.5 L 42.5 -6.5 L 42.6 -5.6 L 42.7 -4.7 L 42.8 -3.7 L 42.9 -2.8 L 43.0 -1.9 L 43.0 -0.9 L 43.0 -0.0 L 43.0 0.9 L 43.0 1.9 L 42.9 2.8 L 42.8 3.7 L 42.7 4.7 L 42.6 5.6 L 42.5 6.5 L 42.3 7.5 L 42.2 8.4 L 42.0 9.3 L 41.8 10.2 L 41.5 11.1 L 41.3 12.0 L 41.0 12.9 L 40.7 13.8 L 40.4 14.7 L 40.1 15.6 L 39.7 16.5 L 39.4 17.3 L 39.0 18.2 L 38.6 19.0 L 38.1 19.9 L 37.7 20.7 L 37.2 21.5 L 36.8 22.3 L 36.3 23.1 L 35.8 23.9 L 35.2 24.7 L 34.7 25.4 L 34.1 26.2 L 33.5 26.9 L 32.9 27.6 L 32.3 28.4 L 31.7 29.1 L 31.1 29.7 L 30.4 30.4 L 29.7 31.1 L 29.1 31.7 L 28.4 32.3 L 27.6 32.9 L 26.9 33.5 L 26.2 34.1 L 25.4 34.7 L 24.7 35.2 L 23.9 35.8 L 23.1 36.3 L 22.3 36.8 L 21.5 37.2 L 20.7 37.7 L 19.9 38.1 L 19.0 38.6 L 18.2 39.0 L 17.3 39.4 L 16.5 39.7 L 15.6 40.1 L 14.7 40.4 L 13.8 40.7 L 12.9 41.0 L 12.0 41.3 L 11.1 41.5 L 10.2 41.8 L 9.3 42.0 L 8.4 42.2 L 7.5 42.3 L 6.5 42.5 L 5.6 42.6 L 4.7 42.7 L 3.7 42.8 L 2.8 42.9 L 1.9 43.0 L 0.9 43.0 L 0.0 43.0 L -0.9 43.0 L -1.9 43.0 L -2.8 42.9 L -3.7 42.8 L -4.7 42.7 L -5.6 42.6 L -6.5 42.5 L -7.5 42.3 L -8.4 42.2 L -9.3 42.0 L -10.2 41.8 L -11.1 41.5 L -12.0 41.3 L -12.9 41.0 L -13.8 40.7 L -14.7 40.4 L -15.6 40.1 L -16.5 39.7 L -17.3 39.4 L -18.2 39.0 L -19.0 38.6 L -19.9 38.1 L -20.7 37.7 L -21.5 37.2 L -22.3 36.8 L -23.1 36.3 L -23.9 35.8 L -24.7 35.2 L -25.4 34.7 L -26.2 34.1 L -26.9 33.5 L -27.6 32.9 L -28.4 32.3 L -29.1 31.7 L -29.7 31.1 L -30.4 30.4 L -31.1 29.7 L -31.7 29.1 L -32.3 28.4 L -32.9 27.6 L -33.5 26.9 L -34.1 26.2 L -34.7 25.4 L -35.2 24.7 L -35.8 23.9 L -36.3 23.1 L -36.8 22.3 L -37.2 21.5 L -37.7 20.7 L -38.1 19.9 L -38.6 19.0 L -39.0 18.2 L -39.4 17.3 L -39.7 16.5 L -40.1 15.6 L -40.4 14.7 L -40.7 13.8 L -41.0 12.9 L -41.3 12.0 L -41.5 11.1 L -41.8 10.2 L -42.0 9.3 L -42.2 8.4 L -42.3 7.5 L -42.5 6.5 L -42.6 5.6 L -42.7 4.7 L -42.8 3.7 L -42.9 2.8 L -43.0 1.9 L -43.0 0.9 L -43.0 0.0 L -43.0 -0.9 L -43.0 -1.9 L -42.9 -2.8 L -42.8 -3.7 L -42.7 -4.7 L -42.6 -5.6 L -42.5 -6.5 L -42.3 -7.5 L -42.2 -8.4 L -42.0 -9.3 L -41.8 -10.2 L -41.5 -11.1 L -41.3 -12.0 L -41.0 -12.9 L -40.7 -13.8 L -40.4 -14.7 L -40.1 -15.6 L -39.7 -16.5 L -39.4 -17.3 L -39.0 -18.2 L -38.6 -19.0 L -38.1 -19.9 L -37.7 -20.7 L -37.2 -21.5 L -36.8 -22.3 L -36.3 -23.1 L -35.8 -23.9 L -35.2 -24.7 L -34.7 -25.4 L -34.1 -26.2 L -33.5 -26.9 L -32.9 -27.6 L -32.3 -28.4 L -31.7 -29.1 L -31.1 -29.7 L -30.4 -30.4 L -29.7 -31.1 L -29.1 -31.7 L -28.4 -32.3 L -27.6 -32.9 L -26.9 -33.5 L -26.2 -34.1 L -25.4 -34.7 L -24.7 -35.2 L -23.9 -35.8 L -23.1 -36.3 L -22.3 -36.8 L -21.5 -37.2 L -20.7 -37.7 L -19.9 -38.1 L -19.0 -38.6 L -18.2 -39.0 L -17.3 -39.4 L -16.5 -39.7 L -15.6 -40.1 L -14.7 -40.4 L -13.8 -40.7 L -12.9 -41.0 L -12.0 -41.3 L -11.1 -41.5 L -10.2 -41.8 L -9.3 -42.0 L -8.4 -42.2 L -7.5 -42.3 L -6.5 -42.5 L -5.6 -42.6 L -4.7 -42.7 L -3.7 -42.8 L -2.8 -42.9 L -1.9 -43.0 L -0.9 -43.0 Z M -0.4 -20.0 L -0.9 -20.0 L -1.3 -20.0 L -1.7 -20.0 L -2.2 -20.0 L -2.6 -20.0 L -3.1 -20.0 L -3.5 -20.0 L -4.0 -20.0 L -4.4 -20.0 L -4.9 -20.0 L -5.4 -20.0 L -5.8 -20.0 L -6.3 -19.9 L -6.8 -19.9 L -7.2 -19.9 L -7.7 -19.9 L -8.2 -19.8 L -8.7 -19.8 L -9.2 -19.8 L -9.7 -19.7 L -10.2 -19.7 L -10.7 -19.6 L -11.3 -19.5 L -11.8 -19.4 L -12.3 -19.3 L -12.9 -19.2 L -13.4 -19.1 L -13.9 -19.0 L -14.5 -18.9 L -15.0 -18.7 L -15.6 -18.6 L -16.1 -18.4 L -16.7 -18.2 L -17.2 -18.0 L -17.8 -17.8 L -18.4 -17.6 L -18.9 -17.3 L -19.5 -17.1 L -20.0 -16.8 L -20.6 -16.5 L -21.1 -16.2 L -21.6 -15.9 L -22.2 -15.5 L -22.7 -15.2 L -23.2 -14.8 L -23.7 -14.4 L -24.2 -14.0 L -24.7 -13.6 L -25.2 -13.1 L -25.7 -12.7 L -26.2 -12.2 L -26.6 -11.7 L -27.1 -11.2 L -27.5 -10.7 L -27.9 -10.2 L -28.3 -9.6 L -28.7 -9.0 L -29.0 -8.5 L -29.4 -7.9 L -29.7 -7.3 L -30.0 -6.7 L -30.3 -6.0 L -30.6 -5.4 L -30.8 -4.7 L -31.1 -4.1 L -31.3 -3.4 L -31.5 -2.8 L -31.6 -2.1 L -31.8 -1.4 L -31.9 -0.7 L -32.0 0.0 L -32.1 0.7 L -32.1 1.4 L -32.2 2.1 L -32.2 2.8 L -32.1 3.5 L -32.1 4.2 L -32.0 4.9 L -32.0 5.6 L -31.9 6.3 L -31.7 7.0 L -31.6 7.7 L -31.4 8.4 L -31.2 9.1 L -31.0 9.8 L -30.7 10.4 L -30.5 11.1 L -30.2 11.7 L -29.9 12.4 L -29.6 13.0 L -29.2 13.6 L -28.9 14.2 L -28.5 14.8 L -28.1 15.4 L -27.7 16.0 L -27.3 16.6 L -26.9 17.1 L -26.4 17.6 L -25.9 18.2 L -25.5 18.7 L -25.0 19.2 L -24.5 19.6 L -24.0 20.1 L -23.4 20.5 L -22.9 21.0 L -22.4 21.4 L -21.8 21.8 L -21.2 22.2 L -20.7 22.6 L -20.1 22.9 L -19.5 23.3 L -18.9 23.6 L -18.3 23.9 L -17.8 24.2 L -17.2 24.5 L -16.6 24.8 L -15.9 25.0 L -15.3 25.3 L -14.7 25.5 L -14.1 25.7 L -13.5 25.9 L -12.9 26.1 L -12.3 26.3 L -11.7 26.5 L -11.0 26.7 L -10.4 26.8 L -9.8 27.0 L -9.2 27.1 L -8.6 27.2 L -8.0 27.3 L -7.4 27.4 L -6.7 27.5 L -6.1 27.6 L -5.5 27.7 L -4.9 27.8 L -4.3 27.8 L -3.7 27.9 L -3.1 27.9 L -2.4 27.9 L -1.8 28.0 L -1.2 28.0 L -0.6 28.0 L 0.0 28.0 L 0.6 28.0 L 1.2 28.0 L 1.8 28.0 L 2.4 27.9 L 3.1 27.9 L 3.7 27.9 L 4.3 27.8 L 4.9 27.8 L 5.5 27.7 L 6.1 27.6 L 6.7 27.5 L 7.4 27.4 L 8.0 27.3 L 8.6 27.2 L 9.2 27.1 L 9.8 27.0 L 10.4 26.8 L 11.0 26.7 L 11.7 26.5 L 12.3 26.3 L 12.9 26.1 L 13.5 25.9 L 14.1 25.7 L 14.7 25.5 L 15.3 25.3 L 15.9 25.0 L 16.6 24.8 L 17.2 24.5 L 17.8 24.2 L 18.3 23.9 L 18.9 23.6 L 19.5 23.3 L 20.1 22.9 L 20.7 22.6 L 21.2 22.2 L 21.8 21.8 L 22.4 21.4 L 22.9 21.0 L 23.4 20.5 L 24.0 20.1 L 24.5 19.6 L 25.0 19.2 L 25.5 18.7 L 25.9 18.2 L 26.4 17.6 L 26.9 17.1 L 27.3 16.6 L 27.7 16.0 L 28.1 15.4 L 28.5 14.8 L 28.9 14.2 L 29.2 13.6 L 29.6 13.0 L 29.9 12.4 L 30.2 11.7 L 30.5 11.1 L 30.7 10.4 L 31.0 9.8 L 31.2 9.1 L 31.4 8.4 L 31.6 7.7 L 31.7 7.0 L 31.9 6.3 L 32.0 5.6 L 32.0 4.9 L 32.1 4.2 L 32.1 3.5 L 32.2 2.8 L 32.2 2.1 L 32.1 1.4 L 32.1 0.7 L 32.0 -0.0 L 31.9 -0.7 L 31.8 -1.4 L 31.6 -2.1 L 31.5 -2.8 L 31.3 -3.4 L 31.1 -4.1 L 30.8 -4.7 L 30.6 -5.4 L 30.3 -6.0 L 30.0 -6.7 L 29.7 -7.3 L 29.4 -7.9 L 29.0 -8.5 L 28.7 -9.0 L 28.3 -9.6 L 27.9 -10.2 L 27.5 -10.7 L 27.1 -11.2 L 26.6 -11.7 L 26.2 -12.2 L 25.7 -12.7 L 25.2 -13.1 L 24.7 -13.6 L 24.2 -14.0 L 23.7 -14.4 L 23.2 -14.8 L 22.7 -15.2 L 22.2 -15.5 L 21.6 -15.9 L 21.1 -16.2 L 20.6 -16.5 L 20.0 -16.8 L 19.5 -17.1 L 18.9 -17.3 L 18.4 -17.6 L 17.8 -17.8 L 17.2 -18.0 L 16.7 -18.2 L 16.1 -18.4 L 15.6 -18.6 L 15.0 -18.7 L 14.5 -18.9 L 13.9 -19.0 L 13.4 -19.1 L 12.9 -19.2 L 12.3 -19.3 L 11.8 -19.4 L 11.3 -19.5 L 10.7 -19.6 L 10.2 -19.7 L 9.7 -19.7 L 9.2 -19.8 L 8.7 -19.8 L 8.2 -19.8 L 7.7 -19.9 L 7.2 -19.9 L 6.8 -19.9 L 6.3 -19.9 L 5.8 -20.0 L 5.4 -20.0 L 4.9 -20.0 L 4.4 -20.0 L 4.0 -20.0 L 3.5 -20.0 L 3.1 -20.0 L 2.6 -20.0 L 2.2 -20.0 L 1.7 -20.0 L 1.3 -20.0 L 0.9 -20.0 L 0.4 -20.0 L 0.0 -20.0 Z" fill="currentColor" fill-rule="evenodd"/></svg></div>
+      <div class="kauf">
+        <div>
+          <div class="eyebrow" data-t="e-set">Komplettset</div>
+          <h2 data-t="h-set" style="margin-top:12px">Der Türzwerg</h2>
+        </div>
+        <div class="preis"><span data-t="preis">19,90 €</span><small data-t="mwst">inkl. MwSt., Versand in DACH kostenlos</small></div>
+
+        <div class="farben">
+          <span class="farbname"><span data-t="farbe-label">Farbe</span>: <strong id="farbname">Mohn</strong></span>
+          <div class="farbreihe" role="group" aria-label="Farbe wählen">
+            <button type="button" class="farbe" aria-pressed="true"  style="background:#D2452B" data-farbe="#D2452B" data-de="Mohn"     data-en="Poppy"></button>
+            <button type="button" class="farbe" aria-pressed="false" style="background:#55886B" data-farbe="#55886B" data-de="Salbei"   data-en="Sage"></button>
+            <button type="button" class="farbe" aria-pressed="false" style="background:#38689B" data-farbe="#38689B" data-de="Himmel"   data-en="Sky"></button>
+            <button type="button" class="farbe" aria-pressed="false" style="background:#E0982F" data-farbe="#E0982F" data-de="Sonne"    data-en="Sun"></button>
+            <button type="button" class="farbe" aria-pressed="false" style="background:#454A52" data-farbe="#454A52" data-de="Schiefer" data-en="Slate"></button>
+          </div>
+        </div>
+
+        <div class="menge">
+          <button type="button" id="minus" aria-label="Weniger">–</button>
+          <output id="anzahl" aria-live="polite">1</output>
+          <button type="button" id="plus" aria-label="Mehr">+</button>
+          <span class="hinweis" data-t="menge-tipp">Die meisten nehmen zwei — Kinderzimmer und Bad.</span>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button type="button" class="knopf" id="kaufen" data-t="kaufen">In den Warenkorb</button>
+          <button type="button" class="knopf leise" data-t="merken">Auf die Warteliste</button>
+        </div>
+        <p class="hinweis" data-t="kasse">Zahlung über Stripe. Der Verkauf startet, sobald die Prüfung nach EN&nbsp;71 abgeschlossen ist.</p>
+
+        <div class="lieferumfang">
+          <span class="eyebrow" data-t="e-lief">Im Karton</span>
+          <ul>
+            <li data-t="l1">Griffring aus Silikon, ⌀ 86 mm</li>
+            <li data-t="l2">Klinkenmanschette, innen ⌀ 18 mm</li>
+            <li data-t="l3">Schnur, 220 mm, bereits verknotet</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="titel">
+      <div class="eyebrow" data-t="e-masse">Maße</div>
+      <h2 data-t="h-masse">Alles nachgerechnet</h2>
+      <p data-t="p-masse">Jede Zahl hier hat einen Grund. Die Öffnung fasst vier Kinderfinger mit 18 mm Luft — genug, dass die Hand sie findet, ohne hinzusehen.</p>
+    </div>
+    <div class="rahmen">
+      <table>
+        <thead><tr><th data-t="t-was">Maß</th><th data-t="t-wert">Wert</th></tr></thead>
+        <tbody>
+          <tr><td data-t="m1">Ring außen</td><td>⌀ 86 × 11 mm</td></tr>
+          <tr><td data-t="m2">Öffnung</td><td>64 × 48 mm</td></tr>
+          <tr><td data-t="m3">Gewicht</td><td>37 g</td></tr>
+          <tr><td data-t="m4">Schnurlänge</td><td>220 mm</td></tr>
+          <tr><td data-t="m5">Passt auf Drücker</td><td>⌀ 18–23 mm</td></tr>
+          <tr><td data-t="m6">Werkstoff</td><td data-t="m6w">Silikon Shore A 80</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sicher">
+      <div>
+        <h3 data-t="si1h">Warum die Schnur kurz ist</h3>
+        <p data-t="si1p">220 mm. Für Kinder unter drei Jahren gilt eine Höchstlänge von 300 mm — kürzer als jede Schlinge, die sich um einen Hals legen kann. Das ist kein Sparen an Material, das ist die Norm.</p>
+      </div>
+      <div>
+        <h3 data-t="si2h">Warum der Ring so groß ist</h3>
+        <p data-t="si2p">86 mm passen durch keine Prüföffnung für Kleinteile, in keiner Lage. Ein kompakter Griff hätte diese Frage offengelassen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="titel">
+      <div class="eyebrow" data-t="e-faq">Fragen</div>
+      <h2 data-t="h-faq">Was Eltern zuerst fragen</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary data-t="f1s">Passt das auf meine Türklinke?</summary>
+        <p data-t="f1p">Auf runde Drücker mit 18 bis 23 mm Durchmesser, und das sind die allermeisten — DIN 18255 normt 20 mm. Miss im Zweifel den Griffteil, nicht die Rosette. Auf eckige oder stark konische Drücker passt die Manschette nicht.</p>
+      </details>
+      <details>
+        <summary data-t="f2s">Bleibt die Manschette wirklich sitzen?</summary>
+        <p data-t="f2p">Sie ist innen 18 mm weit und wird auf einen 20-mm-Drücker geschoben — 11 % Untermaß, das Silikon spannt sich auf. Bei sehr glatten, verchromten Drückern kann sie sich mit der Zeit verdrehen; abziehen und neu aufschieben dauert fünf Sekunden.</p>
+      </details>
+      <details>
+        <summary data-t="f3s">Kann mein Kind damit die Tür auch zumachen?</summary>
+        <p data-t="f3p">Nur, wenn es die Tür ohnehin schon zuziehen kann. Der Türzwerg dreht die Klinke — das Öffnen macht er möglich, das Zuziehen bleibt Muskelarbeit.</p>
+      </details>
+      <details>
+        <summary data-t="f4s">Und wenn mein Kind sich hineinhängt?</summary>
+        <p data-t="f4p">Der Ring hält das aus, er verformt sich elastisch und geht in seine Form zurück. Die Schnur ist auf ein Vielfaches der Betätigungskraft ausgelegt.</p>
+      </details>
+      <details>
+        <summary data-t="f5s">Was ist mit der Türklinke selbst?</summary>
+        <p data-t="f5p">Silikon greift keine Beschichtung an und hinterlässt keine Spuren. Weil es weich ist, schlägt der Ring auch nicht laut gegen das Türblatt.</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bahn">
+  <span data-t="fuss">Doorlino UG (haftungsbeschränkt) · Deutschland</span>
+  <div class="schub"></div>
+  <span data-t="fuss2">Impressum · Datenschutz · AGB · Widerruf</span>
+</footer>
+
+<aside class="korb" id="korb" aria-live="polite">
+  <div class="zeile"><span id="korb-zeile">1 × Türzwerg, Mohn</span></div>
+  <div class="zeile"><span data-t="korb-summe">Summe</span><span class="summe" id="korb-summe">19,90 €</span></div>
+  <button type="button" class="knopf" data-t="zur-kasse">Zur Kasse</button>
+</aside>
+
+<script>
+(function () {
+  var TEXTE = {
+    marke: ["Türzwerg", "Doorlino"],
+    ab: ["Ab 1,5 Jahren", "From 18 months"],
+    h1: ["Die Tür geht auf. Ohne dich.", "The door opens. Without you."],
+    lead: ["Ein Ring an einer Schnur, ein Silikonring auf der Klinke. Mehr ist es nicht. Und plötzlich kommt dein Kind allein ins Kinderzimmer.",
+           "A ring on a cord, a silicone sleeve on the handle. That is all it is. And suddenly your child gets into their room on their own."],
+    u1: ["Silikon, ohne Weichmacher", "Silicone, no plasticisers"],
+    u2: ["In 30 Sekunden montiert", "Fitted in 30 seconds"],
+    u3: ["Passt auf runde Drücker 18–23 mm", "Fits round levers 18–23 mm"],
+    "e-so": ["So funktioniert es", "How it works"],
+    "h-so": ["Drei Handgriffe, kein Werkzeug", "Three moves, no tools"],
+    "p-so": ["Nichts wird geschraubt, geklebt oder gebohrt. Die Manschette sitzt allein durch ihre Spannung — beim Umzug ziehst du sie einfach ab.",
+             "Nothing is screwed, glued or drilled. The sleeve holds by its own tension — when you move out, you just pull it off."],
+    s1h: ["Manschette aufschieben", "Slide on the sleeve"],
+    s1p: ["Der Silikonring wird über den Türdrücker geschoben. Sein Innendurchmesser ist 11 % kleiner als der Drücker — er spannt sich selbst fest.",
+          "The silicone sleeve slides over the door lever. Its bore is 11 % smaller than the lever, so it tensions itself in place."],
+    s2h: ["Schnur einhängen", "Hook in the cord"],
+    s2p: ["Die Schnur ist bereits eingeknotet, der Knoten verschwindet in der Manschette. Von außen sieht man nur die Schnur.",
+          "The cord comes knotted, and the knot disappears inside the sleeve. All you see from outside is the cord."],
+    s3h: ["Fertig", "Done"],
+    s3p: ["Der Ring hängt auf Höhe der Kinderhand. Dein Kind greift hinein und zieht — die Klinke geht runter, die Tür auf.",
+          "The ring hangs at your child's hand height. They reach in and pull — the lever goes down, the door opens."],
+    "e-set": ["Komplettset", "Complete set"],
+    "h-set": ["Der Türzwerg", "The Doorlino"],
+    preis: ["19,90 €", "$ 22.00"],
+    mwst: ["inkl. MwSt., Versand in DACH kostenlos", "incl. tax, free shipping in the EU and UK"],
+    "farbe-label": ["Farbe", "Colour"],
+    "menge-tipp": ["Die meisten nehmen zwei — Kinderzimmer und Bad.", "Most people take two — bedroom and bathroom."],
+    kaufen: ["In den Warenkorb", "Add to basket"],
+    merken: ["Auf die Warteliste", "Join the waitlist"],
+    kasse: ["Zahlung über Stripe. Der Verkauf startet, sobald die Prüfung nach EN 71 abgeschlossen ist.",
+            "Payment via Stripe. Sales open once EN 71 testing is complete."],
+    "e-lief": ["Im Karton", "In the box"],
+    l1: ["Griffring aus Silikon, ⌀ 86 mm", "Silicone pull ring, ⌀ 86 mm"],
+    l2: ["Klinkenmanschette, innen ⌀ 18 mm", "Lever sleeve, ⌀ 18 mm bore"],
+    l3: ["Schnur, 220 mm, bereits verknotet", "Cord, 220 mm, pre-knotted"],
+    "e-masse": ["Maße", "Measurements"],
+    "h-masse": ["Alles nachgerechnet", "Every number has a reason"],
+    "p-masse": ["Jede Zahl hier hat einen Grund. Die Öffnung fasst vier Kinderfinger mit 18 mm Luft — genug, dass die Hand sie findet, ohne hinzusehen.",
+                "The opening takes four small fingers with 18 mm to spare — enough that the hand finds it without looking."],
+    "t-was": ["Maß", "Measurement"], "t-wert": ["Wert", "Value"],
+    m1: ["Ring außen", "Ring, outside"], m2: ["Öffnung", "Opening"],
+    m3: ["Gewicht", "Weight"], m4: ["Schnurlänge", "Cord length"],
+    m5: ["Passt auf Drücker", "Fits levers"], m6: ["Werkstoff", "Material"],
+    m6w: ["Silikon Shore A 80", "Silicone Shore A 80"],
+    si1h: ["Warum die Schnur kurz ist", "Why the cord is short"],
+    si1p: ["220 mm. Für Kinder unter drei Jahren gilt eine Höchstlänge von 300 mm — kürzer als jede Schlinge, die sich um einen Hals legen kann. Das ist kein Sparen an Material, das ist die Norm.",
+           "220 mm. For children under three the limit is 300 mm — shorter than any loop that could go around a neck. That is not us saving material, that is the standard."],
+    si2h: ["Warum der Ring so groß ist", "Why the ring is this big"],
+    si2p: ["86 mm passen durch keine Prüföffnung für Kleinteile, in keiner Lage. Ein kompakter Griff hätte diese Frage offengelassen.",
+           "86 mm will not pass any small-parts gauge, in any orientation. A compact handle would have left that question open."],
+    "e-faq": ["Fragen", "Questions"],
+    "h-faq": ["Was Eltern zuerst fragen", "What parents ask first"],
+    f1s: ["Passt das auf meine Türklinke?", "Will it fit my door handle?"],
+    f1p: ["Auf runde Drücker mit 18 bis 23 mm Durchmesser, und das sind die allermeisten — DIN 18255 normt 20 mm. Miss im Zweifel den Griffteil, nicht die Rosette. Auf eckige oder stark konische Drücker passt die Manschette nicht.",
+          "Round levers from 18 to 23 mm, which is nearly all of them — the German standard specifies 20 mm. If unsure, measure the grip section, not the rose. It will not fit square or strongly tapered levers."],
+    f2s: ["Bleibt die Manschette wirklich sitzen?", "Does the sleeve really stay put?"],
+    f2p: ["Sie ist innen 18 mm weit und wird auf einen 20-mm-Drücker geschoben — 11 % Untermaß, das Silikon spannt sich auf. Bei sehr glatten, verchromten Drückern kann sie sich mit der Zeit verdrehen; abziehen und neu aufschieben dauert fünf Sekunden.",
+          "Its bore is 18 mm and it goes onto a 20 mm lever — 11 % undersize, so the silicone tensions itself. On very smooth chrome levers it can rotate over time; pulling it off and back on takes five seconds."],
+    f3s: ["Kann mein Kind damit die Tür auch zumachen?", "Can my child close the door with it too?"],
+    f3p: ["Nur, wenn es die Tür ohnehin schon zuziehen kann. Der Türzwerg dreht die Klinke — das Öffnen macht er möglich, das Zuziehen bleibt Muskelarbeit.",
+          "Only if they can already pull the door shut. It turns the lever — opening becomes possible, closing is still down to muscle."],
+    f4s: ["Und wenn mein Kind sich hineinhängt?", "What if my child hangs off it?"],
+    f4p: ["Der Ring hält das aus, er verformt sich elastisch und geht in seine Form zurück. Die Schnur ist auf ein Vielfaches der Betätigungskraft ausgelegt.",
+          "The ring takes it. It deforms elastically and springs back. The cord is rated for a multiple of the force needed to work the lever."],
+    f5s: ["Was ist mit der Türklinke selbst?", "What about the handle itself?"],
+    f5p: ["Silikon greift keine Beschichtung an und hinterlässt keine Spuren. Weil es weich ist, schlägt der Ring auch nicht laut gegen das Türblatt.",
+          "Silicone does not attack finishes and leaves no marks. Being soft, the ring does not knock loudly against the door either."],
+    fuss: ["Doorlino UG (haftungsbeschränkt) · Deutschland", "Doorlino UG · Germany"],
+    fuss2: ["Impressum · Datenschutz · AGB · Widerruf", "Imprint · Privacy · Terms · Returns"],
+    "korb-summe": ["Summe", "Total"],
+    "zur-kasse": ["Zur Kasse", "Checkout"]
+  };
+
+  var PREIS = [19.90, 22.00];
+  var sprache = 0, anzahl = 1;
+  var farbe = document.querySelector(".farbe");
+
+  function hole(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function setze(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+  function geld(n) {
+    return sprache === 0
+      ? n.toFixed(2).replace(".", ",") + " €"
+      : "$ " + n.toFixed(2);
+  }
+
+  function zeichne() {
+    Object.keys(TEXTE).forEach(function (k) {
+      var els = document.querySelectorAll('[data-t="' + k + '"]');
+      for (var i = 0; i < els.length; i++) els[i].textContent = TEXTE[k][sprache];
+    });
+    document.documentElement.lang = sprache === 0 ? "de" : "en";
+    document.title = TEXTE.marke[sprache];
+    document.querySelectorAll("[data-lang]").forEach(function (b) {
+      b.setAttribute("aria-pressed", (b.dataset.lang === "de") === (sprache === 0));
+    });
+    document.getElementById("farbname").textContent =
+      sprache === 0 ? farbe.dataset.de : farbe.dataset.en;
+    document.getElementById("anzahl").textContent = anzahl;
+    document.getElementById("korb-zeile").textContent =
+      anzahl + " × " + TEXTE["h-set"][sprache].replace(/^(Der |The )/, "") + ", "
+      + (sprache === 0 ? farbe.dataset.de : farbe.dataset.en);
+    document.getElementById("korb-summe").textContent = geld(PREIS[sprache] * anzahl);
+  }
+
+  document.querySelectorAll("[data-lang]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      sprache = b.dataset.lang === "de" ? 0 : 1;
+      setze("tz-sprache", b.dataset.lang);
+      zeichne();
+    });
+  });
+
+  document.querySelectorAll(".farbe").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".farbe").forEach(function (o) {
+        o.setAttribute("aria-pressed", "false");
+      });
+      b.setAttribute("aria-pressed", "true");
+      farbe = b;
+      document.documentElement.style.setProperty("--akzent", b.dataset.farbe);
+      setze("tz-farbe", b.dataset.farbe);
+      zeichne();
+    });
+  });
+
+  document.getElementById("plus").addEventListener("click", function () {
+    if (anzahl < 9) { anzahl++; zeichne(); }
+  });
+  document.getElementById("minus").addEventListener("click", function () {
+    if (anzahl > 1) { anzahl--; zeichne(); }
+  });
+  document.getElementById("kaufen").addEventListener("click", function () {
+    document.getElementById("korb").classList.add("offen");
+  });
+
+  var gs = hole("tz-sprache");
+  if (gs === "en") sprache = 1;
+  var gf = hole("tz-farbe");
+  if (gf) {
+    var t = document.querySelector('.farbe[data-farbe="' + gf + '"]');
+    if (t) { t.click(); }
+  }
+  zeichne();
+})();
+</script>

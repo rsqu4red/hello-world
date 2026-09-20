@@ -1,0 +1,260 @@
+<title>Türzwerg Farbkarte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Figtree:wght@400;600&display=swap">
+
+<style>
+/* Die Seite ist bewusst einfarbig hell und hat keinen Dunkelmodus.
+   Zwei Gruende: die Markenregel - "die Seite selbst ist farblos,
+   Papierweiss wie eine lackierte Zimmertuer" - und die Aufgabe. Wer
+   Schnurfarben vergleicht, braucht einen neutralen hellen Grund; auf
+   dunklem Untergrund verschieben sich gerade die gedaempften Toene. */
+:root{
+  --papier:#FBFAF7; --flaeche:#EFEDE6; --linie:#E2DFD5;
+  --leise:#6C675A; --tinte:#17160F;
+  --mohn:#D2452B; --salbei:#55886B; --himmel:#38689B;
+  --sonne:#E0982F; --schiefer:#454A52;
+  --disp:"Bricolage Grotesque",-apple-system,"Segoe UI",sans-serif;
+  --txt:"Figtree",-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--papier); color:var(--tinte);
+  font-family:var(--txt); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.blatt{max-width:980px; margin:0 auto; padding-inline:20px; padding-block:0 72px}
+
+header{padding-block:52px 34px}
+.kopfzeile{font-size:.72rem; font-weight:600; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--leise); margin:0 0 16px}
+h1{font-family:var(--disp); font-weight:800; font-size:clamp(2.4rem,7vw,4rem);
+  letter-spacing:-.035em; line-height:1; margin:0; text-wrap:balance}
+.lead{margin:18px 0 0; max-width:58ch; color:var(--leise); font-size:1.05rem}
+.regel{border-left:2px solid var(--mohn); padding-left:18px; margin-top:26px;
+  max-width:58ch}
+.regel p{margin:0; font-size:.97rem; color:var(--leise)}
+.regel b{color:var(--tinte); font-weight:600}
+
+h2{font-family:var(--disp); font-weight:800; font-size:1.7rem;
+  letter-spacing:-.02em; margin:54px 0 4px}
+.unterzeile{margin:0 0 24px; color:var(--leise); font-size:.95rem; max-width:62ch}
+
+/* ---------------------------------------------------------- Farbkarten -- */
+.karten{display:grid; gap:14px}
+.karte{display:grid; grid-template-columns:200px minmax(0,1fr) auto;
+  gap:20px; align-items:center; background:var(--flaeche);
+  border:1px solid var(--linie); border-radius:4px; padding:16px 18px}
+.schnur{width:100%; height:auto; display:block; border-radius:3px}
+.karte h3{font-family:var(--disp); font-weight:800; font-size:1.45rem;
+  letter-spacing:-.02em; margin:0}
+.en{color:var(--leise); font-weight:400; font-size:1rem; margin-left:8px}
+.karte p{margin:5px 0 0; color:var(--leise); font-size:.93rem; max-width:44ch}
+.werte{display:flex; flex-direction:column; gap:6px; align-items:flex-end}
+.hex{font-family:ui-monospace,"SF Mono",monospace; font-size:1rem;
+  font-weight:600; background:var(--papier); border:1px solid var(--linie);
+  border-radius:3px; padding:6px 11px; cursor:pointer; color:var(--tinte);
+  font-variant-numeric:tabular-nums}
+.hex:hover{border-color:var(--leise)}
+.hex:focus-visible{outline:2px solid var(--mohn); outline-offset:2px}
+.hsl{font-family:ui-monospace,monospace; font-size:.76rem; color:var(--leise);
+  font-variant-numeric:tabular-nums}
+
+/* ------------------------------------------------------------ Neutrale -- */
+.neutral{display:grid; grid-template-columns:repeat(5,1fr); gap:12px}
+.n{text-align:left}
+.n .feld{height:64px; border-radius:4px; border:1px solid var(--linie)}
+.n b{display:block; font-size:.88rem; font-weight:600; margin-top:8px}
+.n code{font-size:.74rem; color:var(--leise); font-family:ui-monospace,monospace}
+
+/* ------------------------------------------------------------ Hinweise -- */
+.merk{background:var(--flaeche); border:1px solid var(--linie);
+  border-radius:4px; padding:22px 24px; margin-top:20px}
+.merk h3{font-family:var(--disp); font-weight:800; font-size:1.1rem; margin:0 0 8px}
+.merk h3+p{margin-top:0}
+.merk p{margin:0 0 14px; color:var(--leise); font-size:.95rem; max-width:64ch}
+.merk p:last-child{margin-bottom:0}
+.merk strong{color:var(--tinte); font-weight:600}
+.warnung{border-left:3px solid var(--sonne)}
+
+table{width:100%; border-collapse:collapse; font-size:.93rem; margin-top:8px}
+th{font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--leise); text-align:left; font-weight:600;
+  padding:8px 12px 8px 0; border-bottom:1px solid var(--linie)}
+td{padding:11px 12px 11px 0; border-bottom:1px solid var(--linie);
+  vertical-align:top}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600; white-space:nowrap}
+
+footer{margin-top:52px; padding-top:20px; border-top:1px solid var(--linie);
+  color:var(--leise); font-size:.85rem}
+footer a{color:var(--leise)}
+#hinweis{position:fixed; left:50%; transform:translateX(-50%);
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  background:var(--tinte); color:var(--papier); padding:9px 16px;
+  border-radius:4px; font-size:.85rem; font-weight:600}
+
+@media (max-width:760px){
+  .karte{grid-template-columns:1fr; gap:14px}
+  .werte{flex-direction:row; align-items:center; gap:12px;
+    justify-content:flex-start}
+  .neutral{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+
+<div class="blatt">
+
+<header>
+  <p class="kopfzeile">Türzwerg · Doorlino — Farbkarte</p>
+  <h1>Fünf Produktfarben</h1>
+  <p class="lead">Der Satz aus dem Markenkern, hier zum Abgleich mit
+  Schnurmustern. Die Hexwerte sind die verbindlichen; alles darunter ist
+  Hilfestellung beim Suchen.</p>
+  <div class="regel">
+    <p><b>Die Markenregel:</b> Die Seite selbst ist farblos — Papierweiß wie
+    eine lackierte Zimmertür. Farbe kommt ausschließlich vom Produkt. Wer die
+    Farbe im Shop wechselt, färbt damit die ganze Seite um. So bleibt es bunt,
+    ohne bunt zu wirken.</p>
+  </div>
+</header>
+
+<h2>Produktfarben</h2>
+<p class="unterzeile">Dargestellt als Schnur, weil sie dort landen — eine
+flache Kachel täuscht bei geflochtenem Material. Klick auf den Hexwert
+kopiert ihn.</p>
+
+<div class="karten" id="karten"></div>
+
+<h2>Grundton</h2>
+<p class="unterzeile">Papier, Fläche und Linie tragen die Seite, Leise und
+Tinte die Schrift. Diese fünf sind nie Produktfarbe.</p>
+<div class="neutral">
+  <div class="n"><div class="feld" style="background:#FBFAF7"></div><b>Papier</b><code>#FBFAF7</code></div>
+  <div class="n"><div class="feld" style="background:#EFEDE6"></div><b>Fläche</b><code>#EFEDE6</code></div>
+  <div class="n"><div class="feld" style="background:#E2DFD5"></div><b>Linie</b><code>#E2DFD5</code></div>
+  <div class="n"><div class="feld" style="background:#6C675A"></div><b>Leise</b><code>#6C675A</code></div>
+  <div class="n"><div class="feld" style="background:#17160F"></div><b>Tinte</b><code>#17160F</code></div>
+</div>
+
+<h2>Abgleich mit Paracord 550 Type III</h2>
+<p class="unterzeile">Der Durchmesser passt: rund 4 mm, genau das Maß, auf das
+die Schnurbohrung der Manschette ausgelegt ist.</p>
+
+<div class="merk warnung">
+  <h3>Was hier nicht steht</h3>
+  <p>Konkrete <strong>Farbnamen des Anbieters fehlen mit Absicht</strong>.
+  Der Zugriff auf paracord.eu war beim Erstellen dieser Seite gesperrt — weder
+  Produktseiten noch Farbkatalog waren erreichbar. Bestätigen ließ sich über
+  Suchtreffer genau eine Farbe im 550 Type III: <strong>Olive Drab</strong>.
+  Geratene Farbnamen sind beim Bestellen wertlos, deshalb steht hier
+  stattdessen, wonach zu suchen ist.</p>
+  <p>Gesichert ist: über 500 Farben, unterteilt in Basisfarben (Nylon nach
+  MIL-C-5040H und Polyester), Multi, Pastell, Neon, Shiny und Musterserien.
+  Es gibt einen Farbkatalog und <strong>kostenlose Musterstücke</strong>.</p>
+</div>
+
+<div class="merk">
+  <h3>Vorgehen</h3>
+  <p>Monitorfarben lügen, und verglichen wird gefärbtes Garn gegen gegossenes
+  Silikon. Zu jeder Farbe <strong>zwei bis drei Muster</strong> bestellen:
+  eines, das am Bildschirm zu hell wirkt, und eines, das zu dunkel wirkt.</p>
+  <table>
+    <thead><tr><th>Farbe</th><th>Erwartung</th></tr></thead>
+    <tbody>
+      <tr><td>Mohn, Sonne</td><td>hohe Trefferquote — kräftige, gesättigte Töne sind in jedem Paracord-Sortiment vertreten</td></tr>
+      <tr><td>Himmel</td><td>machbar, aber zwischen Royal und Navy liegt wenig Auswahl</td></tr>
+      <tr><td>Salbei, Schiefer</td><td>schwierig — beide stark entsättigt, Paracord ist traditionell auf Militär- und Signalfarben ausgelegt</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="merk">
+  <h3>Material</h3>
+  <p><strong>Polyester statt Nylon.</strong> Beides gibt es als 550 Type III.
+  Nylon ist das Original, dehnt sich aber merklich — bei einer Zugschnur heißt
+  das Schwammigkeit im Griff. Polyester ist steifer, UV-stabiler und
+  farbechter.</p>
+  <p><strong>Enden versiegeln ist Pflicht, nicht Finish.</strong> 550 Type III
+  führt sieben lose Innenlitzen. Ein offenes Schnittende lässt sich von einem
+  Kleinkind aufziehen, und dann liegen sieben dünne Fäden frei.</p>
+</div>
+
+<footer>
+  <p>Farbwerte aus dem Markenkern, Stand Shopstart. Schrift: Bricolage
+  Grotesque 800 für Überschriften, Figtree 400/600 für Text — beide über
+  Google Fonts, beide auch kommerziell kostenlos.
+  Farbkatalog des Anbieters:
+  <a href="https://www.paracord.shop/color-guide">paracord.shop/color-guide</a>.</p>
+</footer>
+
+</div>
+
+<script>
+var FARBEN = [
+  {de:"Mohn",     en:"Poppy", hex:"#D2452B", h:9,   s:66, l:50,
+   text:"Warmes Rot mit Orangestich. Kein Blaurot, kein Bordeaux — beim Suchen eher Richtung Vermillon als Richtung Crimson."},
+  {de:"Salbei",   en:"Sage",  hex:"#55886B", h:146, s:23, l:43,
+   text:"Gedämpftes Mittelgrün, stark ausgegraut. Kein Oliv, kein Kelly, kein Flaschengrün — der Ton liegt zwischen Graugrün und Waldgrün."},
+  {de:"Himmel",   en:"Sky",   hex:"#38689B", h:211, s:47, l:41,
+   text:"Staubiges Mittelblau. Deutlich heller als Navy, deutlich ruhiger als Royal. Ein Hauch Grau ist drin."},
+  {de:"Sonne",    en:"Sun",   hex:"#E0982F", h:36,  s:74, l:53,
+   text:"Ocker beziehungsweise Bernstein. Kein Zitronengelb, kein Messinggold — die Richtung ist Safran."},
+  {de:"Schiefer", en:"Slate", hex:"#454A52", h:217, s:9,  l:30,
+   text:"Dunkles Blaugrau, nahe Anthrazit, aber nicht Schwarz. Der Blauanteil ist gering, aber vorhanden."}
+];
+
+function schnur(hex, id){
+  // Paracord-Geflecht: diagonale Baender, abwechselnd etwas heller und
+  // dunkler, dazu eine Laengswoelbung. Reicht, um den Ton auf gerundetem
+  // Garn zu zeigen statt auf einer flachen Kachel.
+  var b = [];
+  for (var x = -40; x < 200; x += 13){
+    b.push('<path d="M'+x+' 0 L'+(x+11)+' 0 L'+(x+11+22)+' 44 L'+(x+22)+' 44 Z" '
+           + 'fill="#FFFFFF" opacity="0.10"/>');
+    b.push('<path d="M'+(x+11)+' 0 L'+(x+13)+' 0 L'+(x+13+22)+' 44 L'+(x+11+22)+' 44 Z" '
+           + 'fill="#000000" opacity="0.16"/>');
+  }
+  return '<svg class="schnur" viewBox="0 0 200 44" role="img" '
+    + 'aria-label="Paracord in der Farbe ' + hex + '">'
+    + '<defs><clipPath id="c'+id+'"><rect x="0" y="4" width="200" height="36" rx="18"/></clipPath>'
+    + '<linearGradient id="g'+id+'" x1="0" y1="0" x2="0" y2="1">'
+    + '<stop offset="0" stop-color="#000" stop-opacity="0.22"/>'
+    + '<stop offset="0.34" stop-color="#fff" stop-opacity="0.20"/>'
+    + '<stop offset="1" stop-color="#000" stop-opacity="0.26"/></linearGradient></defs>'
+    + '<g clip-path="url(#c'+id+')">'
+    + '<rect x="0" y="4" width="200" height="36" fill="'+hex+'"/>'
+    + b.join('')
+    + '<rect x="0" y="4" width="200" height="36" fill="url(#g'+id+')"/>'
+    + '</g>'
+    + '<rect x="0.5" y="4.5" width="199" height="35" rx="17.5" fill="none" '
+    + 'stroke="#17160F" stroke-opacity="0.16"/></svg>';
+}
+
+document.getElementById("karten").innerHTML = FARBEN.map(function(f, i){
+  return '<div class="karte">'
+    + schnur(f.hex, i)
+    + '<div><h3>' + f.de + '<span class="en">' + f.en + '</span></h3>'
+    + '<p>' + f.text + '</p></div>'
+    + '<div class="werte">'
+    + '<button class="hex" type="button" data-hex="' + f.hex + '">' + f.hex + '</button>'
+    + '<span class="hsl">H ' + f.h + '° · S ' + f.s + ' % · L ' + f.l + ' %</span>'
+    + '</div></div>';
+}).join("");
+
+document.getElementById("karten").addEventListener("click", function(e){
+  var b = e.target.closest(".hex");
+  if (!b) return;
+  var wert = b.dataset.hex;
+  try { navigator.clipboard.writeText(wert); } catch (err) { return melde("Kopieren geht hier nicht"); }
+  melde(wert + " kopiert");
+});
+
+var weg;
+function melde(text){
+  var alt = document.getElementById("hinweis");
+  if (alt) alt.remove();
+  var d = document.createElement("div");
+  d.id = "hinweis"; d.textContent = text; d.setAttribute("role", "status");
+  document.body.appendChild(d);
+  clearTimeout(weg);
+  weg = setTimeout(function(){ d.remove(); }, 1600);
+}
+</script>
