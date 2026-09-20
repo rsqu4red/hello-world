@@ -16,6 +16,7 @@ Alle Masse in Millimetern. Anpassen und neu ausfuehren:
 """
 
 import math
+import sys
 
 from netz import (vernetzen, volumen, offene_kanten, ueberhang,
                   abweichung, schreibe_stl,
@@ -33,13 +34,28 @@ LAENGE = 28.0           # Laenge der Manschette entlang des Drueckers
 # Silikonmanschette haben, damit sie sich aufspannt.
 D_INNEN = 18.0
 
-# Wandstaerke. 2,0 mm sind beim Drucken genau fuenf Bahnen einer 0,4-mm-Duese.
-# Krumme Vielfache sind bei TPU der haeufigste Grund fuer poroese Waende:
-# der Slicer laesst dann zwischen den Bahnen eine Luecke, die er mit
-# Lueckenfuellung zu schliessen versucht, was bei weichem Filament schlecht
-# haelt.
+# Wandstaerke in der Mitte. 2,0 mm sind beim Drucken genau fuenf Bahnen einer
+# 0,4-mm-Duese. Krumme Vielfache sind bei TPU der haeufigste Grund fuer
+# poroese Waende: der Slicer laesst dann zwischen den Bahnen eine Luecke, die
+# er mit Lueckenfuellung zu schliessen versucht, was bei weichem Filament
+# schlecht haelt. Fuer die gegossene Silikonfassung gilt das Bahnenargument
+# nicht mehr - dort zaehlt nur, dass die Form sich fuellt.
 WAND = 2.0
 BAHN = 0.4              # angenommene Extrusionsbreite, nur zur Kontrolle
+
+# Abflachung zu den Stirnseiten hin.
+#
+# Ueber ABFLACHUNG laeuft die ganze Aussenkontur - Rohr und Rippe - von WAND
+# auf WAND_ENDE zurueck. Der Uebergang vom blanken Druecker auf die Manschette
+# ist damit kein Absatz von zwei Millimetern mehr, sondern eine Rampe.
+#
+# Zurueckgenommen wird die Aussenflaeche, nicht die Bohrung: die Ø18 bleibt
+# ueber die volle Laenge zylindrisch, sie ist die Funktionsflaeche am Druecker.
+# Die Rampe laeuft als Smoothstep, hat an beiden Enden also Steigung null und
+# hinterlaesst weder am Mundstueck noch dort, wo sie in die volle Wand
+# einlaeuft, eine Kante.
+WAND_ENDE = 1.2
+ABFLACHUNG = 6.0
 
 # Rippe an der Unterseite: nimmt die Knotenkammer auf und laeuft ueber die
 # volle Laenge durch. Das ist nicht nur Optik - ein durchlaufendes Profil
@@ -49,7 +65,10 @@ KAMMER_ACHSE = 11.0     # Abstand der Kammerachse von der Rohrachse
 D_KAMMER = 11.0         # Knotenkammer
 KAMMER_LAENGE = 10.0    # gerader Teil; mit den 45-Grad-Kegeln 21 mm gesamt,
                         # bleiben bei 28 mm Laenge 3,5 mm Wand an beiden Enden
-RIPPE_WAND = 2.0        # Material um die Kammer herum
+
+# Material um die Kammer herum. Haengt an WAND: wird die Manschette staerker,
+# waechst die Rippe mit, sonst sitzt eine duenne Kammer in einem dicken Rohr.
+RIPPE_WAND = WAND
 
 D_SCHNUR = 5.0          # Schnurbohrung nach aussen, rund
 SCHNUR_SENK = 0.5       # 45-Grad-Senkung am aeusseren Ende, fuer die Schnur
@@ -60,11 +79,23 @@ VERRUNDUNG = 4.0        # weicher Uebergang Rohr zu Rippe
 # aus, weil die Flaeche die Zellen schraeg durchlaeuft. Ein Radius von gut
 # einer Zellbreite loest das, und an einer Silikonmanschette ist eine
 # verrundete Kante ohnehin besser als eine scharfe Lippe.
-KANTE = 1.2
+#
+# Kleiner als frueher (1,2): die Stirnwand ist durch die Abflachung nur noch
+# 1,2 mm dick, und ein Radius von 1,2 haette sie ganz weggerundet.
+KANTE = 0.9
 
 # Anfasung der Bohrung an beiden Enden, damit sich die Manschette leichter
-# auf den Druecker schieben laesst.
-EINLAUF = 1.0
+# auf den Druecker schieben laesst. Ebenfalls kleiner als frueher (1,0) -
+# die abgeflachte Aussenkontur uebernimmt jetzt den groesseren Teil der
+# Einfuehrhilfe, und was von der Stirnwand uebrig bleibt, soll nicht von
+# beiden Seiten gleichzeitig abgetragen werden.
+EINLAUF = 0.5
+
+# Wandstaerke laesst sich beim Aufruf ueberschreiben, um Varianten zu
+# vergleichen:   python3 manschette.py 2.5
+if len(sys.argv) > 1:
+    WAND = float(sys.argv[1])
+    RIPPE_WAND = WAND
 
 # Abgeleitet
 R_INNEN = D_INNEN / 2.0
@@ -74,19 +105,36 @@ RIPPE_UNTEN = KAMMER_ACHSE + R_RIPPE           # tiefster Punkt der Rippe
 HOEHE = R_AUSSEN + RIPPE_UNTEN                 # Gesamthoehe ueber alles
 
 RASTER = 0.36           # Kantenlaenge der Gitterzelle
-DATEI = "tuerzwerg-manschette.stl"
+DATEI = ("tuerzwerg-manschette.stl" if abs(WAND - 2.0) < 1e-9
+         else f"tuerzwerg-manschette-wand{WAND:.1f}".replace(".", "") + ".stl")
 
 
 # ------------------------------------------------------------- Distanzfeld ---
+
+def _ruecknahme(z):
+    """Wieviel die Aussenkontur an dieser Stelle zurueckgenommen wird.
+
+    Null in der Mitte, WAND - WAND_ENDE an beiden Stirnseiten. Dazwischen
+    ein Smoothstep, damit an keinem Ende der Rampe eine Kante steht.
+    """
+    s = min(z, LAENGE - z)
+    if s >= ABFLACHUNG:
+        return 0.0
+    t = min(max(s, 0.0), ABFLACHUNG) / ABFLACHUNG
+    return (WAND - WAND_ENDE) * (1.0 - t * t * (3.0 - 2.0 * t))
+
 
 def feld(x, y, z):
     """Signierter Abstand. Negativ bedeutet Material."""
     r = math.hypot(x, y)
 
-    # Querschnitt: Rohr und Rippe, weich vereinigt. Haengt nicht von z ab.
+    # Querschnitt: Rohr und Rippe, weich vereinigt. Zu den Stirnseiten hin
+    # wird das ganze Profil zurueckgenommen - ein positiver Summand auf ein
+    # Distanzfeld schrumpft den Koerper genau um diesen Betrag, und zwar
+    # senkrecht zur Flaeche, also an Rohr und Rippe gleich viel.
     profil = _weich_vereinen(r - R_AUSSEN,
                              math.hypot(x, y + KAMMER_ACHSE) - R_RIPPE,
-                             VERRUNDUNG)
+                             VERRUNDUNG) + _ruecknahme(z)
 
     # Gerundete Extrusion: das Profil wird um KANTE geschrumpft, in z um
     # KANTE gekuerzt und der Koerper anschliessend wieder um KANTE
@@ -161,6 +209,38 @@ def feld(x, y, z):
     return d
 
 
+def wand_bei(z, grad=0.0, rmax=30.0, schritt=0.004):
+    """Wanddicke, radial gemessen, an dieser Stelle.
+
+    Laeuft von der Bohrungsachse nach aussen und misst die Strecke, auf der
+    das Feld negativ ist. Das ist die wirkliche Wand am fertigen Koerper,
+    nicht die Differenz zweier Konstanten - Kantenverrundung, Einlauf und
+    Abflachung sind darin enthalten. Genau daran ist die bisherige Fassung
+    duenn: in der Mitte hat sie ihre 2,0 mm, am Mundstueck nicht.
+
+    grad = 0 zeigt nach oben, also auf die dem Kiel gegenueberliegende Seite.
+    """
+    w = math.radians(grad)
+    dx, dy = math.sin(w), math.cos(w)
+    ein = None
+    r = 0.0
+    while r <= rmax:
+        if feld(dx * r, dy * r, z) < 0.0:
+            if ein is None:
+                ein = r
+        elif ein is not None:
+            return r - ein
+        r += schritt
+    return 0.0 if ein is None else rmax - ein
+
+
+def abmessungen(tri):
+    """Umschliessender Quader des vernetzten Koerpers."""
+    lo = [min(p[i] for d in tri for p in d) for i in range(3)]
+    hi = [max(p[i] for d in tri for p in d) for i in range(3)]
+    return [hi[i] - lo[i] for i in range(3)], lo, hi
+
+
 def knotenfreiraum(d_druecker):
     """Radialer Platz, der dem Knoten unter einem Druecker bleibt.
 
@@ -191,11 +271,26 @@ if __name__ == "__main__":
     print(f"Dreiecke       {len(tri)}")
     print(f"Offene Kanten  {offene_kanten(tri)}  (0 = geschlossenes Volumen)")
     print(f"Volumen        {vol/1000:.2f} cm^3   ({vol/1000*1.15:.1f} g Silikon)")
-    print(f"Abmessungen    {2*R_AUSSEN:.1f} breit x {HOEHE:.1f} hoch x "
-          f"{LAENGE:.0f} lang")
-    print(f"Innen          {D_INNEN:.1f} mm durchgehend zylindrisch")
-    print(f"Wand           {WAND:.1f} mm = {WAND/BAHN:.0f} Bahnen zu {BAHN} mm")
-    print(f"Rippenwand     {RIPPE_WAND:.1f} mm = {RIPPE_WAND/BAHN:.0f} Bahnen")
+    (bb, lo, hi) = abmessungen(tri)
+    print()
+    print("Masse ueber alles, am vernetzten Koerper gemessen")
+    print(f"  Breite (x)   {bb[0]:6.2f} mm    Rohr aussen Ø{2*R_AUSSEN:.1f}")
+    print(f"  Hoehe  (y)   {bb[1]:6.2f} mm    Rohrscheitel {R_AUSSEN:.1f} "
+          f"ueber Achse, Kiel {RIPPE_UNTEN:.1f} darunter")
+    print(f"  Tiefe  (z)   {bb[2]:6.2f} mm    Laenge entlang des Drueckers")
+    print(f"  Bohrung      {D_INNEN:6.2f} mm    durchgehend zylindrisch")
+    print()
+    print("Wandstaerke, radial nachgemessen (0 Grad = oben, dem Kiel gegenueber)")
+    for z, was in ((LAENGE / 2.0, "Mitte"),
+                   (ABFLACHUNG, "Ende der Rampe"),
+                   (ABFLACHUNG / 2.0, "Mitte der Rampe"),
+                   (1.0, "1 mm vom Rand"),
+                   (0.3, "0,3 mm vom Rand")):
+        print(f"  z = {z:5.1f}  {was:<17}{wand_bei(z):5.2f} mm")
+    print(f"  Soll: {WAND:.1f} in der Mitte, {WAND_ENDE:.1f} an der Stirnseite, "
+          f"Rampe {ABFLACHUNG:.0f} mm")
+    print(f"  Duese 0,4: Mitte {WAND/BAHN:.0f} Bahnen, "
+          f"Kiel {RIPPE_WAND/BAHN:.0f} Bahnen")
     print(f"Knotenkammer   {D_KAMMER:.1f} x {KAMMER_LAENGE:.0f} mm, "
           f"Stirnwand {(LAENGE - KAMMER_LAENGE)/2 - D_KAMMER/2:.1f} mm, "
           f"Schnurbohrung {D_SCHNUR:.1f} mm")
