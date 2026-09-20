@@ -1,0 +1,1104 @@
+<title>Drücker oder Knauf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --grund:#F2F4F1; --flaeche:#FBFCFA; --erhoben:#E9ECE7;
+  --tinte:#161A17; --weich:#5E665E; --linie:#B9C1B7; --linie-zart:#D8DDD6;
+  --akzent:#C7422A; --gut:#3F7345; --mittel:#A8762A; --aus:#8A9189;
+  --serif:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif;
+  --schmal:"IBM Plex Sans Condensed","DejaVu Sans Condensed",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --grund:#131614; --flaeche:#1B1F1C; --erhoben:#22271F;
+    --tinte:#E8EBE7; --weich:#9AA69A; --linie:#39423B; --linie-zart:#272E29;
+    --akzent:#E4674C; --gut:#7FB183; --mittel:#D3A354; --aus:#6E786F;
+  }
+}
+:root[data-theme="dark"]{
+  --grund:#131614; --flaeche:#1B1F1C; --erhoben:#22271F;
+  --tinte:#E8EBE7; --weich:#9AA69A; --linie:#39423B; --linie-zart:#272E29;
+  --akzent:#E4674C; --gut:#7FB183; --mittel:#D3A354; --aus:#6E786F;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--grund); color:var(--tinte);
+  font-family:var(--serif); font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.blatt{max-width:1080px; margin:0 auto; padding-inline:20px; padding-block:0 80px}
+
+/* ---------------------------------------------------------------- Kopf --- */
+header{padding-block:56px 40px; border-bottom:2px solid var(--tinte)}
+.marke{
+  font-family:var(--schmal); font-size:12px; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--akzent);
+  margin:0 0 14px;
+}
+h1{
+  font-family:var(--schmal); font-weight:700; font-size:clamp(38px,8vw,66px);
+  line-height:1.02; letter-spacing:-.015em; margin:0; text-wrap:balance;
+}
+.unter{
+  margin:16px 0 0; max-width:60ch; font-size:17px; color:var(--weich);
+}
+.unter strong{color:var(--tinte); font-weight:600}
+
+/* --------------------------------------------------------------- These --- */
+.these{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:0; margin-block:40px; border:1px solid var(--linie);
+  background:var(--flaeche);
+}
+.these > div{padding:22px 20px; border-right:1px solid var(--linie-zart)}
+.these > div:last-child{border-right:0}
+.zahl{
+  font-family:var(--schmal); font-weight:700; font-size:42px; line-height:1;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums;
+}
+.zahl.ja{color:var(--gut)} .zahl.nein{color:var(--akzent)}
+.these p{margin:8px 0 0; font-size:13.5px; color:var(--weich); line-height:1.5}
+.these b{display:block; font-family:var(--schmal); font-size:13px; font-weight:600;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--tinte); margin-top:10px}
+
+/* -------------------------------------------------------------- Hinweis --- */
+.hinweis{
+  border-left:3px solid var(--mittel); background:var(--erhoben);
+  padding:16px 20px; margin-block:36px; font-size:14px; color:var(--weich);
+}
+.hinweis b{color:var(--tinte); font-family:var(--schmal); font-weight:600}
+
+/* -------------------------------------------------------------- Region --- */
+section{margin-top:64px}
+.regionkopf{
+  display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  border-bottom:1px solid var(--tinte); padding-bottom:10px;
+}
+.regionkopf h2{
+  font-family:var(--schmal); font-weight:700; font-size:30px; margin:0;
+  letter-spacing:-.01em;
+}
+.rang{
+  font-family:var(--mono); font-size:12px; color:var(--akzent);
+  letter-spacing:.06em; text-transform:uppercase;
+}
+.regiontext{margin:14px 0 26px; max-width:66ch; color:var(--weich); font-size:14.5px}
+.regiontext strong{color:var(--tinte); font-weight:600}
+
+/* --------------------------------------------------------------- Zeile --- */
+.reihe{display:flex; flex-direction:column; gap:0}
+.griff{
+  display:grid; gap:18px 22px; align-items:center;
+  grid-template-columns:210px minmax(0,1fr) 160px 92px;
+  padding:18px 0; border-bottom:1px solid var(--linie-zart);
+}
+.griff:first-child{border-top:1px solid var(--linie-zart)}
+.bild{
+  background:var(--flaeche); border:1px solid var(--linie-zart);
+  display:block; width:100%; height:auto; color:var(--tinte);
+}
+.name{font-family:var(--schmal); font-weight:600; font-size:18px; margin:0 0 3px}
+.platz{
+  font-family:var(--mono); font-size:11px; color:var(--aus);
+  margin-right:7px;
+}
+.beispiele{margin:0; font-size:13.5px; color:var(--weich); line-height:1.5}
+.beispiele em{font-style:normal; color:var(--tinte); font-weight:500}
+.masse{
+  font-family:var(--mono); font-size:11.5px; color:var(--aus); margin:5px 0 0;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------------------------------------------------------------- Balken --- */
+.anteil{display:flex; flex-direction:column; gap:5px}
+.balkenzeile{display:flex; align-items:center; gap:9px}
+.balken{flex:1; height:9px; background:var(--linie-zart); position:relative; overflow:hidden}
+.balken i{position:absolute; inset:0 auto 0 0; background:var(--tinte); display:block}
+.balken i.knauf{background:var(--akzent)}
+.prozent{
+  font-family:var(--mono); font-size:13px; font-variant-numeric:tabular-nums;
+  min-width:42px; text-align:right;
+}
+.anteil small{font-family:var(--schmal); font-size:11px; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--aus)}
+
+/* ----------------------------------------------------------------- Chip --- */
+.chip{
+  font-family:var(--schmal); font-weight:600; font-size:12px;
+  letter-spacing:.06em; text-transform:uppercase; text-align:center;
+  padding:7px 4px; border:1px solid;
+}
+.chip.ja{color:var(--gut); border-color:var(--gut)}
+.chip.teils{color:var(--mittel); border-color:var(--mittel)}
+.chip.nein{color:var(--akzent); border-color:var(--akzent); background:color-mix(in srgb,var(--akzent) 9%,transparent)}
+
+/* --------------------------------------------------------------- Fazit --- */
+.fazit{
+  margin-top:72px; border:2px solid var(--tinte); background:var(--flaeche);
+  padding:32px 28px;
+}
+.fazit h2{font-family:var(--schmal); font-weight:700; font-size:28px; margin:0 0 6px}
+.fazit .lead{color:var(--weich); margin:0 0 24px; max-width:60ch}
+.fazit h3{
+  font-family:var(--schmal); font-size:13px; font-weight:600; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--akzent); margin:26px 0 8px;
+}
+.fazit p{margin:0 0 10px; max-width:68ch; font-size:14.5px}
+.fazit ul{margin:0; padding-left:20px; max-width:68ch; font-size:14.5px}
+.fazit li{margin-bottom:7px}
+.fazit code{font-family:var(--mono); font-size:13px; background:var(--erhoben); padding:1px 5px}
+
+table.ziel{width:100%; border-collapse:collapse; margin-top:14px; font-size:14px}
+table.ziel th{
+  font-family:var(--schmal); font-size:11.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--aus); text-align:left;
+  padding:6px 10px 6px 0; border-bottom:1px solid var(--linie);
+  font-weight:600;
+}
+table.ziel td{padding:9px 10px 9px 0; border-bottom:1px solid var(--linie-zart);
+  font-variant-numeric:tabular-nums}
+table.ziel td:first-child{font-family:var(--schmal); font-weight:600}
+table.ziel .num{font-family:var(--mono); font-size:13px}
+
+footer{
+  margin-top:60px; padding-top:22px; border-top:1px solid var(--linie);
+  font-size:12.5px; color:var(--aus); line-height:1.65;
+}
+footer a{color:var(--weich)}
+footer h3{font-family:var(--schmal); font-size:12px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--weich); margin:18px 0 6px}
+footer ul{margin:0; padding-left:18px; columns:2; column-gap:30px}
+@media (max-width:640px){footer ul{columns:1}}
+
+@media (max-width:860px){
+  .griff{grid-template-columns:150px minmax(0,1fr); grid-template-areas:
+    "bild name" "bild anteil" "chip chip";}
+  .griff > .bild{grid-area:bild}
+  .griff > .text{grid-area:name}
+  .griff > .anteil{grid-area:anteil}
+  .griff > .chip{grid-area:chip; justify-self:start; padding-inline:14px}
+}
+@media (max-width:480px){
+  .griff{grid-template-columns:1fr; grid-template-areas:"bild" "name" "anteil" "chip"}
+}
+@media (prefers-reduced-motion:no-preference){
+  .balken i{animation:wachsen .7s cubic-bezier(.2,.8,.3,1) both}
+  @keyframes wachsen{from{transform:scaleX(.04); transform-origin:left}to{transform:scaleX(1)}}
+}
+</style>
+
+<div class="blatt">
+
+<header>
+  <p class="marke">Türzwerg · Marktübersicht Zimmertüren</p>
+  <h1>Drücker oder Knauf</h1>
+  <p class="unter">Was an Zimmertüren in Deutschland, Europa, Amerika und Asien wirklich
+  montiert ist — und welcher davon eine Zugschnur trägt. Denn eine Schlaufe zieht
+  einen Drücker <strong>herunter</strong>. Einen Knauf müsste sie <strong>drehen</strong>,
+  und das kann eine Schnur nicht.</p>
+</header>
+
+<div class="these">
+  <div>
+    <span class="zahl ja">~80 %</span>
+    <b>Drücker weltweit</b>
+    <p>Der Hebel ist der globale Normalfall. Europa, Asien, Ozeanien,
+    Südamerika, der gesamte Gewerbebau.</p>
+  </div>
+  <div>
+    <span class="zahl nein">~20 %</span>
+    <b>Knauf</b>
+    <p>Fast ausschließlich Nordamerika und der von dort belieferte Teil
+    Mittelamerikas. Anderswo Altbestand.</p>
+  </div>
+  <div>
+    <span class="zahl">8 mm</span>
+    <b>Vierkant DE</b>
+    <p>Der Stift, auf dem in Deutschland jeder Drücker sitzt. Österreich
+    fährt 8,5 mm, die USA gar keinen — dort sitzt der Griff auf einem
+    Rohrschloss.</p>
+  </div>
+  <div>
+    <span class="zahl">130–140</span>
+    <b>mm Grifflänge</b>
+    <p>Der übliche Hebel in DACH. US-Hebel sind mit 110–120 mm kürzer,
+    italienische Designdrücker oft dünner.</p>
+  </div>
+</div>
+
+<div class="hinweis">
+  <b>Woher die Prozente kommen.</b> Für Zimmertürbeschläge gibt es keine
+  veröffentlichte Marktanteilsstatistik nach Bauform — weder von GfK noch von
+  den Verbänden. Die Anteile unten sind meine Schätzung aus Herstellersortimenten,
+  Händler-Bestsellerlisten, Normen und Bauvorschriften. Als Rangfolge belastbar,
+  als Zahl auf ±10 Punkte genau. Wo eine Quelle etwas Hartes sagt — eine Norm,
+  ein Vierkantmaß, ein Verbot — steht das ausdrücklich dabei.
+  <br><br>
+  <b>Und zu den Bildern.</b> Das sind maßstäbliche Zeichnungen von mir, keine
+  Produktfotos: gleicher Maßstab für alle, damit sich Grifflängen ehrlich
+  vergleichen lassen. Fremde Produktfotos dürfte ich hier ohnehin nicht einbauen.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ DEUTSCHLAND ══ -->
+<section>
+  <div class="regionkopf">
+    <h2>Deutschland</h2>
+    <span class="rang">Fokusmarkt · ~40 Mio. Wohnungen</span>
+  </div>
+  <p class="regiontext">Der deutsche Zimmertürbeschlag ist so weit normiert, dass man
+  ihn fast als ein einziges Produkt behandeln kann: <strong>Vierkantstift 8 mm</strong>,
+  Rosette oder Langschild, Buntbart (BB) oder Profilzylinder, geprüft nach
+  <strong>DIN EN 1906</strong> — für Zimmertüren üblicherweise Gebrauchsklasse 3.
+  Was sich unterscheidet, ist allein die Form des Hebels. Der Knauf kommt an
+  Zimmertüren praktisch nicht vor; wo er auftaucht, sitzt er außen an der
+  Wohnungsabschlusstür, wo er gerade <em>nicht</em> öffnen soll.</p>
+
+  <div class="reihe">
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Bogendrücker auf Rundrosette, Seitenansicht">
+        <circle cx="34" cy="35" r="25" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="25" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L136 35 C155 35 161 41 159 50" fill="none" stroke="currentColor"
+              stroke-width="17" stroke-linecap="round"/>
+        <path d="M172 24 L172 44 M166 38 L172 45 L178 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">01</span>Bogendrücker auf Rundrosette</p>
+        <p class="beispiele"><em>Hoppe Amsterdam</em> — der meistverbaute Drücker
+        Deutschlands, dazu <em>Hoppe Paris</em>, <em>Marseille</em>, <em>Vitoria</em>.
+        Sanfter Bogen, freies Ende leicht nach unten gezogen.</p>
+        <p class="masse">Grifflänge ~130 mm · Rosette Ø52 · Vierkant 8 · BB/PZ/WC</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:35%"></i></span><span class="prozent">35 %</span></div>
+        <small>Neumontagen, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Gerader Drücker mit Schrägansatz">
+        <circle cx="34" cy="35" r="25" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="25" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L168 35" fill="none" stroke="currentColor"
+              stroke-width="16" stroke-linecap="round"/>
+        <path d="M60 27 L68 43" fill="none" stroke="var(--grund)" stroke-width="1.6" opacity=".7"/>
+        <path d="M172 24 L172 44 M166 38 L172 45 L178 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">02</span>Gerader Drücker, Schrägansatz</p>
+        <p class="beispiele"><em>FSB 1035</em> (Neuentwicklung nach klassischem Vorbild,
+        Grifflänge ~137 mm) und der <em>Ulmer Griff</em> von Griffwerk. Beidseitig
+        abgeflacht, im Schrägschnitt in den runden Hals übergehend.</p>
+        <p class="masse">Grifflänge ~137 mm · Rosette rund o. quadratisch · DIN EN 1906 Kl. 3</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:22%"></i></span><span class="prozent">22 %</span></div>
+        <small>Neumontagen, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="L-förmiger Drücker auf Quadratrosette">
+        <rect x="9" y="10" width="50" height="50" fill="var(--linie)"/>
+        <rect x="9" y="10" width="50" height="50" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L150 35 L150 54" fill="none" stroke="currentColor"
+              stroke-width="15" stroke-linecap="butt" stroke-linejoin="miter"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">03</span>L-Drücker, eckig</p>
+        <p class="beispiele">Die reduzierte Gegenposition zum Bogen: rechter Winkel,
+        oft quadratische Rosette. <em>Griffwerk</em>, <em>Südmetall</em> und die
+        Eigenmarken der Baumärkte. Stark im Neubau und bei Renovierungen.</p>
+        <p class="masse">Grifflänge 120–140 mm · Rosette 52×52 · quadratischer Querschnitt</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:20%"></i></span><span class="prozent">20 %</span></div>
+        <small>Neumontagen, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Drückergarnitur auf Langschild">
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="var(--linie)"/>
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34.5" cy="55" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M34.5 58 L34.5 63" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M34 35 C92 35 112 31 140 24 C152 21 157 27 152 33" fill="none"
+              stroke="currentColor" stroke-width="13" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">04</span>Langschild-Garnitur</p>
+        <p class="beispiele">Der Bestand. In Altbau und Nachkriegsbau sitzt die
+        Garnitur auf einem durchgehenden Schild mit Buntbart-Schlüsselloch, der
+        Hebel oft geschwungen oder mit Schnörkelende. Wird bei Renovierung meist
+        gegen Rosette getauscht — steht aber noch in Millionen Wohnungen.</p>
+        <p class="masse">Schild ~240×40 mm · Vierkant 8 · Buntbart</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:21%"></i></span><span class="prozent">21 %</span></div>
+        <small>Bestand, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Runder Knauf">
+        <circle cx="34" cy="35" r="26" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="26" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34" cy="35" r="19" fill="var(--flaeche)" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="29" cy="30" r="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/>
+        <path d="M74 27 A16 16 0 1 1 74 43" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M68 38 L74 44 L80 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">05</span>Knauf</p>
+        <p class="beispiele">An deutschen Zimmertüren die Ausnahme. Wo er vorkommt,
+        sitzt er außen an der Wohnungsabschlusstür — als feststehender Knauf, der
+        bewusst nicht öffnet. Innen praktisch nie.</p>
+        <p class="masse">Ø 50–60 mm · muss gedreht werden</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i class="knauf" style="width:2%"></i></span><span class="prozent">&lt;2 %</span></div>
+        <small>Neumontagen, geschätzt</small>
+      </div>
+      <div class="chip nein">Schnur nein</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════ DACH ══ -->
+<section>
+  <div class="regionkopf">
+    <h2>DACH</h2>
+    <span class="rang">Gleiche Formen, andere Stifte</span>
+  </div>
+  <p class="regiontext">Österreich und die Schweiz sehen aus wie Deutschland und sind es
+  im Detail nicht. Der wichtigste Unterschied ist der Vierkant: Österreich fährt nach
+  <strong>Ö-Norm 8,5 mm</strong> statt 8 mm — FSB und andere führen den 1035 ausdrücklich
+  in beiden Ausführungen. Die Schweiz hat ein eigenes Schlossmaß und mit
+  <strong>Glutz</strong> einen starken einheimischen Hersteller; quadratische Rosetten
+  sind dort verbreiteter als in Deutschland. Für ein Produkt, das auf den
+  <em>Hebel</em> geschoben wird statt an die Rosette geschraubt, ist das alles
+  gleichgültig — die Griffquerschnitte sind praktisch identisch.</p>
+
+  <div class="reihe">
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Bogendrücker">
+        <circle cx="34" cy="35" r="25" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="25" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L136 35 C155 35 161 41 159 50" fill="none" stroke="currentColor"
+              stroke-width="17" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">01</span>Bogendrücker — überall gleich</p>
+        <p class="beispiele">Hoppe liefert DE, AT und CH aus derselben Serienlogik.
+        <em>Amsterdam</em>, <em>Hamburg</em>, <em>London</em> sind in allen drei
+        Ländern Standardsortiment.</p>
+        <p class="masse">DE Vierkant 8 · AT 8,5 (Ö-Norm) · CH eigenes Schlossmaß</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:33%"></i></span><span class="prozent">33 %</span></div>
+        <small>DACH gesamt, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Gerader Drücker auf Quadratrosette, Schweizer Typ">
+        <rect x="9" y="10" width="50" height="50" rx="2" fill="var(--linie)"/>
+        <rect x="9" y="10" width="50" height="50" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L162 35" fill="none" stroke="currentColor"
+              stroke-width="14" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">02</span>Gerader Drücker, Quadratrosette</p>
+        <p class="beispiele">Der Schweizer Normalfall und in Österreich stark:
+        <em>Glutz</em>, <em>Hoppe</em>, <em>Dorma</em>. Nüchtern, gerade, oft in
+        Edelstahl fein matt.</p>
+        <p class="masse">Grifflänge 125–140 mm · Rosette 52×52 oder 55×55</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:26%"></i></span><span class="prozent">26 %</span></div>
+        <small>DACH gesamt, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="L-Drücker eckig">
+        <rect x="9" y="10" width="50" height="50" fill="var(--linie)"/>
+        <rect x="9" y="10" width="50" height="50" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L150 35 L150 54" fill="none" stroke="currentColor"
+              stroke-width="15" stroke-linejoin="miter"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">03</span>L-Drücker, eckig</p>
+        <p class="beispiele">Im Neubau und bei Innenausbauern gesetzt, in der
+        Schweiz besonders stark.</p>
+        <p class="masse">quadratischer Querschnitt 16–20 mm</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:21%"></i></span><span class="prozent">21 %</span></div>
+        <small>DACH gesamt, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Langschild-Garnitur">
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="var(--linie)"/>
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34.5" cy="55" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M34 35 C92 35 112 31 140 24 C152 21 157 27 152 33" fill="none"
+              stroke="currentColor" stroke-width="13" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">04</span>Langschild, Bestand</p>
+        <p class="beispiele">In Wien und im Schweizer Altbestand genauso präsent wie
+        in deutschen Gründerzeitwohnungen.</p>
+        <p class="masse">Schild ~240×40 mm</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:18%"></i></span><span class="prozent">18 %</span></div>
+        <small>Bestand, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Ovaler Drücker, Olivenform">
+        <circle cx="34" cy="35" r="22" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M40 35 L154 35" fill="none" stroke="currentColor"
+              stroke-width="20" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">05</span>Olive / ovaler Drücker</p>
+        <p class="beispiele">Dicker, ovaler Querschnitt, in der Schweiz und im
+        Design-Segment beliebt. Für eine aufgeschobene Manschette der
+        <em>dickste</em> Fall — hier wird es eng.</p>
+        <p class="masse">Querschnitt bis 24 × 20 mm</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:2%"></i></span><span class="prozent">2 %</span></div>
+        <small>DACH gesamt, geschätzt</small>
+      </div>
+      <div class="chip teils">Passung prüfen</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ EUROPA ══ -->
+<section>
+  <div class="regionkopf">
+    <h2>Europa</h2>
+    <span class="rang">Drückerkontinent · ~95 % Hebel</span>
+  </div>
+  <p class="regiontext">Europa ist bei Zimmertüren nahezu geschlossen Drückerland. Die
+  Unterschiede sind stilistisch, nicht mechanisch: Italien liefert das Design,
+  Großbritannien hält am Langschild fest, Skandinavien am ovalen Querschnitt.
+  Polen ist der größte Produktionsstandort für Massenware. Ein Produkt, das auf
+  einen Hebel passt, passt in ganz Europa — die Frage ist nur der Querschnitt.</p>
+
+  <div class="reihe">
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Schlanker Designdrücker, italienischer Typ">
+        <circle cx="34" cy="35" r="21" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="21" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L158 35" fill="none" stroke="currentColor"
+              stroke-width="11" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">01</span>Schlanker Designdrücker</p>
+        <p class="beispiele">Italien setzt den Ton. <em>Olivari</em> mit
+        <em>Pitagora</em> (Giugiaro, frühe 80er), <em>Planet</em>, <em>Lama</em>
+        (Gio Ponti), <em>Link</em> (Lissoni), <em>Total</em> (Dordoni);
+        <em>Colombo Design</em> mit <em>Roboquattro</em> und <em>Robocinque</em>.
+        Dünner als deutsche Drücker.</p>
+        <p class="masse">Querschnitt oft nur 12–16 mm · Rosette Ø50</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:30%"></i></span><span class="prozent">30 %</span></div>
+        <small>EU-weit, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Bogendrücker auf Rosette">
+        <circle cx="34" cy="35" r="25" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="25" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L136 35 C155 35 161 41 159 50" fill="none" stroke="currentColor"
+              stroke-width="17" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">02</span>Bogendrücker auf Rosette</p>
+        <p class="beispiele">Der mitteleuropäische Standard, von Frankreich über
+        Polen bis Tschechien. Hoppe ist hier grenzüberschreitend Marktführer.</p>
+        <p class="masse">Grifflänge 125–140 mm · Vierkant 8 mm</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:28%"></i></span><span class="prozent">28 %</span></div>
+        <small>EU-weit, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Victorian-Scroll-Drücker auf Langschild">
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="var(--linie)"/>
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34.5" cy="55" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M34.5 58 L34.5 63" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M34 35 C88 35 106 32 132 25 C146 21 154 26 150 33 C147 38 141 37 140 32"
+              fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">03</span>Victorian Scroll auf Langschild</p>
+        <p class="beispiele">Der britische Klassiker mit eingerolltem Ende. Ein
+        UK-Händler nennt ihn „the most popular door handle on Planet Earth" —
+        das ist Verkaufsprosa, aber im Vereinigten Königreich stimmt die
+        Richtung. Daneben wächst dort „lever on rose".</p>
+        <p class="masse">Schild ~180×40 mm · geschwungener Hebel</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:17%"></i></span><span class="prozent">17 %</span></div>
+        <small>EU-weit, geschätzt · UK deutlich höher</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Ovaler Drücker, skandinavisch">
+        <circle cx="34" cy="35" r="22" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M40 35 L152 35" fill="none" stroke="currentColor"
+              stroke-width="20" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">04</span>Skandinavische Olive</p>
+        <p class="beispiele">Dänemark, Schweden, Norwegen: dicker ovaler
+        Querschnitt, warm in der Hand, häufig in gebürstetem Stahl oder Messing.
+        <em>Randi</em>, <em>Assa Abloy</em>, <em>d line</em>.</p>
+        <p class="masse">Querschnitt 20–24 mm · für eine Manschette der Grenzfall</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:13%"></i></span><span class="prozent">13 %</span></div>
+        <small>EU-weit, geschätzt</small>
+      </div>
+      <div class="chip teils">Passung prüfen</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Knauf">
+        <circle cx="34" cy="35" r="26" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="26" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34" cy="35" r="19" fill="var(--flaeche)" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M74 27 A16 16 0 1 1 74 43" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M68 38 L74 44 L80 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">05</span>Knauf</p>
+        <p class="beispiele">In Europa nur im britischen und irischen Altbestand
+        nennenswert — dort oft als Porzellan- oder Messingknauf an Innentüren.
+        Sonst Randerscheinung.</p>
+        <p class="masse">Ø 50–65 mm · muss gedreht werden</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i class="knauf" style="width:5%"></i></span><span class="prozent">5 %</span></div>
+        <small>EU-weit, geschätzt</small>
+      </div>
+      <div class="chip nein">Schnur nein</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ USA ══ -->
+<section>
+  <div class="regionkopf">
+    <h2>USA</h2>
+    <span class="rang">Der Sonderfall · Knaufland im Umbau</span>
+  </div>
+  <p class="regiontext">Die USA haben ein völlig anderes Beschlagsystem: kein Vierkant,
+  keine Rosette mit Stift, sondern ein <strong>Rohrschloss</strong> (tubular latch) mit
+  Dornmaß 2⅜″ oder 2¾″, auf das Knauf oder Hebel von beiden Seiten aufgeschraubt wird.
+  Historisch dominiert der <strong>Knauf</strong> im Wohnungsbestand. Im Gewerbebau ist
+  er faktisch verboten: <strong>ADA und IBC</strong> verlangen Beschläge, die sich mit
+  einer Hand ohne festes Greifen, Kneifen oder Drehen des Handgelenks bedienen lassen —
+  der runde Knauf erfüllt das nicht und ist auf barrierefreien Wegen und Fluchtwegen
+  unzulässig. Das drückt den Hebel auch in den Wohnungsbau. Preislich liegen Knäufe bei
+  15–25 $, Hebel bei 25–50 $.</p>
+
+  <div class="reihe">
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Runder Knauf, Kugelform">
+        <circle cx="34" cy="35" r="27" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="27" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34" cy="35" r="21" fill="var(--flaeche)" stroke="currentColor" stroke-width="2.8"/>
+        <circle cx="28" cy="29" r="7" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".45"/>
+        <path d="M78 27 A16 16 0 1 1 78 43" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M72 38 L78 44 L84 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="100" y="41" font-family="IBM Plex Mono,monospace" font-size="11"
+              fill="var(--akzent)">drehen</text>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">01</span>Knauf (knob)</p>
+        <p class="beispiele"><em>Schlage Georgian</em> und <em>Plymouth</em>,
+        <em>Kwikset Polo</em> und <em>Tylo</em> — die Standardknäufe im
+        US-Wohnungsbau, jeweils als passage (ohne Verriegelung),
+        privacy (Druckknopf) und keyed entry.</p>
+        <p class="masse">Ø 52–58 mm · Dornmaß 2⅜″ / 2¾″ · 15–25 $</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i class="knauf" style="width:55%"></i></span><span class="prozent">55 %</span></div>
+        <small>Bestand Wohnbau, geschätzt</small>
+      </div>
+      <div class="chip nein">Schnur nein</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="US-Hebel mit Rücklauf zur Tür">
+        <circle cx="34" cy="35" r="24" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L124 35 C142 35 147 41 143 49" fill="none" stroke="currentColor"
+              stroke-width="15" stroke-linecap="round"/>
+        <path d="M164 24 L164 44 M158 38 L164 45 L170 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">02</span>Hebel mit Rücklauf (lever)</p>
+        <p class="beispiele"><em>Schlage Accent</em> und Verwandte. Das freie Ende
+        krümmt sich zur Tür zurück — vorgeschrieben, damit nichts hängen bleibt.
+        Im Gewerbebau Pflicht, im Neubau und bei Umbauten für das Alter stark
+        wachsend.</p>
+        <p class="masse">Grifflänge 110–120 mm · Rücklauf zur Türfläche · 25–50 $</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:33%"></i></span><span class="prozent">33 %</span></div>
+        <small>Wohnbau, wachsend</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Ovaler Knauf, Eiform">
+        <circle cx="34" cy="35" r="27" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="27" fill="none" stroke="currentColor" stroke-width="2"/>
+        <ellipse cx="34" cy="35" rx="16" ry="21" fill="var(--flaeche)" stroke="currentColor" stroke-width="2.8"/>
+        <path d="M78 27 A16 16 0 1 1 78 43" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M72 38 L78 44 L84 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">03</span>Eiförmiger Knauf</p>
+        <p class="beispiele">Die „traditionelle" Variante — <em>Schlage Byron</em>,
+        <em>Andover</em>. Etwas besser zu greifen als die Kugel, aber mechanisch
+        derselbe Fall: Drehen.</p>
+        <p class="masse">ca. 55 × 42 mm · muss gedreht werden</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i class="knauf" style="width:8%"></i></span><span class="prozent">8 %</span></div>
+        <small>Bestand Wohnbau, geschätzt</small>
+      </div>
+      <div class="chip nein">Schnur nein</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Gerader Hebel auf eckiger Rosette">
+        <rect x="11" y="12" width="46" height="46" rx="3" fill="var(--linie)"/>
+        <rect x="11" y="12" width="46" height="46" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L140 35 L140 48" fill="none" stroke="currentColor"
+              stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">04</span>Moderner Hebel, eckige Rosette</p>
+        <p class="beispiele">Das, was gerade in Neubau und Renovierung gekauft
+        wird: matt schwarz, eckige Rosette, gerader Hebel mit kurzem Rücklauf.
+        Wächst am schnellsten.</p>
+        <p class="masse">Grifflänge ~115 mm · Rosette quadratisch</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:3%"></i></span><span class="prozent">3 %</span></div>
+        <small>Bestand, aber hoher Neubauanteil</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Blindknauf ohne Funktion">
+        <circle cx="34" cy="35" r="24" fill="var(--linie)" opacity=".6"/>
+        <circle cx="34" cy="35" r="24" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="5 4"/>
+        <circle cx="34" cy="35" r="17" fill="none" stroke="currentColor" stroke-width="2.4"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">05</span>Dummy knob / Schrankgriff</p>
+        <p class="beispiele">Feststehender Knauf ohne Mechanik, an Schranktüren
+        und Doppeltüren. Für ein Kind ohnehin kein Fall — die Tür hat keinen
+        Riegel.</p>
+        <p class="masse">Ø 50 mm · ohne Funktion</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i class="knauf" style="width:1%"></i></span><span class="prozent">1 %</span></div>
+        <small>Bestand, geschätzt</small>
+      </div>
+      <div class="chip nein">entfällt</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ AMERIKA ══ -->
+<section>
+  <div class="regionkopf">
+    <h2>Übriges Amerika</h2>
+    <span class="rang">Zweigeteilt entlang der US-Lieferkette</span>
+  </div>
+  <p class="regiontext">Der Kontinent zerfällt sauber in zwei Zonen. <strong>Kanada,
+  Mexiko und Mittelamerika</strong> hängen an der US-Beschlagnorm — gleiches
+  Rohrschloss, gleiche Dornmaße, gleiche Marken, also auch Knauf. Kanada hat wegen
+  eigener Barrierefreiheitsvorschriften mehr Hebel als die USA.
+  <strong>Südamerika</strong> dagegen — Brasilien, Argentinien, Chile — ist
+  europäisch geprägt: Drücker auf Rosette, Vierkant.</p>
+
+  <div class="reihe">
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Knauf, US-Norm">
+        <circle cx="34" cy="35" r="27" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="27" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34" cy="35" r="21" fill="var(--flaeche)" stroke="currentColor" stroke-width="2.8"/>
+        <path d="M78 27 A16 16 0 1 1 78 43" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M72 38 L78 44 L84 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">01</span>Knauf, US-Norm — Mexiko &amp; Mittelamerika</p>
+        <p class="beispiele">Dieselben Rohrschlösser und oft dieselben Marken wie
+        in den USA, dazu lokale Nachbauten. Im mexikanischen Wohnungsbau der
+        Standardfall.</p>
+        <p class="masse">Ø 52–58 mm · Dornmaß in Zoll</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i class="knauf" style="width:40%"></i></span><span class="prozent">40 %</span></div>
+        <small>Nordamerika ohne USA + Mittelamerika</small>
+      </div>
+      <div class="chip nein">Schnur nein</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Bogendrücker, südamerikanischer Typ">
+        <circle cx="34" cy="35" r="24" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L138 35 C154 35 160 41 158 49" fill="none" stroke="currentColor"
+              stroke-width="16" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">02</span>Drücker auf Rosette — Südamerika</p>
+        <p class="beispiele">Brasilien, Argentinien, Chile und Uruguay folgen der
+        europäischen Bauart. <em>Papaiz</em>, <em>La Fonte</em>, <em>Pado</em> in
+        Brasilien.</p>
+        <p class="masse">Vierkant 8 mm · Rosette rund</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:34%"></i></span><span class="prozent">34 %</span></div>
+        <small>Amerika ohne USA</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Hebel mit Rücklauf, Kanada">
+        <circle cx="34" cy="35" r="24" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L124 35 C142 35 147 41 143 49" fill="none" stroke="currentColor"
+              stroke-width="15" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">03</span>Hebel mit Rücklauf — Kanada</p>
+        <p class="beispiele">US-Mechanik, aber durch die provinziellen
+        Barrierefreiheitsvorschriften deutlich früher und breiter auf Hebel
+        umgestellt als die USA.</p>
+        <p class="masse">Grifflänge 110–120 mm · Rohrschloss</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:18%"></i></span><span class="prozent">18 %</span></div>
+        <small>Amerika ohne USA</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Langschild-Garnitur, Kolonialbestand">
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="var(--linie)"/>
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34.5" cy="55" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M34 35 C92 35 112 31 140 24 C152 21 157 27 152 33" fill="none"
+              stroke="currentColor" stroke-width="13" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">04</span>Langschild, Kolonialbestand</p>
+        <p class="beispiele">In den Altstädten von Buenos Aires, Havanna oder Lima
+        die gleiche Bauart wie in europäischen Gründerzeitbauten.</p>
+        <p class="masse">Schild ~240×40 mm · Buntbart</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:6%"></i></span><span class="prozent">6 %</span></div>
+        <small>Amerika ohne USA</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Eiförmiger Knauf">
+        <circle cx="34" cy="35" r="26" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="26" fill="none" stroke="currentColor" stroke-width="2"/>
+        <ellipse cx="34" cy="35" rx="15" ry="20" fill="var(--flaeche)" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M76 27 A16 16 0 1 1 76 43" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M70 38 L76 44 L82 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">05</span>Eiförmiger Knauf</p>
+        <p class="beispiele">Die günstige Massenware in Mittelamerika und der
+        Karibik, meist aus asiatischer Fertigung nach US-Maßen.</p>
+        <p class="masse">ca. 55 × 42 mm · muss gedreht werden</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i class="knauf" style="width:2%"></i></span><span class="prozent">2 %</span></div>
+        <small>Amerika ohne USA</small>
+      </div>
+      <div class="chip nein">Schnur nein</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ ASIEN ══ -->
+<section>
+  <div class="regionkopf">
+    <h2>Asien</h2>
+    <span class="rang">Hebelland mit eigenen Sonderwegen</span>
+  </div>
+  <p class="regiontext">Asien ist heute überwiegend Drückerland — und zugleich die
+  Werkbank der Welt: Ein sehr großer Teil aller Zimmertürdrücker überhaupt wird in
+  China gefertigt, auch die europäischen Handelsmarken. <strong>Japan</strong> hat den
+  Knauf seit den Neunzigern weitgehend durch den Hebel ersetzt; er steht heute vor
+  allem noch im Altbestand. <strong>Korea</strong> geht einen eigenen Weg mit
+  Push-Pull-Beschlägen und digitalen Schlössern. <strong>Indien</strong> fährt beides
+  nebeneinander.</p>
+
+  <div class="reihe">
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Gerader Hebel, japanischer Typ">
+        <circle cx="34" cy="35" r="23" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="23" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L156 35" fill="none" stroke="currentColor"
+              stroke-width="13" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">01</span>Gerader Hebel — Japan &amp; China</p>
+        <p class="beispiele">In Japan durch Universal-Design-Anforderungen
+        flächendeckend: <em>Kawajun</em>, <em>Miwa</em>, <em>Goal</em>,
+        <em>Sugatsune</em>. In China Standardware aus einer riesigen OEM-Basis.</p>
+        <p class="masse">Grifflänge 110–140 mm · oft schlanker Querschnitt</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:44%"></i></span><span class="prozent">44 %</span></div>
+        <small>Asien, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Geteilter Vierkant, Drücker mit Rosette">
+        <circle cx="34" cy="35" r="24" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M34 35 L134 35 C150 35 156 40 154 48" fill="none" stroke="currentColor"
+              stroke-width="15" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">02</span>Split-Spindle-Drücker</p>
+        <p class="beispiele">Geteilter Vierkant: jede Türseite funktioniert
+        unabhängig — innen öffnet immer, außen nur entriegelt. Aus China in alle
+        Welt geliefert, auch als Handelsmarke in Europa.</p>
+        <p class="masse">Vierkant 8 mm, geteilt · Rosette rund</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:21%"></i></span><span class="prozent">21 %</span></div>
+        <small>Asien, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Senkrechte Push-Pull-Stange">
+        <rect x="70" y="4" width="50" height="62" rx="4" fill="var(--linie)"/>
+        <rect x="70" y="4" width="50" height="62" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M95 14 L95 56" fill="none" stroke="currentColor"
+              stroke-width="17" stroke-linecap="round"/>
+        <path d="M140 35 L162 35 M154 29 L163 35 L154 41" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">03</span>Push-Pull — Korea</p>
+        <p class="beispiele">Senkrechter Bügel, der gedrückt oder gezogen wird,
+        statt gedreht. In Südkorea im Wohnungsbau weit verbreitet, oft kombiniert
+        mit einem digitalen Schloss.</p>
+        <p class="masse">Bügellänge ~200 mm senkrecht · drücken/ziehen</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:9%"></i></span><span class="prozent">9 %</span></div>
+        <small>Asien, geschätzt · KR deutlich höher</small>
+      </div>
+      <div class="chip teils">anders greifen</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Drücker auf Langschild, indischer Typ">
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="var(--linie)"/>
+        <rect x="21" y="3" width="27" height="64" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34.5" cy="55" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M34 35 L144 35 C156 35 160 40 157 47" fill="none" stroke="currentColor"
+              stroke-width="14" stroke-linecap="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">04</span>Drücker auf Schild — Indien</p>
+        <p class="beispiele"><em>Godrej</em>, <em>Dorset</em>, <em>Europa</em>.
+        Meist auf einem Schild mit Zylinder, kräftig dimensioniert; daneben
+        Knäufe im günstigen Segment.</p>
+        <p class="masse">Schild ~200×45 mm · Zylinder</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i style="width:17%"></i></span><span class="prozent">17 %</span></div>
+        <small>Asien, geschätzt</small>
+      </div>
+      <div class="chip ja">Schnur ja</div>
+    </div>
+
+    <div class="griff">
+      <svg class="bild" viewBox="0 0 190 70" role="img" aria-label="Knauf, japanischer Altbestand">
+        <circle cx="34" cy="35" r="25" fill="var(--linie)"/>
+        <circle cx="34" cy="35" r="25" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="34" cy="35" r="18" fill="var(--flaeche)" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M74 27 A16 16 0 1 1 74 43" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M68 38 L74 44 L80 38" fill="none" stroke="var(--akzent)"
+              stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="text">
+        <p class="name"><span class="platz">05</span>Knauf, Altbestand</p>
+        <p class="beispiele">Japanische Wohnungen aus den Siebzigern und Achtzigern
+        sowie günstiger Wohnungsbau in Südostasien. Wird bei jeder Renovierung
+        gegen einen Hebel getauscht.</p>
+        <p class="masse">Ø 50–55 mm · muss gedreht werden</p>
+      </div>
+      <div class="anteil">
+        <div class="balkenzeile"><span class="balken"><i class="knauf" style="width:9%"></i></span><span class="prozent">9 %</span></div>
+        <small>Asien, geschätzt · fallend</small>
+      </div>
+      <div class="chip nein">Schnur nein</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ FAZIT ══ -->
+<div class="fazit">
+  <h2>Was das für den Türzwerg heißt</h2>
+  <p class="lead">Drei Dinge, in der Reihenfolge, in der sie über das Produkt entscheiden.</p>
+
+  <h3>1 · Der Knauf ist kein schwieriger Fall, sondern ein unmöglicher</h3>
+  <p>Ein Drücker wird <strong>heruntergedrückt</strong> — eine Schnur kann das, weil sie
+  genau in die Richtung zieht, in die der Hebel muss. Ein Knauf wird
+  <strong>gedreht</strong>, und eine Schnur kann kein Drehmoment um eine Achse
+  aufbringen, die in ihrer eigenen Zugrichtung liegt. Für Knauftüren ist das Produkt
+  nicht schwerer zu verkaufen, es funktioniert dort nicht. Das ist keine Schwäche des
+  Entwurfs, sondern eine Eigenschaft des Beschlags — und es zieht die Marktgrenze
+  quer durch Nordamerika.</p>
+
+  <h3>2 · Der adressierbare Markt</h3>
+  <table class="ziel">
+    <thead>
+      <tr><th>Region</th><th>Drücker­anteil</th><th>Einschätzung</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Deutschland</td><td class="num">~98 %</td><td>Heimmarkt, praktisch keine Ausnahme</td></tr>
+      <tr><td>DACH</td><td class="num">~98 %</td><td>identisch, andere Vierkantmaße irrelevant</td></tr>
+      <tr><td>Europa</td><td class="num">~95 %</td><td>UK-Altbestand mit Knäufen als einzige Lücke</td></tr>
+      <tr><td>Asien</td><td class="num">~90 %</td><td>Japan umgestellt, Korea mit eigener Bauform</td></tr>
+      <tr><td>Südamerika</td><td class="num">~90 %</td><td>europäisch geprägt</td></tr>
+      <tr><td>USA</td><td class="num">~35 %</td><td>wachsend durch ADA/IBC, aber Bestand ist Knauf</td></tr>
+      <tr><td>Mexiko, Mittelamerika</td><td class="num">~30 %</td><td>an der US-Lieferkette</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:14px">Praktisch: DACH und Europa zuerst, Asien als Exportmarkt
+  ohne Anpassung, Nordamerika erst mit dem Hebelanteil — oder mit einer zweiten
+  Bauform, die einen Knauf umschließt und ihn mitdreht. Das wäre ein anderes Produkt.</p>
+
+  <h3>3 · Die Manschette muss über den Hebel passen</h3>
+  <p>Der aktuelle Entwurf hat <code>D_INNEN = 18 mm</code> bei <code>28 mm</code> Länge.
+  Gemessen an dem, was tatsächlich verbaut ist:</p>
+  <ul>
+    <li><strong>Italienische Designdrücker</strong> 12–16 mm — die Manschette sitzt zu
+    locker, sie braucht innen Rippen oder eine zweite Größe.</li>
+    <li><strong>Deutscher Standard</strong> (Amsterdam, FSB 1035, L-Drücker) 16–20 mm —
+    hier passt 18 mm, Silikon gleicht den Rest aus.</li>
+    <li><strong>Skandinavische Olive und Schweizer Ovaldrücker</strong> bis 24 × 20 mm —
+    das sind 33 % Dehnung im Umfang. Zu prüfen, nicht zu hoffen.</li>
+  </ul>
+  <p>Mit einer Größe deckt man den deutschen Kern ab. Für Europa insgesamt sind es
+  eher zwei: eine schlanke und eine weite.</p>
+</div>
+
+<footer>
+  <p><strong>Zur Belastbarkeit:</strong> Die Rangfolgen stützen sich auf
+  Herstellersortimente, Händler-Bestsellerlisten, Normen und Bauvorschriften.
+  Harte Angaben — Vierkantmaße, DIN EN 1906, ADA/IBC, Preisspannen, Grifflänge
+  des FSB 1035 — stammen aus den Quellen unten. Die Prozentwerte sind meine
+  Schätzung und keine erhobene Statistik; eine veröffentlichte Marktanteilserhebung
+  für Zimmertürbeschläge nach Bauform existiert nicht. Alle Zeichnungen sind
+  eigene, maßstäbliche Darstellungen.</p>
+
+  <h3>Quellen</h3>
+  <ul>
+    <li><a href="https://www.hoppe.com/de-de/produkt/1001219514/amsterdam-innentuer-garnituren">HOPPE Amsterdam, Innentür-Garnituren</a></li>
+    <li><a href="https://www.ostermann.eu/de_DE/product/turdrucker-garnitur-hoppe-amsterdam">Ostermann — Hoppe Amsterdam, DIN EN 1906</a></li>
+    <li><a href="https://endlich-sicher.de/fsb-tuergriff-1035/10-2679">FSB 1035, Ö-Norm 8,5 mm</a></li>
+    <li><a href="https://www.griffwerk.de/produkt/ulmer-griff-4250214411291/">Griffwerk Ulmer Griff, Rosettengarnitur</a></li>
+    <li><a href="https://www.manigliedesign.com/blog/maniglie-per-porte/le-maniglie-olivari-piu-vendute">Le maniglie Olivari più vendute</a></li>
+    <li><a href="https://www.manigliedesign.com/blog/maniglie-per-porte/le-maniglie-colombo-design-piu-vendute">Le maniglie Colombo Design più vendute</a></li>
+    <li><a href="https://www.colombodesign.com/collezione/contemporanee/">Colombo Design — Roboquattro, Robocinque, Mood</a></li>
+    <li><a href="https://www.hiatt-hardware.com/blog/post/exploring-traditional-internal-door-handles-victorian-style">Hiatt Hardware — Victorian style internal handles</a></li>
+    <li><a href="https://www.handles4u.co.uk/products/Door+Handles/Lever+Handles/Lever+Handles+on+Backplate/+Style::Victorian">Handles4U — Victorian lever on backplate</a></li>
+    <li><a href="https://rightsethardware.com/blogs/news/knob-vs-lever-which-door-handle-style">RightSet — Knob vs. Lever, Code Requirements</a></li>
+    <li><a href="https://www.cdfdistributors.com/blog/post/lever-handles-vs-knobs">CDF Distributors — Lever Handles vs Knobs (ADA/IBC)</a></li>
+    <li><a href="https://doorsforpros.com/blog/post/door-knob-vs-door-handle">Doors For Pros — Knob vs Handle, Preisspannen</a></li>
+    <li><a href="https://www.schlage.com/en/home/products/F60PLYFFFGEO.html">Schlage Plymouth / Georgian</a></li>
+    <li><a href="https://www.amazon.com/Schlage-F10GEO609-Georgian-Passage-Antique/dp/B00002N58X">Schlage Georgian Passage Knob</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Door_handle">Wikipedia — Door handle (Bauformen)</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Sugatsune">Wikipedia — Sugatsune (JP)</a></li>
+    <li><a href="https://mccoymart.com/post/door-handle-brands/">McCoy Mart — Top door handle brands in India</a></li>
+    <li><a href="https://buildingandinteriors.com/best-door-handle-brands-in-india/">Building &amp; Interiors — Door handle brands India</a></li>
+    <li><a href="https://lockspioneer.com/door-handles-manufacturer-in-china/">Door handle manufacturing in China</a></li>
+    <li><a href="https://untappedjournal.com/stories/edwin-heathcote-door-handles-knobs">Untapped Journal — Heathcote, Modernism and the door handle</a></li>
+  </ul>
+</footer>
+
+</div>
