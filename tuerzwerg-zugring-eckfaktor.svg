@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1380 980" width="1380" height="980"><rect width="1380" height="980" fill="#F2F4F1"/>
+<text x="56" y="50" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="27" font-weight="700" fill="#161A17" text-anchor="start">Türzwerg · Zugring · der Eckfaktor</text>
+<text x="56" y="76" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="14" font-weight="400" fill="#5E665E" text-anchor="start">eck ist keine Länge, sondern ein Anteil an der kürzeren Halbachse des Querschnitts</text>
+<rect x="56" y="98" width="1268" height="52" fill="#E9ECE7" stroke="#B9C1B7" stroke-width="1"/>
+<text x="76" y="122" font-family="IBM Plex Mono,ui-monospace,monospace" font-size="20" font-weight="700" fill="#161A17" text-anchor="start">k  =  eck · min(a, b)</text>
+<text x="290" y="118" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="13" font-weight="500" fill="#5E665E" text-anchor="start">a = halbe Bandbreite     b = halbe Banddicke     k = Eckradius</text>
+<text x="290" y="138" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="13" font-weight="500" fill="#5E665E" text-anchor="start">eck = 0 → Rechteck        eck = 1 → Stadion, der Radius füllt die kürzere Halbachse ganz aus</text>
+<text x="56" y="196" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="18" font-weight="700" fill="#161A17" text-anchor="start">1  Die zwei Stellen, an denen es zählt</text>
+<text x="56" y="218" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">Maßstab 9 : 1 · innen liegt links, zur Öffnung hin</text>
+<text x="268" y="252" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="15" font-weight="700" fill="#C7422A" text-anchor="middle">A–A  oben, mit der Knotenkammer</text>
+<rect x="182.50" y="277.00" width="171.00" height="126.00" rx="38.94" fill="#E9ECE7" stroke="#161A17" stroke-width="2.6"/>
+<rect x="218.50" y="299.50" width="99.00" height="81.00" rx="32.40" fill="none" stroke="#C7422A" stroke-width="1.8"/>
+<rect x="250.0" y="277.0" width="36.0" height="22.5" fill="none" stroke="#C7422A" stroke-width="1.8"/>
+<circle cx="221.4" cy="315.9" r="38.9" fill="none" stroke="#C7422A" stroke-width="1.2" stroke-dasharray="5 4"/>
+<circle cx="221.4" cy="315.9" r="2.6" fill="#C7422A"/>
+<path d="M221.4 315.9L193.9 288.4" stroke="#C7422A" stroke-width="1.6" fill="none"/>
+<text x="193.96807064562168" y="288.46807064562165" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="13" font-weight="700" fill="#C7422A" text-anchor="end">k = 4.33</text>
+<path d="M182.5 315.9L182.5 364.1" stroke="#C7422A" stroke-width="4.0" fill="none"/>
+<path d="M148.5 315.9L148.5 364.1" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M148.5 315.9l-2.8 10.0M148.5 315.9l2.8 10.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M148.5 364.1l2.8 -10.0M148.5 364.1l-2.8 -10.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<text x="161.5" y="344.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="700" fill="#C7422A" text-anchor="start">5.35</text>
+<text x="142.5" y="390.06385870875664" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12" font-weight="600" fill="#C7422A" text-anchor="middle">flache Innenfläche</text>
+<text x="142.5" y="406.06385870875664" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11" font-weight="400" fill="#5E665E" text-anchor="middle">hier bricht die Kammer durch</text>
+<path d="M182.5 433.0L353.5 433.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M182.5 433.0l10.0 2.8M182.5 433.0l10.0 -2.8" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M353.5 433.0l-10.0 -2.8M353.5 433.0l-10.0 2.8" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<text x="268.0" y="425.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="700" fill="#C7422A" text-anchor="middle">19.0</text>
+<path d="M383.5 277.0L383.5 403.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M383.5 277.0l-2.8 10.0M383.5 277.0l2.8 10.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M383.5 403.0l2.8 -10.0M383.5 403.0l-2.8 -10.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<text x="396.5" y="344.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="700" fill="#C7422A" text-anchor="start">14.0</text>
+<text x="268" y="479.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="14" font-weight="700" fill="#161A17" text-anchor="middle">eck_oben = 1/φ = 0.618</text>
+<text x="800" y="252" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="15" font-weight="700" fill="#C7422A" text-anchor="middle">C–C  unten, die Zugstelle</text>
+<rect x="732.50" y="277.00" width="135.00" height="126.00" rx="63.00" fill="#E9ECE7" stroke="#161A17" stroke-width="2.6"/>
+<circle cx="795.5" cy="340.0" r="63.0" fill="none" stroke="#C7422A" stroke-width="1.2" stroke-dasharray="5 4"/>
+<circle cx="795.5" cy="340.0" r="2.6" fill="#C7422A"/>
+<path d="M795.5 340.0L751.0 295.5" stroke="#C7422A" stroke-width="1.6" fill="none"/>
+<text x="756.0" y="300.5" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="13" font-weight="700" fill="#C7422A" text-anchor="end">k = 7.00</text>
+<path d="M732.5 433.0L867.5 433.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M732.5 433.0l10.0 2.8M732.5 433.0l10.0 -2.8" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M867.5 433.0l-10.0 -2.8M867.5 433.0l-10.0 2.8" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<text x="800.0" y="425.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="700" fill="#C7422A" text-anchor="middle">15.0</text>
+<path d="M897.5 277.0L897.5 403.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M897.5 277.0l-2.8 10.0M897.5 277.0l2.8 10.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<path d="M897.5 403.0l2.8 -10.0M897.5 403.0l-2.8 -10.0" stroke="#C7422A" stroke-width="1.3" fill="none"/>
+<text x="910.5" y="344.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="700" fill="#C7422A" text-anchor="start">14.0</text>
+<text x="800" y="479.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="14" font-weight="700" fill="#161A17" text-anchor="middle">eck_unten = 1,000   ·   Stadion</text>
+<text x="800" y="499.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12" font-weight="400" fill="#5E665E" text-anchor="middle">kein gerades Stück mehr in der Höhe</text>
+<text x="1090" y="262" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="15" font-weight="700" fill="#161A17" text-anchor="start">Warum verschieden</text>
+<text x="1090" y="288" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">Unten wird gezogen. Dort soll</text>
+<text x="1090" y="307" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">keine Kante mehr stehen, an der</text>
+<text x="1090" y="326" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">der Finger abknickt — also eck = 1.</text>
+<text x="1090" y="345" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start"></text>
+<text x="1090" y="364" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">Oben sitzt die Knotenkammer. Je</text>
+<text x="1090" y="383" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">größer der Eckradius, desto dünner</text>
+<text x="1090" y="402" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">steht das Band an seiner Innen-</text>
+<text x="1090" y="421" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">kante — und genau dort bricht die</text>
+<text x="1090" y="440" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">Kammer in die Öffnung durch.</text>
+<text x="1090" y="459" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">Deshalb oben kleiner.</text>
+<text x="56" y="560" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="18" font-weight="700" fill="#161A17" text-anchor="start">2  Derselbe obere Querschnitt bei verschiedenen Eckfaktoren</text>
+<text x="56" y="582" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">19,0 × 14,0 mm · Maßstab 5 : 1 · rot die flache Innenfläche, die der Knotenkammer bleibt</text>
+<rect x="142.50" y="655.00" width="95.00" height="70.00" rx="5.00" fill="#E9ECE7" stroke="#161A17" stroke-width="2.4"/>
+<path d="M142.5 660.0L142.5 720.0" stroke="#C7422A" stroke-width="4.5" fill="none"/>
+<text x="190" y="757.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="15" font-weight="700" fill="#161A17" text-anchor="middle">eck = 0,143</text>
+<text x="190" y="777.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="13" font-weight="600" fill="#C7422A" text-anchor="middle">k = 1.00 mm</text>
+<text x="190" y="797.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="500" fill="#5E665E" text-anchor="middle">flach innen 12.00 mm</text>
+<text x="190" y="819.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11.5" font-weight="400" fill="#9AA29A" text-anchor="middle">Rev. A, wie er war</text>
+<text x="190" y="835.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11.5" font-weight="400" fill="#9AA29A" text-anchor="middle">1 mm Kante</text>
+<rect x="442.50" y="655.00" width="95.00" height="70.00" rx="21.63" fill="#E9ECE7" stroke="#161A17" stroke-width="2.4"/>
+<path d="M442.5 676.6L442.5 703.4" stroke="#C7422A" stroke-width="4.5" fill="none"/>
+<text x="490" y="757.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="15" font-weight="700" fill="#161A17" text-anchor="middle">eck = 0,618</text>
+<text x="490" y="777.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="13" font-weight="600" fill="#C7422A" text-anchor="middle">k = 4.33 mm</text>
+<text x="490" y="797.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="500" fill="#5E665E" text-anchor="middle">flach innen 5.35 mm</text>
+<text x="490" y="819.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11.5" font-weight="400" fill="#9AA29A" text-anchor="middle">Rev. A φ</text>
+<text x="490" y="835.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11.5" font-weight="400" fill="#9AA29A" text-anchor="middle">1/φ — jetzt</text>
+<rect x="742.50" y="655.00" width="95.00" height="70.00" rx="25.20" fill="#E9ECE7" stroke="#161A17" stroke-width="2.4"/>
+<path d="M742.5 680.2L742.5 699.8" stroke="#C7422A" stroke-width="4.5" fill="none"/>
+<text x="790" y="757.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="15" font-weight="700" fill="#161A17" text-anchor="middle">eck = 0,720</text>
+<text x="790" y="777.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="13" font-weight="600" fill="#C7422A" text-anchor="middle">k = 5.04 mm</text>
+<text x="790" y="797.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="500" fill="#5E665E" text-anchor="middle">flach innen 3.92 mm</text>
+<text x="790" y="819.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11.5" font-weight="400" fill="#9AA29A" text-anchor="middle">Rev. A rund, Rev. H</text>
+<text x="790" y="835.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11.5" font-weight="400" fill="#9AA29A" text-anchor="middle">vorher</text>
+<rect x="1042.50" y="655.00" width="95.00" height="70.00" rx="35.00" fill="#E9ECE7" stroke="#161A17" stroke-width="2.4"/>
+<path d="M1042.5 690.0L1042.5 690.0" stroke="#C7422A" stroke-width="4.5" fill="none"/>
+<text x="1090" y="757.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="15" font-weight="700" fill="#161A17" text-anchor="middle">eck = 1,000</text>
+<text x="1090" y="777.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="13" font-weight="600" fill="#C7422A" text-anchor="middle">k = 7.00 mm</text>
+<text x="1090" y="797.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="500" fill="#5E665E" text-anchor="middle">flach innen 0.00 mm</text>
+<text x="1090" y="819.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11.5" font-weight="400" fill="#9AA29A" text-anchor="middle">Stadion</text>
+<text x="1090" y="835.0" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="11.5" font-weight="400" fill="#9AA29A" text-anchor="middle">wie unten</text>
+<path d="M56.0 888.0L1324.0 888.0" stroke="#B9C1B7" stroke-width="0.8" fill="none"/>
+<text x="56" y="914" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">Rev. A φ: oben 19.0 × 14.0 mit k = 4.33 · unten 15.0 × 14.0 mit k = 7.00 · beide Radien stehen zueinander im Verhältnis 1.6180 = φ.</text>
+<text x="56" y="934" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">Die Schnurbohrung ist jetzt Ø4 statt Ø5 — gleich dem Durchmesser von Paracord 550 Type III. Die Knotenkammer bleibt 11 × 9.0.</text>
+<text x="56" y="954" font-family="IBM Plex Sans Condensed,DejaVu Sans Condensed,sans-serif" font-size="12.5" font-weight="400" fill="#5E665E" text-anchor="start">eck ist ein Anteil, keine Länge: ändert sich die Banddicke, ändert sich der Radius mit. Deshalb steht in der Tabelle immer beides — der Faktor und der Radius in Millimetern.</text>
+</svg>

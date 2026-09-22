@@ -75,7 +75,13 @@ from reif_alt import e_modul, D_FINGER, ZYLINDER, KOPF
 
 TAU = 2.0 * math.pi
 
-D_SCHNUR = 5.0
+# Schnurbohrung, gleich dem Schnurdurchmesser. 4 mm, nicht 5: Paracord 550
+# Type III misst rund 4 mm. Gleich gross und nicht groesser, wie bei der
+# Manschette - Silikon dehnt sich beim Einfaedeln, und was bleibt, ist eine
+# Bohrung ohne Spiel. Ein Sackstich in 4-mm-Schnur misst rund 8 mm: durch
+# eine 5er Bohrung muesste er sie um 60 Prozent weiten, durch eine 4er um
+# 100.
+D_SCHNUR = 4.0
 WAND_KAMMER = 1.9       # Mindestwand ueber der Knotenkammer, wie Rev. E
 RASTER = 0.47
 
