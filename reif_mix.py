@@ -82,6 +82,7 @@ TAU = 2.0 * math.pi
 # eine 5er Bohrung muesste er sie um 60 Prozent weiten, durch eine 4er um
 # 100.
 D_SCHNUR = 4.0
+SCHNUR_SENK = 0.5       # Obergrenze der Senkung am Bohrungsaustritt
 WAND_KAMMER = 1.9       # Mindestwand ueber der Knotenkammer, wie Rev. E
 RASTER = 0.47
 
@@ -190,8 +191,31 @@ class Mix:
         u = rho - (self.aussen(c) - a)
         koerper = _rundbox(u, z, a, b, self.eckfaktor(c) * min(a, b))
 
+        a_top = self.b_oben / 2.0
+        b_top = self.d_oben / 2.0
+        k_top = self.eck_oben * min(a_top, b_top)
+
         kammer_aussen = self.aussen(1.0) - self.bohr_tiefe
-        bohrung = max(math.hypot(x, z) - D_SCHNUR / 2.0, kammer_aussen - y)
+
+        # Senkung am Bohrungsaustritt, damit die Schnur dort nicht ueber eine
+        # Kante laeuft. Silikon reisst an scharfen Kanten weiter, und die
+        # Schnur knickt an genau dieser Stelle zur Klinke hin ab. Die
+        # Manschette hat dafuer eine feste 45-Grad-Senkung von 0,5 mm.
+        #
+        # Hier waere ein fester Wert falsch. Neben der Bohrung steht nur, was
+        # die flache Aussenflaeche des Bandes uebrig laesst - die ist
+        # b_top - k_top hoch, und davon geht der halbe Bohrungsdurchmesser ab.
+        # Bei 14 mm Band mit eck_oben = 1/phi sind das 0,67 mm, bei 11 mm mit
+        # eck_oben = 0,72 dagegen nichts: dort bricht die Bohrung ohnehin
+        # durch die gerundete Kante, und eine Senkung wuerde das verschlimmern.
+        #
+        # Ausgegeben wird deshalb hoechstens die Haelfte dessen, was da ist,
+        # gedeckelt auf SCHNUR_SENK. Wo nichts uebrig ist, entfaellt sie.
+        rest = (b_top - k_top) - D_SCHNUR / 2.0
+        tiefe = min(SCHNUR_SENK, max(0.0, rest * 0.5))
+        senk = min(tiefe, max(0.0, y - (self.aussen(1.0) - tiefe)))
+        bohrung = max(math.hypot(x, z) - (D_SCHNUR / 2.0 + senk),
+                      kammer_aussen - y)
 
         # Die Kammerhoehe folgt der Bandkontur, aber nur ueber dem
         # eingeschlossenen Teil - zum Mund hin laeuft sie wieder auf.
@@ -214,9 +238,6 @@ class Mix:
         # Das ist wieder das Verhalten des real erprobten Rev. E aus
         # reif.py, dessen Kammer ueber die ganze Laenge denselben
         # Querschnitt hat.
-        a_top = self.b_oben / 2.0
-        b_top = self.d_oben / 2.0
-        k_top = self.eck_oben * min(a_top, b_top)
         u_top = y - (self.aussen(1.0) - a_top)
         hoch = self._profil_z(u_top, a_top, b_top, k_top) - WAND_KAMMER
         t = min(max((u_top + a_top) / max(k_top, 1e-6), 0.0), 1.0)
