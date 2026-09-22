@@ -76,6 +76,31 @@ REV_H72 = Mix(r0=REV_H.r0 * F, e=0.0, w=0.0,
               bohr_tiefe=REV_H.bohr_tiefe * F,
               a_kammer=REV_H.a_kammer, b_kammer=REV_H.b_kammer)
 
+# Rev. A - der Ring der ersten Giessform, Ø72 x 14. Mit den Kanten von
+# Rev. H: unten voll ausgerundet, oben 0,72.
+#
+# Rev. A ist mit 14 mm das dickste Band der ganzen Reihe. Bei eck_unten = 1
+# wird der Griffquerschnitt damit 15 x 14 mit 7 mm Radius - ein Rundstab mit
+# einem Millimeter Gerade darin. Genau das ist "geschmeidig fuer die Hand":
+# es gibt keine Kante mehr, an der der Finger abknickt.
+REV_A_RUND = Mix(r0=36.0, e=0.0, w=0.0,
+                 b_oben=19.0, b_seite=12.0, b_unten=15.0,
+                 d_oben=14.0, d_unten=14.0,
+                 eck_oben=REV_H.eck_oben, eck_unten=REV_H.eck_unten,
+                 bohr_tiefe=8.0, a_kammer=5.5, b_kammer=4.5)
+
+# Rev. A, wie er war: umlaufend 1,0 mm Kantenradius. Als Eckfaktor
+# ausgedrueckt sind das 1,0 / 7,0 = 0,143.
+#
+# Naeherung, und zwar an einer Stelle: die 40-Grad-Druckfasen von Rev. A
+# bildet die Mix-Klasse nicht ab. Fuer den Vergleich der Kantenverrundung
+# spielt das keine Rolle, fuer ein Volumen auf zwei Stellen schon.
+REV_A = Mix(r0=36.0, e=0.0, w=0.0,
+            b_oben=19.0, b_seite=12.0, b_unten=15.0,
+            d_oben=14.0, d_unten=14.0,
+            eck_oben=1.0 / 7.0, eck_unten=1.0 / 7.0,
+            bohr_tiefe=8.0, a_kammer=5.5, b_kammer=4.5)
+
 # Rev. E, wie er war: Eckfaktor 0,85 rundum.
 REV_E = Mix(r0=43.0, e=0.0, w=0.0,
             b_oben=23.0, b_seite=11.0, b_unten=15.0,
@@ -92,6 +117,7 @@ REV_E_RUND = Mix(r0=43.0, e=0.0, w=0.0,
                  eck_oben=REV_H.eck_oben, eck_unten=REV_H.eck_unten,
                  bohr_tiefe=7.0, a_kammer=6.0, b_kammer=3.6)
 
+DATEI_AR = "tuerzwerg-zugring-reva-rund.stl"
 DATEI_H72 = "tuerzwerg-zugring-revh72.stl"
 DATEI_ER = "tuerzwerg-zugring-reve-rund.stl"
 
@@ -100,6 +126,24 @@ def eckradius(m, c):
     """Wirklicher Eckradius des Querschnitts an dieser Stelle."""
     a, b = m.breite(c) / 2.0, m.dicke(c) / 2.0
     return m.eckfaktor(c) * min(a, b)
+
+
+def umfang_quer(m, c=-1.0):
+    """Wirklicher Umfang des Querschnitts - der Weg, den die Finger gehen.
+
+    Mix.griffumfang() rechnet die Ramanujan-Naeherung fuer eine Ellipse und
+    sieht den Eckradius nicht: fuer Rev. A mit 1 mm Kante und fuer Rev. A mit
+    7 mm Kante liefert sie denselben Wert. Der Querschnitt ist aber ein
+    Rechteck mit verrundeten Ecken, und dessen Umfang ist exakt
+
+        4a + 4b - 8k + 2*pi*k
+
+    mit den Halbmassen a, b und dem Eckradius k. Bei k = min(a, b) faellt das
+    auf das Stadion zusammen, bei k = 0 auf das Rechteck.
+    """
+    a, b = m.breite(c) / 2.0, m.dicke(c) / 2.0
+    k = m.eckfaktor(c) * min(a, b)
+    return 4.0 * a + 4.0 * b - 8.0 * k + 2.0 * math.pi * k
 
 
 def kammerlaenge(m):
@@ -125,15 +169,17 @@ if __name__ == "__main__":
           f"{REV_H.aussenmass()[0]:.0f} = {F:.4f}\n")
 
     gebaut = {}
-    for m, datei, name in ((REV_H72, DATEI_H72, "Rev. H auf 72"),
+    for m, datei, name in ((REV_A_RUND, DATEI_AR, "Rev. A gerundet"),
+                           (REV_H72, DATEI_H72, "Rev. H auf 72"),
                            (REV_E_RUND, DATEI_ER, "Rev. E gerundet")):
         gebaut[name] = baue(m, datei, name) + (datei,)
 
-    alle = [("Rev. H 72", REV_H72), ("Rev. E rund", REV_E_RUND),
-            ("Rev. E alt", REV_E), ("Rev. H", REV_H)]
+    alle = [("Rev. A rund", REV_A_RUND), ("Rev. A alt", REV_A),
+            ("Rev. H 72", REV_H72), ("Rev. E rund", REV_E_RUND),
+            ("Rev. H", REV_H)]
 
     print("\nVergleich, alle bei Shore A 70")
-    kopf = ["", "Rev. H 72", "Rev. E rund", "Rev. E alt", "Rev. H"]
+    kopf = [""] + [n for n, _ in alle]
     print(f"  {kopf[0]:<22}" + "".join(f"{k:>17}" for k in kopf[1:]))
 
     def zeile(name, f):
@@ -147,7 +193,8 @@ if __name__ == "__main__":
     zeile("Griff unten", lambda m: "%.1f x %.1f" % (m.b_unten, m.dicke(-1.0)))
     zeile("Eckradius unten", lambda m: "%.2f" % eckradius(m, -1.0))
     zeile("Eckradius oben", lambda m: "%.2f" % eckradius(m, 1.0))
-    zeile("Griffumfang", lambda m: "%.0f" % m.griffumfang())
+    zeile("Griffumfang echt", lambda m: "%.1f" % umfang_quer(m))
+    zeile("  (Ellipsennaeherung)", lambda m: "%.1f" % m.griffumfang())
     zeile("Kammer", lambda m: "%.0f x %.1f" % (2 * m.a_kammer, 2 * m.b_kammer))
     zeile("Kammerlaenge", lambda m: "%.1f" % kammerlaenge(m))
     for s in (60, 70, 80):
@@ -171,12 +218,12 @@ if __name__ == "__main__":
               f"Kleinteilezylinder {'besteht' if min(br, ho) > ZYLINDER else 'FAELLT DURCH'}"
               f", Kopffalle {'ok' if ob < KOPF else 'PRUEFEN'}")
 
-    Z.zeichne(REV_H72,
-              [("Rev. E rund", REV_E_RUND), ("Rev. E alt", REV_E),
-               ("Rev. H", REV_H)],
+    Z.zeichne(REV_A_RUND,
+              [("Rev. A alt", REV_A), ("Rev. H 72", REV_H72),
+               ("Rev. E rund", REV_E_RUND), ("Rev. H", REV_H)],
               datei="tuerzwerg-zugring-eh-vergleich.svg",
-              titel="Zugring · Rev. H auf Ø72 gegen Rev. E",
-              untertitel="Rev. H in der Ringebene auf das Aussenmass der "
-                         "ersten Giessform geschrumpft · Dicke und "
-                         "Knotenkammer unveraendert · Shore A 70 · Masse in mm",
-              eigen="Rev. H 72")
+              titel="Zugring · Rev. A gerundet wie Rev. H",
+              untertitel="Rev. A mit den Eckfaktoren von Rev. H · unten ein "
+                         "volles Stadion 15 x 14 · daneben Rev. H auf Ø72 "
+                         "und Rev. E · Shore A 70 · Masse in mm",
+              eigen="Rev. A rund")
