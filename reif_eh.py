@@ -89,6 +89,31 @@ REV_A_RUND = Mix(r0=36.0, e=0.0, w=0.0,
                  eck_oben=REV_H.eck_oben, eck_unten=REV_H.eck_unten,
                  bohr_tiefe=8.0, a_kammer=5.5, b_kammer=4.5)
 
+PHI = (1.0 + 5.0 ** 0.5) / 2.0
+
+# Rev. A rund, auf phi gebracht - mit zwei Aenderungen, die beide nichts
+# kosten und je eine Sache verbessern.
+#
+#   Band oben : seitlich = phi     19,0 : 11,74 statt 19,0 : 12,0
+#   Eckradius unten : oben = phi   eck_oben = 1/phi, eck_unten = 1
+#
+# Das erste lag mit 19 : 12 = 1,583 ohnehin nur 2,1 Prozent daneben - phi
+# ordnet hier den Masssatz, es begruendet ihn nicht. Die Oeffnung wird
+# dabei um einen halben Millimeter weiter, der Ring 3,5 Prozent weicher.
+#
+# Das zweite ist der eigentliche Gewinn: ein kleinerer Eckradius oben laesst
+# das Band an seiner Innenkante dicker stehen - die flache Innenflaeche
+# waechst von 3,92 auf 5,35 mm. Der Trichter, mit dem die Knotenkammer in
+# die Oeffnung durchbricht, schneidet damit weniger tief in die Bandkante.
+# Unten bleibt eck = 1, das volle Stadion; dort wird gezogen.
+#
+# Die Bohrtiefe bleibt bei 8 - die einzige echte Fibonacci-Zahl im Satz.
+REV_A_PHI = Mix(r0=36.0, e=0.0, w=0.0,
+                b_oben=19.0, b_seite=19.0 / PHI, b_unten=15.0,
+                d_oben=14.0, d_unten=14.0,
+                eck_oben=1.0 / PHI, eck_unten=1.0,
+                bohr_tiefe=8.0, a_kammer=5.5, b_kammer=4.5)
+
 # Rev. A, wie er war: umlaufend 1,0 mm Kantenradius. Als Eckfaktor
 # ausgedrueckt sind das 1,0 / 7,0 = 0,143.
 #
@@ -118,6 +143,7 @@ REV_E_RUND = Mix(r0=43.0, e=0.0, w=0.0,
                  bohr_tiefe=7.0, a_kammer=6.0, b_kammer=3.6)
 
 DATEI_AR = "tuerzwerg-zugring-reva-rund.stl"
+DATEI_AP = "tuerzwerg-zugring-reva-phi.stl"
 DATEI_H72 = "tuerzwerg-zugring-revh72.stl"
 DATEI_ER = "tuerzwerg-zugring-reve-rund.stl"
 
@@ -189,14 +215,15 @@ if __name__ == "__main__":
           f"{REV_H.aussenmass()[0]:.0f} = {F:.4f}\n")
 
     gebaut = {}
-    for m, datei, name in ((REV_A_RUND, DATEI_AR, "Rev. A gerundet"),
+    for m, datei, name in ((REV_A_PHI, DATEI_AP, "Rev. A phi"),
+                           (REV_A_RUND, DATEI_AR, "Rev. A gerundet"),
                            (REV_H72, DATEI_H72, "Rev. H auf 72"),
                            (REV_E_RUND, DATEI_ER, "Rev. E gerundet")):
         gebaut[name] = baue(m, datei, name) + (datei,)
 
-    alle = [("Rev. A rund", REV_A_RUND), ("Rev. A alt", REV_A),
-            ("Rev. H 72", REV_H72), ("Rev. E rund", REV_E_RUND),
-            ("Rev. H", REV_H)]
+    alle = [("Rev. A phi", REV_A_PHI), ("Rev. A rund", REV_A_RUND),
+            ("Rev. A alt", REV_A), ("Rev. H 72", REV_H72),
+            ("Rev. E rund", REV_E_RUND), ("Rev. H", REV_H)]
 
     print("\nVergleich, alle bei Shore A 70")
     kopf = [""] + [n for n, _ in alle]
@@ -218,6 +245,12 @@ if __name__ == "__main__":
     zeile("Kammer", lambda m: "%.0f x %.1f" % (2 * m.a_kammer, 2 * m.b_kammer))
     zeile("Kammerlaenge", lambda m: "%.1f" % kammerlaenge(m))
     zeile("Eingang lichte Hoehe", lambda m: "%.2f" % mund(m))
+    zeile("Innenflaeche oben flach",
+          lambda m: "%.2f" % (m.d_oben - 2 * m.eck_oben
+                              * min(m.b_oben / 2, m.d_oben / 2)))
+    zeile("Band oben : seitlich", lambda m: "%.4f" % (m.b_oben / m.b_seite))
+    zeile("Eckradius unten : oben",
+          lambda m: "%.4f" % (eckradius(m, -1.0) / eckradius(m, 1.0)))
     for s in (60, 70, 80):
         zeile(f"Aufweitung 17 N, A{s}",
               lambda m, s=s: "%.2f mm" % m.aufweitung(17.0, s))
@@ -239,12 +272,12 @@ if __name__ == "__main__":
               f"Kleinteilezylinder {'besteht' if min(br, ho) > ZYLINDER else 'FAELLT DURCH'}"
               f", Kopffalle {'ok' if ob < KOPF else 'PRUEFEN'}")
 
-    Z.zeichne(REV_A_RUND,
-              [("Rev. A alt", REV_A), ("Rev. H 72", REV_H72),
+    Z.zeichne(REV_A_PHI,
+              [("Rev. A rund", REV_A_RUND), ("Rev. H 72", REV_H72),
                ("Rev. E rund", REV_E_RUND), ("Rev. H", REV_H)],
               datei="tuerzwerg-zugring-eh-vergleich.svg",
-              titel="Zugring · Rev. A gerundet wie Rev. H",
+              titel="Zugring · Rev. A rund, auf φ gebracht",
               untertitel="Rev. A mit den Eckfaktoren von Rev. H · unten ein "
                          "volles Stadion 15 x 14 · daneben Rev. H auf Ø72 "
                          "und Rev. E · Shore A 70 · Masse in mm",
-              eigen="Rev. A rund")
+              eigen="Rev. A phi")
