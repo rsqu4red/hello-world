@@ -59,7 +59,7 @@ genauso an wie der grosse. Die Zahlen unten bestaetigen das.
 import math
 
 from netz import vernetzen, volumen, offene_kanten, abweichung, schreibe_stl
-from reif_mix import Mix, RASTER, D_FINGER, ZYLINDER, KOPF
+from reif_mix import Mix, RASTER, D_FINGER, ZYLINDER, KOPF, WAND_KAMMER
 from reif_revh import REV_H
 import reif_mix_zeichnung as Z
 
@@ -146,6 +146,26 @@ def umfang_quer(m, c=-1.0):
     return 4.0 * a + 4.0 * b - 8.0 * k + 2.0 * math.pi * k
 
 
+def kammer_hoehe(m, y):
+    """Lichte Hoehe der Knotenkammer an der radialen Stelle y, und wieviel
+    Band darueber stehen bleibt. Bildet die Rechnung aus Mix.feld nach."""
+    a_top, b_top = m.b_oben / 2.0, m.d_oben / 2.0
+    k_top = m.eck_oben * min(a_top, b_top)
+    u = y - (m.aussen(1.0) - a_top)
+    h = m._profil_z(u, a_top, b_top, k_top)
+    t = min(max((u + a_top) / max(k_top, 1e-6), 0.0), 1.0)
+    t = t * t * (3.0 - 2.0 * t)
+    bk = min(m.b_kammer,
+             max(h - WAND_KAMMER, 0.0) * t + m.b_kammer * (1.0 - t))
+    return 2.0 * h, 2.0 * bk, h - bk
+
+
+def mund(m):
+    """Lichte Hoehe des Eingangs, dort wo die Kammer in die Oeffnung
+    durchbricht."""
+    return kammer_hoehe(m, m.innen(1.0))[1]
+
+
 def kammerlaenge(m):
     """Radiale Laenge der Knotenkammer, vom aeusseren Ende bis zum
     Durchbruch in die Oeffnung."""
@@ -197,6 +217,7 @@ if __name__ == "__main__":
     zeile("  (Ellipsennaeherung)", lambda m: "%.1f" % m.griffumfang())
     zeile("Kammer", lambda m: "%.0f x %.1f" % (2 * m.a_kammer, 2 * m.b_kammer))
     zeile("Kammerlaenge", lambda m: "%.1f" % kammerlaenge(m))
+    zeile("Eingang lichte Hoehe", lambda m: "%.2f" % mund(m))
     for s in (60, 70, 80):
         zeile(f"Aufweitung 17 N, A{s}",
               lambda m, s=s: "%.2f mm" % m.aufweitung(17.0, s))

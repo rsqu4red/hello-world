@@ -187,18 +187,36 @@ class Mix:
         kammer_aussen = self.aussen(1.0) - self.bohr_tiefe
         bohrung = max(math.hypot(x, z) - D_SCHNUR / 2.0, kammer_aussen - y)
 
-        # Die Kammerhoehe folgt der Bandkontur. Am inneren Ende rundet
-        # der Querschnitt ab, das Band wird dort duenner - eine Kammer
-        # mit fester Hoehe liesse darueber nur 1,38 mm Wand stehen, und
-        # genau dort drueckt der Knoten. Jetzt wird die Kammer flacher,
-        # sobald ihr weniger als WAND_KAMMER bleibt; ueber den mittleren
-        # zwei Dritteln ihrer Laenge behaelt sie die volle Hoehe.
+        # Die Kammerhoehe folgt der Bandkontur, aber nur ueber dem
+        # eingeschlossenen Teil - zum Mund hin laeuft sie wieder auf.
+        #
+        # Die erste Fassung nahm sie ueberall zurueck, sobald ihr weniger
+        # als WAND_KAMMER blieb, mit 0,8 als unterer Schranke. Am inneren
+        # Ende rundet der Querschnitt aber aus, die Bandhoehe geht gegen
+        # null, und damit wurde der Mund ueberall genau 1,6 mm hoch. Ein
+        # Knoten in 4-mm-Schnur misst rund 8 - er kommt da nicht hinein.
+        #
+        # Der Denkfehler steckte in der Begruendung "genau dort drueckt
+        # der Knoten". Das stimmt nicht: die Schnur zieht nach aussen, der
+        # Knoten drueckt gegen die Schulter um die Schnurbohrung am
+        # AEUSSEREN Ende. Am Mund traegt die Wand darueber nichts, und es
+        # gibt dort auch keine mehr - das Band endet ja.
+        #
+        # Deshalb wirkt die Ruecknahme jetzt gewichtet: tief im Band voll,
+        # am Mund gar nicht. Die Uebergangslaenge ist der Eckradius des
+        # Bandes selbst, also genau die Strecke, ueber die es ausrundet.
+        # Das ist wieder das Verhalten des real erprobten Rev. E aus
+        # reif.py, dessen Kammer ueber die ganze Laenge denselben
+        # Querschnitt hat.
         a_top = self.b_oben / 2.0
         b_top = self.d_oben / 2.0
         k_top = self.eck_oben * min(a_top, b_top)
-        hoch = self._profil_z(y - (self.aussen(1.0) - a_top),
-                              a_top, b_top, k_top) - WAND_KAMMER
-        bk = max(0.8, min(self.b_kammer, hoch))
+        u_top = y - (self.aussen(1.0) - a_top)
+        hoch = self._profil_z(u_top, a_top, b_top, k_top) - WAND_KAMMER
+        t = min(max((u_top + a_top) / max(k_top, 1e-6), 0.0), 1.0)
+        t = t * t * (3.0 - 2.0 * t)          # weich, ohne Knick am Mund
+        bk = min(self.b_kammer,
+                 max(hoch, 0.0) * t + self.b_kammer * (1.0 - t))
 
         kammer_innen = self.innen(1.0) - 1.0
         quer = _rundbox(x, z, self.a_kammer, bk,
