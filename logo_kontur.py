@@ -53,6 +53,25 @@ def spanne(radius, n=720):
     return min(werte), max(werte)
 
 
+def svg_reif(datei="tuerzwerg-reif-zeichen.svg", farbe="#454A52", rand=2.0):
+    """Der Reif allein, ohne Muetze und ohne Schnur.
+
+    fill="currentColor" mit einem color-Attribut am <svg>: eingebettet
+    erbt das Zeichen die Textfarbe, als eigenstaendige Datei zeigt es die
+    angegebene. Die Oeffnung ist mit fill-rule evenodd ausgestanzt.
+    """
+    a = R.aussen(1.0) + rand
+    inhalt = (f'<svg xmlns="http://www.w3.org/2000/svg" '
+              f'viewBox="{-a:.0f} {-a:.0f} {2 * a:.0f} {2 * a:.0f}" '
+              f'width="{2 * a:.0f}" height="{2 * a:.0f}" color="{farbe}" '
+              f'role="img" aria-label="Türzwerg Reif">'
+              f'<title>Türzwerg · Reif</title>'
+              f'<path d="{pfad(R.aussen)}{pfad(R.innen)}" '
+              f'fill="currentColor" fill-rule="evenodd"/></svg>\n')
+    open(datei, "w", encoding="utf-8").write(inhalt)
+    return datei
+
+
 if __name__ == "__main__":
     i_min, i_max = spanne(R.innen)
     daten = {
@@ -80,3 +99,4 @@ if __name__ == "__main__":
           f"= {(i_max / i_min - 1) * 100:.0f} % Unterschied")
     print(f"  Pfade        {len(daten['aussen'])} und "
           f"{len(daten['innen'])} Zeichen bei {PUNKTE} Punkten")
+    print(f"geschrieben: {svg_reif()}  (Reif allein, ohne Muetze und Schnur)")
