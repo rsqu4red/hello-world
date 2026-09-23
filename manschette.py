@@ -73,8 +73,10 @@ ABFLACHUNG = 7.0
 # keine Stuetzen.
 KAMMER_ACHSE = 11.0     # Abstand der Kammerachse von der Rohrachse
 D_KAMMER = 11.0         # Knotenkammer
-KAMMER_LAENGE = 10.0    # gerader Teil; mit den 45-Grad-Kegeln 21 mm gesamt,
-                        # bleiben bei 28 mm Laenge 3,5 mm Wand an beiden Enden
+# Laenge der Knotenkammer, jetzt durchgehend voller Querschnitt. Der
+# Huellraum ist derselbe wie vorher (21 mm), nur ohne die Kegel - die
+# Stirnwand bleibt damit bei 3,5 mm.
+KAMMER_LAENGE = 21.0
 
 # Material um die Kammer herum. Haengt an WAND: wird die Manschette staerker,
 # waechst die Rippe mit, sonst sitzt eine duenne Kammer in einem dicken Rohr.
@@ -91,7 +93,11 @@ RIPPE_WAND = WAND
 # weiten, durch eine 4er um 100. Das ist der Unterschied zwischen
 # "rutscht unter Dauerzug irgendwann durch" und "geht nicht".
 D_SCHNUR = 4.0
-SCHNUR_SENK = 0.5       # 45-Grad-Senkung am aeusseren Ende, fuer die Schnur
+# 45-Grad-Senkung am aeusseren Ende der Schnurbohrung, damit die Schnur
+# dort nicht ueber eine Kante laeuft. Obergrenze; der wirkliche Wert wird
+# unten nach derselben Regel wie beim Reif abgeleitet - hoechstens die
+# Haelfte dessen, was neben der Bohrung im flachen Kammerboden steht.
+SCHNUR_SENK_MAX = 0.5
 VERRUNDUNG = 4.0        # weicher Uebergang Rohr zu Rippe
 
 # Verrundung der Stirnkanten. Eine scharfe Kante laesst sich mit einem
@@ -124,6 +130,14 @@ if len(sys.argv) > 1:
 # satt aufliegt. Bei 11 mm Kammer und Ø4 Schnur sind das 2,5 mm Radius und
 # 6,0 mm flacher Boden.
 ECK_KAMMER = (D_KAMMER - (D_SCHNUR + 2.0)) / 2.0
+KAMMER_HALB = KAMMER_LAENGE / 2.0
+
+# Senkung, abgeleitet wie beim Reif: neben der Schnurbohrung steht im
+# flachen Kammerboden (D_KAMMER - 2*ECK_KAMMER) minus Bohrungsdurchmesser,
+# je zur Haelfte auf beiden Seiten. Davon wird hoechstens die Haelfte fuer
+# die Senkung ausgegeben. Bei 6,0 mm flachem Boden und Ø4 sind das 0,5 mm.
+_REST = ((D_KAMMER - 2.0 * ECK_KAMMER) - D_SCHNUR) / 2.0
+SCHNUR_SENK = min(SCHNUR_SENK_MAX, max(0.0, _REST * 0.5))
 
 # Abgeleitet
 R_INNEN = D_INNEN / 2.0
@@ -134,22 +148,19 @@ HOEHE = R_AUSSEN + RIPPE_UNTEN                 # Gesamthoehe ueber alles
 
 # Kantenlaenge der Gitterzelle.
 #
-# 0,29. Wo der 45-Grad-Auslauf der Knotenkammer die Bohrungswand fast
-# tangential streift, setzt der Vernetzer je nach Raster mehrfach belegte
-# und entartete Kanten - kein Loch: keine einzige Kante hat dort nur ein
-# Dreieck, die Flaeche ist geschlossen. Dass es am Gitter liegt und nicht
-# am Koerper, zeigt das Volumen ueber mehrere Raster:
+# 0,29. Fruehere Fassungen hatten hier ein Rasterproblem: wo der
+# 45-Grad-Auslauf der Knotenkammer die Bohrungswand fast tangential
+# streifte, setzte der Vernetzer je nach Raster mehrfach belegte Kanten -
+# bei 0,31 waren es 885. Mit den geraden Stirnwaenden gibt es diese
+# Tangentenstelle nicht mehr, und alle Raster laufen sauber durch:
 #
 #   Raster   Dreiecke   mehrfach belegte Kanten   Volumen
-#   0,27      560 752                         0   6,943 cm^3
-#   0,29      486 380                         0   6,943
-#   0,31      426 852                       885   6,942
-#   0,34      353 828                         0   6,941
-#   0,37      298 908                         0   6,940
+#   0,27      572 512                         0   6,414 cm^3
+#   0,29      496 136                         0   6,413
+#   0,31      435 568                         0   6,412
+#   0,34      361 304                         0   6,412
 #
-# Das Volumen ist ueber alle Raster gleich, die Kantenzahl springt. Waere es
-# ein Loch, haette das Volumen mitgewandert. Gewaehlt ist der feinste Wert,
-# der sauber durchlaeuft.
+# 0,29 bleibt stehen, weil die Facetten damit unter drei Zehnteln liegen.
 RASTER = 0.29
 DATEI = ("tuerzwerg-manschette.stl" if abs(WAND - WAND_VORGABE) < 1e-9
          else f"tuerzwerg-manschette-wand{WAND:.1f}".replace(".", "") + ".stl")
@@ -164,6 +175,15 @@ def _rundbox(u, v, a, b, k):
     du, dv = abs(u) - (a - k), abs(v) - (b - k)
     return (math.hypot(max(du, 0.0), max(dv, 0.0))
             + min(max(du, dv), 0.0) - k)
+
+
+def _rundbox3(u, v, w, a, b, c, k):
+    """Quader 2a x 2b x 2c mit Radius k an allen Kanten und Ecken."""
+    k = min(k, a, b, c)
+    du, dv, dw = abs(u) - (a - k), abs(v) - (b - k), abs(w) - (c - k)
+    aus = math.sqrt(max(du, 0.0) ** 2 + max(dv, 0.0) ** 2
+                    + max(dw, 0.0) ** 2)
+    return aus + min(max(du, dv, dw), 0.0) - k
 
 
 def _ruecknahme(z):
@@ -251,12 +271,23 @@ def feld(x, y, z):
     # Die 45-Grad-Kegel an den Stirnseiten sind jetzt eine gleichmaessige
     # Erosion des Querschnitts statt eines Radienvergleichs - damit folgen
     # sie der gerundeten Box, wie sie vorher dem Kreis gefolgt sind.
+    # Stirnseiten gerade, wie beim Reif - keine Kegel mehr.
+    #
+    # Die 45-Grad-Kegel stammten aus der Druckfassung: liegend gedruckt
+    # braucht eine waagerechte Kammerdecke Stuetzen, ein Kegel nicht. Fuer
+    # das gegossene Teil gilt das nicht mehr, und fuer den Knoten waren sie
+    # schlecht - er konnte in die Spitze wandern und sich dort verkeilen,
+    # statt an einer Wand anzustehen. Gerade Stirnwaende halten ihn, und die
+    # Kammer gewinnt das ganze Kegelvolumen dazu.
+    #
+    # Verrundet wird mit ECK_KAMMER an allen Kanten, nicht nur an den
+    # Bodenecken. Eine scharfe Innenkante ist hier nicht nur haesslich: sie
+    # ist die Stelle, an der ein Riss anfaengt, und der Weiterreisswiderstand
+    # entscheidet, ob der Knoten haelt.
     yk = min(0.0, y + KAMMER_ACHSE)
-    z_a = LAENGE / 2.0 - KAMMER_LAENGE / 2.0 - D_KAMMER / 2.0
-    z_b = LAENGE / 2.0 + KAMMER_LAENGE / 2.0 + D_KAMMER / 2.0
-    schrumpf = max(0.0, D_KAMMER / 2.0 - min(z - z_a, z_b - z))
-    kammer = max(_rundbox(x, yk, D_KAMMER / 2.0, D_KAMMER / 2.0, ECK_KAMMER)
-                 + schrumpf, y)
+    kammer = max(_rundbox3(x, yk, z - LAENGE / 2.0,
+                           D_KAMMER / 2.0, D_KAMMER / 2.0, KAMMER_HALB,
+                           ECK_KAMMER), y)
 
     # Schnurbohrung. Scharf abgezogen und nach aussen leicht kegelig.
     #
