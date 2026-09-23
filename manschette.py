@@ -118,6 +118,13 @@ if len(sys.argv) > 1:
     WAND = float(sys.argv[1])
     RIPPE_WAND = WAND
 
+# Eckradius der Knotenkammer. Abgeleitet, nicht gesetzt: der flache Boden
+# soll beidseits einen Millimeter breiter sein als die Schnurbohrung, damit
+# diese durch ebenes Material austritt und der Knoten rings um sie herum
+# satt aufliegt. Bei 11 mm Kammer und Ø4 Schnur sind das 2,5 mm Radius und
+# 6,0 mm flacher Boden.
+ECK_KAMMER = (D_KAMMER - (D_SCHNUR + 2.0)) / 2.0
+
 # Abgeleitet
 R_INNEN = D_INNEN / 2.0
 R_AUSSEN = R_INNEN + WAND
@@ -127,27 +134,37 @@ HOEHE = R_AUSSEN + RIPPE_UNTEN                 # Gesamthoehe ueber alles
 
 # Kantenlaenge der Gitterzelle.
 #
-# 0,31 statt 0,36. Bei 3 mm Wand streift der 45-Grad-Kegel der Knotenkammer
-# die Bohrungswand fast tangential, und dort setzte der Vernetzer bei 0,36
-# mehrfach belegte und entartete Kanten - kein Loch: keine einzige Kante hatte
-# nur ein Dreieck, die Flaeche war geschlossen. Dass es am Gitter lag und
-# nicht am Koerper, zeigt das Volumen ueber mehrere Raster:
+# 0,29. Wo der 45-Grad-Auslauf der Knotenkammer die Bohrungswand fast
+# tangential streift, setzt der Vernetzer je nach Raster mehrfach belegte
+# und entartete Kanten - kein Loch: keine einzige Kante hat dort nur ein
+# Dreieck, die Flaeche ist geschlossen. Dass es am Gitter liegt und nicht
+# am Koerper, zeigt das Volumen ueber mehrere Raster:
 #
 #   Raster   Dreiecke   mehrfach belegte Kanten   Volumen
-#   0,31      422 844                         0   7,065 cm^3
-#   0,33      373 152                         5   7,065
-#   0,36      311 964                       267   7,063
-#   0,40      253 716                       188   7,062
-#   0,43      219 484                         0   7,061
+#   0,27      560 752                         0   6,943 cm^3
+#   0,29      486 380                         0   6,943
+#   0,31      426 852                       885   6,942
+#   0,34      353 828                         0   6,941
+#   0,37      298 908                         0   6,940
 #
 # Das Volumen ist ueber alle Raster gleich, die Kantenzahl springt. Waere es
-# ein Loch, haette das Volumen mitgewandert.
-RASTER = 0.31
+# ein Loch, haette das Volumen mitgewandert. Gewaehlt ist der feinste Wert,
+# der sauber durchlaeuft.
+RASTER = 0.29
 DATEI = ("tuerzwerg-manschette.stl" if abs(WAND - WAND_VORGABE) < 1e-9
          else f"tuerzwerg-manschette-wand{WAND:.1f}".replace(".", "") + ".stl")
 
 
 # ------------------------------------------------------------- Distanzfeld ---
+
+def _rundbox(u, v, a, b, k):
+    """Rechteck 2a x 2b mit Eckradius k, als Distanzfeld. Dieselbe Form,
+    aus der der Reif seine Knotenkammer baut."""
+    k = min(k, a, b)
+    du, dv = abs(u) - (a - k), abs(v) - (b - k)
+    return (math.hypot(max(du, 0.0), max(dv, 0.0))
+            + min(max(du, dv), 0.0) - k)
+
 
 def _ruecknahme(z):
     """Wieviel die Aussenkontur an dieser Stelle zurueckgenommen wird.
@@ -223,10 +240,23 @@ def feld(x, y, z):
     # Schnurbohrung - die Schnur zieht nach unten. Geschlossen wird der
     # Kanal vom Tuerdruecker, der in der Bohrung darueber steckt.
     # Eingefaedelt wird von oben, bevor der Druecker eingeschoben wird.
-    rk = math.hypot(x, min(0.0, y + KAMMER_ACHSE))
+    # Querschnitt wie beim Reif: gerundete Box statt Halbkreis. Unten ein
+    # flacher Boden, die Ecken mit ECK_KAMMER verrundet, darueber wie bisher
+    # senkrechte Waende. Der Grund ist nicht Formsprache, sondern die
+    # Auflage: der Knoten wird von der Schnur nach unten gezogen und
+    # stuetzt sich rings um die Schnurbohrung ab. Auf einem Halbkreis
+    # traegt er nur auf dem Scheitel, auf einem flachen Boden auf der
+    # ganzen Breite.
+    #
+    # Die 45-Grad-Kegel an den Stirnseiten sind jetzt eine gleichmaessige
+    # Erosion des Querschnitts statt eines Radienvergleichs - damit folgen
+    # sie der gerundeten Box, wie sie vorher dem Kreis gefolgt sind.
+    yk = min(0.0, y + KAMMER_ACHSE)
     z_a = LAENGE / 2.0 - KAMMER_LAENGE / 2.0 - D_KAMMER / 2.0
     z_b = LAENGE / 2.0 + KAMMER_LAENGE / 2.0 + D_KAMMER / 2.0
-    kammer = max(rk - D_KAMMER / 2.0, rk - (z - z_a), rk - (z_b - z), y)
+    schrumpf = max(0.0, D_KAMMER / 2.0 - min(z - z_a, z_b - z))
+    kammer = max(_rundbox(x, yk, D_KAMMER / 2.0, D_KAMMER / 2.0, ECK_KAMMER)
+                 + schrumpf, y)
 
     # Schnurbohrung. Scharf abgezogen und nach aussen leicht kegelig.
     #
