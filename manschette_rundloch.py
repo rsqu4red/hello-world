@@ -56,19 +56,20 @@ from manschette import (D_INNEN, D_SCHNUR, EINLAUF, KANTE, LAENGE, RIPPE_WAND,
 
 D_LOCH = 10.0            # Knotenloch, rund
 SCHNUR_HALS = 3.5        # Laenge des Ø4-Halses am Kielboden
-# Kiel nach unten verlaengern. 0 waere die Fassung genau wie
-# vorgeschlagen - dann bleiben unter einem Ø20-Druecker aber nur 5,5 mm
-# fuer den Knoten, also noch weniger als die 6,5 von heute. Der Grund ist
-# nicht das Rundloch, sondern dass der Knoten weiterhin unter dem
-# Druecker sitzt. 3,5 mm tiefer bringt die 9,0 mm, die ein Sackstich in
-# 4-mm-Schnur braucht, und kostet 3,5 mm Bauhoehe. Am Mantel aendert es
-# nichts - der bleibt bei 62 Prozent.
-TIEFER = 3.5
 
-KIEL_ACHSE = MA.KAMMER_ACHSE + TIEFER
-R_KIEL = D_LOCH / 2.0 + RIPPE_WAND
-KIEL_UNTEN = KIEL_ACHSE + R_KIEL
-Y_STUFE = -(KIEL_UNTEN - SCHNUR_HALS)     # wo Ø10 auf Ø4 springt
+# Die Aussenform wird unveraendert vom Original uebernommen: gleiche
+# Kielachse, gleicher Kielradius, gleiche Bauhoehe. Das Rundloch aendert
+# also nur das Innenleben.
+#
+# Der Preis steht in knotenfreiraum(): mit dem Original-Kiel liegt die
+# Stufe bei y = -16,0, unter einem Ø20-Druecker bleiben dem Knoten also
+# 6,0 mm. Ein Sackstich in 4-mm-Schnur braucht rund 9. Das ist keine
+# Folge des Rundlochs, sondern die alte Einschraenkung: der Knoten sitzt
+# unter dem Druecker und teilt sich den Platz mit ihm.
+KIEL_ACHSE = MA.KAMMER_ACHSE          # 11,0 wie im Original
+R_KIEL = MA.R_RIPPE                   # 8,5 wie im Original
+KIEL_UNTEN = KIEL_ACHSE + R_KIEL      # 19,5
+Y_STUFE = -(KIEL_UNTEN - SCHNUR_HALS)
 
 RASTER = 0.29
 DATEI = "tuerzwerg-manschette-rundloch.stl"

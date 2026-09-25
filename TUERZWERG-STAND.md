@@ -643,8 +643,14 @@ Repo, das Paket ist also nur nötig, wenn sich die Geometrie ändert.
    fest in der oberen Hälfte und fährt beim Öffnen von selbst heraus;
    der Bohrungskern braucht eine Ø10-Querbohrung.
    Rohrmantel **62 %** geschlossen (heute 23, Quertasche 99).
-   Mit `TIEFER = 3,5` Knotenraum 9,0 mm, Bauhöhe 34,5 mm, 9,2 g.
-   Preis: sichtbares Loch oben.
+   **Außenform unverändert wie das Original** (24,00 × 31,50 × 28,00 mm,
+   Kielachse 11,0, Kielradius 8,5) — nachgewiesen: die beiden
+   Außenfelder sind rechnerisch identisch (0,000000 µm über 40 000
+   Punkte), und die STEP-Fläche liegt außerhalb des Lochs auf 1,1 µm
+   auf der Originalkontur.
+   Preis: sichtbares Loch oben, 8,4 statt 7,4 g Silikon, und der
+   Knotenraum bleibt mit 6,0 mm unter Ø20 zu knapp (Sackstich braucht
+   ~9). Ein kürzerer Ø4-Hals hilft etwas: 2,0 mm statt 3,5 → 7,5 mm.
    Dateien: `manschette_rundloch.py`, `step_manschette_rundloch.py`,
    `tuerzwerg-manschette-rundloch.stl/.step/.png`.
 
