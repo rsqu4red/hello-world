@@ -607,10 +607,21 @@ Repo, das Paket ist also nur nötig, wenn sich die Geometrie ändert.
 4. **Markenkollision „Doorlino"** prüfen lassen.
 
 ### Konstruktiv
-5. **Knotenkammertiefe** unter einem ⌀20-DIN-Drücker: verfügbar sind
-   **6,5 mm**, gerechnet gebraucht werden **≈ 9 mm**. ⚠️ **Unverifiziert
-   — braucht einen echten Test.** Der Knoten muss bei der Manschette
-   komplett verschwinden, weil die Klinke darübergezogen wird.
+5. ~~**Knotenkammertiefe**~~ — **gelöst** in der spritzgussgerechten
+   Fassung (`manschette_spritzguss.py`): Kanalachse von 11,0 auf 13,5 mm,
+   damit **9,0 mm** statt 6,5 mm unter einem ⌀20-Drücker. Kostet 2,5 mm
+   Bauhöhe, spart trotzdem Silikon. Praxistest steht weiter aus.
+
+5b. **Spritzgussgerechte Manschette.** Der Hersteller meldete, dass das
+   Werkzeug an der innenliegenden Knotenkammer scheitert. Nachgerechnet:
+   17,8 % der Hohlraumpunkte sind gegenüber einem axialen Kern
+   hinterschnitten → zwei Kerne mit gesteuerter Reihenfolge. Lösung: die
+   Stirnwände entfallen, der Kanal läuft durch → **0,03 %**, also ein
+   gerader Kern. Dateien: `manschette_spritzguss.py`,
+   `step_manschette_sg.py`, `tuerzwerg-manschette-spritzguss.stl/.step`,
+   Bild `tuerzwerg-manschette-spritzguss.png`.
+   Offen: der Knoten kann im Kanal längs wandern (unkritisch, siehe
+   Modulkopf) — wer einen Anschlag will, setzt `STIRNWAND > 0`.
 6. **Beide Gießformen neu rechnen** (siehe 2.5).
 7. **Shore-Härte festlegen** (A 70 oder A 80) und ein Silikon mit
    passendem Weiterreißwiderstand wählen.
