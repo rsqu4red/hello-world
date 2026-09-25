@@ -81,11 +81,15 @@ def knotenfreiraum(d_druecker=20.0):
 
 # --------------------------------------------------------------- Feld -----
 
-def aussenfeld(x, y, z):
-    profil = _weich_vereinen(
+def profil(x, y, z):
+    """Der Querschnitt: Rohr und Kiel, weich vereinigt."""
+    return _weich_vereinen(
         math.hypot(x, y) - (R_AUSSEN - _ruecknahme(z)),
         math.hypot(x, y + KIEL_ACHSE) - R_KIEL, VERRUNDUNG)
-    wq = profil + KANTE
+
+
+def aussenfeld(x, y, z):
+    wq = profil(x, y, z) + KANTE
     wz = abs(z - LAENGE / 2.0) - (LAENGE / 2.0 - KANTE)
     return (min(max(wq, wz), 0.0)
             + math.hypot(max(wq, 0.0), max(wz, 0.0)) - KANTE)

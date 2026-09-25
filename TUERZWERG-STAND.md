@@ -634,6 +634,25 @@ Repo, das Paket ist also nur nötig, wenn sich die Geometrie ändert.
    der Seite sichtbar (`TASCHE_BLIND` schließt eine Seite).
    Dateien: `manschette_quertasche.py`, `step_manschette_quer.py`,
    `tuerzwerg-manschette-quertasche.stl/.step/.png`.
+
+5d. **Rundloch durch die Decke — die kleinste Änderung, die trägt.**
+   Ø10-Loch senkrecht von oben durch die Decke, durch die Bohrung, in
+   den Kiel; nur die letzten 3,5 mm sind Ø4. Weil der Stift **nach oben**
+   gezogen wird, erweitert sich das Loch in Entformrichtung überall →
+   **0,04 %** Hinterschnitt. Bei waagerechter Trennebene steckt der Stift
+   fest in der oberen Hälfte und fährt beim Öffnen von selbst heraus;
+   der Bohrungskern braucht eine Ø10-Querbohrung.
+   Rohrmantel **62 %** geschlossen (heute 23, Quertasche 99).
+   Mit `TIEFER = 3,5` Knotenraum 9,0 mm, Bauhöhe 34,5 mm, 9,2 g.
+   Preis: sichtbares Loch oben.
+   Dateien: `manschette_rundloch.py`, `step_manschette_rundloch.py`,
+   `tuerzwerg-manschette-rundloch.stl/.step/.png`.
+
+⚠️ **Messkorrektur:** Der Rohrmantel wurde zuerst auf halber Wandstärke
+   (r = 10,5) abgetastet. An den Stirnseiten ist die Wand auf 1,2 mm
+   abgeflacht, der Messkreis lag dort außerhalb des Bauteils und zählte
+   fälschlich als offen. Ältere Zahlen in dieser Datei (12 % / 87 %) sind
+   dadurch zu niedrig; richtig sind **23 % / 99 %**.
 6. **Beide Gießformen neu rechnen** (siehe 2.5).
 7. **Shore-Härte festlegen** (A 70 oder A 80) und ein Silikon mit
    passendem Weiterreißwiderstand wählen.
