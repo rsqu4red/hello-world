@@ -552,6 +552,31 @@ Branch: `claude/door-opener-cord-toddlers-i97hxf`
 | `logo_schnurzwerg.py` | Logoentwurf „Schnurzwerg" (Arbeit läuft) |
 | `giessform_revh.py` | Gießform Rev. H (veraltet) |
 | `giessform_manschette.py` | Gießform Manschette (veraltet) |
+| `step_reif.py` | Reif als **STEP** (B-Rep) aus der Parametrik |
+| `step_manschette.py` | Manschette als **STEP** (B-Rep) aus der Parametrik |
+
+### CAD-Dateien (STEP, AP214, Millimeter)
+
+Beide sind **nicht** aus dem STL gewandelt, sondern aus derselben
+parametrischen Definition neu gebaut — mit Kurven und Flächen statt
+Dreiecken, und dadurch genauer als die STLs:
+
+| Teil | Datei | Flächen | größte Abweichung | STL zum Vergleich |
+|---|---|---|---|---|
+| Reif Rev. A φ | `tuerzwerg-zugring-reva-phi.step` | 21 | 5,7 µm | 207 µm |
+| Manschette | `tuerzwerg-manschette.step` | 58 | 4,4 µm | 153 µm |
+
+Bohrungen, Senkungen und Kammerwände stehen darin als echte Zylinder-,
+Kegel- und Torusflächen. **Eine bewusste Abweichung:** im Distanzfeld
+wird die Knotenkammer mit einem *weichen Minimum* (Radius 0,8)
+abgezogen; im STEP ist daraus eine echte Verrundung mit konstantem
+Radius 0,8 geworden — fertigbar und bemaßbar, aber nicht auf den
+Mikrometer dasselbe. Nachgemessen liegen **alle** Abweichungen über
+50 µm genau dort.
+
+Zum Neuerzeugen wird `cadquery` gebraucht (`pip install cadquery`), das
+den OpenCASCADE-Kernel mitbringt. Die fertigen STEP-Dateien liegen im
+Repo, das Paket ist also nur nötig, wenn sich die Geometrie ändert.
 
 ### Dokumente
 
