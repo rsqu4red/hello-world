@@ -620,8 +620,20 @@ Repo, das Paket ist also nur nötig, wenn sich die Geometrie ändert.
    gerader Kern. Dateien: `manschette_spritzguss.py`,
    `step_manschette_sg.py`, `tuerzwerg-manschette-spritzguss.stl/.step`,
    Bild `tuerzwerg-manschette-spritzguss.png`.
-   Offen: der Knoten kann im Kanal längs wandern (unkritisch, siehe
-   Modulkopf) — wer einen Anschlag will, setzt `STIRNWAND > 0`.
+   **Verworfen:** der durchlaufende Kanal nimmt der Manschette die
+   beiden geschlossenen Ringe an den Stirnseiten, und die tragen die
+   Spannkraft am Drücker.
+
+5c. **Quertasche — der tragfähige Weg.** Die Tasche wandert unter den
+   Rohrmantel und läuft quer durch den Kiel. Ergebnis: Rohrring auf
+   **87 % statt 12 %** der Länge geschlossen (also *besserer* Halt als
+   heute), Knotenraum 8,5 mm **unabhängig vom Drückerdurchmesser**
+   (heute 7,5 / 6,5 / 5,0 mm bei Ø18 / Ø20 / Ø23 — für keinen genug),
+   Werkzeug = zwei Hälften + ein glatter Zylinderkern, **kein Schieber**.
+   Kosten: 35 statt 31,5 mm Bauhöhe, 8,4 statt 7,4 g Silikon, Knoten von
+   der Seite sichtbar (`TASCHE_BLIND` schließt eine Seite).
+   Dateien: `manschette_quertasche.py`, `step_manschette_quer.py`,
+   `tuerzwerg-manschette-quertasche.stl/.step/.png`.
 6. **Beide Gießformen neu rechnen** (siehe 2.5).
 7. **Shore-Härte festlegen** (A 70 oder A 80) und ein Silikon mit
    passendem Weiterreißwiderstand wählen.
